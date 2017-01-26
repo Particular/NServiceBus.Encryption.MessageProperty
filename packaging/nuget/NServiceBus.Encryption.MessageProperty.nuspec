@@ -10,7 +10,7 @@
     <projectUrl>$projectUrl$</projectUrl>
     <iconUrl>$iconUrl$</iconUrl>
     <requireLicenseAcceptance>$requireLicenseAcceptance$</requireLicenseAcceptance>
-    <description>NServiceBus Message Property Encryption</description>
+    <description>Selectively encrypt NServiceBus message properties</description>
     <copyright>$copyright$</copyright>
     <tags>$tags$</tags>
     <dependencies>
