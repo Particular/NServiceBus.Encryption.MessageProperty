@@ -1,4 +1,4 @@
-namespace NServiceBus
+namespace NServiceBus.Encryption.MessageProperty
 {
     using System;
     using System.Reflection;
