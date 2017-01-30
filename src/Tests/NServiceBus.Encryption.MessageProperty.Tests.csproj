@@ -58,7 +58,6 @@
     <Compile Include="Issue_701.cs" />
     <Compile Include="Issue_949.cs" />
     <Compile Include="Mailing_list_complex_dto.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RijndaelEncryptionServiceTest.cs" />
     <Compile Include="When_decrypting_a_member_that_is_missing_encryption_data.cs" />
     <Compile Include="When_message_contains_props_and_fields_that_cannot_be_set.cs" />
@@ -73,6 +72,9 @@
       <Project>{63ee7112-93f3-43b9-9895-d593eaadea9b}</Project>
       <Name>NServiceBus.Encryption.MessageProperty</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
