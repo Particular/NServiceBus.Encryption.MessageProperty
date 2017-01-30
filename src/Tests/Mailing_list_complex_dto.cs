@@ -1,4 +1,4 @@
-﻿namespace NServiceBus.Core.Tests.Encryption
+﻿namespace NServiceBus.Encryption.MessageProperty.Tests
 {
     using System.Collections.Generic;
     using NUnit.Framework;

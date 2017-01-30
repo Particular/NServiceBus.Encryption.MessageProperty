@@ -1,11 +1,11 @@
-﻿namespace NServiceBus.Core.Tests.Encryption
+﻿namespace NServiceBus.Encryption.MessageProperty.Tests
 {
     using System;
     using System.Collections.Generic;
     using System.Security.Cryptography;
     using System.Text;
-    using NServiceBus.Pipeline;
     using NUnit.Framework;
+    using Pipeline;
 
     [TestFixture]
     public class RijndaelEncryptionServiceTest

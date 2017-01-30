@@ -1,6 +1,5 @@
-﻿namespace NServiceBus.Encryption.Tests
+﻿namespace NServiceBus.Encryption.MessageProperty.Tests
 {
-    using Core.Tests.Encryption;
     using NUnit.Framework;
 
     [TestFixture]
