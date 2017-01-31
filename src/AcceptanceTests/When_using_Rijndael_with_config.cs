@@ -1,12 +1,11 @@
-﻿namespace NServiceBus.AcceptanceTests.Encryption
+﻿namespace NServiceBus.Encryption.MessageProperty.AcceptanceTests
 {
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using AcceptanceTesting;
-    using EndpointTemplates;
-    using NServiceBus.Config;
-    using NServiceBus.Config.ConfigurationSource;
+    using Config;
+    using Config.ConfigurationSource;
     using NUnit.Framework;
 
     public class When_using_Rijndael_with_config : NServiceBusAcceptanceTest
@@ -89,7 +88,6 @@
             }
         }
 
-        
         public class MessageWithSecretData : IMessage
         {
             public WireEncryptedString Secret { get; set; }
@@ -97,14 +95,12 @@
             public List<CreditCardDetails> CreditCards { get; set; }
         }
 
-        
         public class CreditCardDetails
         {
             public DateTime ValidTo { get; set; }
             public WireEncryptedString Number { get; set; }
         }
 
-        
         public class MySecretSubProperty
         {
             public WireEncryptedString Secret { get; set; }

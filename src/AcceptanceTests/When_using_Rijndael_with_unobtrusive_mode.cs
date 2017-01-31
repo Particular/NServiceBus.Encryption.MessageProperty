@@ -1,4 +1,4 @@
-namespace NServiceBus.AcceptanceTests.Encryption
+namespace NServiceBus.Encryption.MessageProperty.AcceptanceTests
 {
     using System;
     using System.Collections.Generic;
@@ -6,7 +6,6 @@ namespace NServiceBus.AcceptanceTests.Encryption
     using System.Text;
     using System.Threading.Tasks;
     using AcceptanceTesting;
-    using EndpointTemplates;
     using NUnit.Framework;
 
     public class When_using_Rijndael_with_unobtrusive_mode : NServiceBusAcceptanceTest
@@ -70,13 +69,13 @@ namespace NServiceBus.AcceptanceTests.Encryption
             public Sender()
             {
                 EndpointSetup<DefaultServer>(c =>
-                {
-                    c.Conventions()
-                        .DefiningCommandsAs(t => t.Namespace != null && t.FullName == typeof(MessageWithSecretData).FullName)
-                        .DefiningEncryptedPropertiesAs(t => t.Name.StartsWith("Encrypted"));
+                    {
+                        c.Conventions()
+                            .DefiningCommandsAs(t => t.Namespace != null && t.FullName == typeof(MessageWithSecretData).FullName)
+                            .DefiningEncryptedPropertiesAs(t => t.Name.StartsWith("Encrypted"));
 
-                    c.RijndaelEncryptionService("1st", Keys);
-                }).AddMapping<MessageWithSecretData>(typeof(Receiver))
+                        c.RijndaelEncryptionService("1st", Keys);
+                    }).AddMapping<MessageWithSecretData>(typeof(Receiver))
                     .ExcludeType<MessageWithSecretData>(); // remove that type from assembly scanning to simulate what would happen with true unobtrusive mode
             }
         }

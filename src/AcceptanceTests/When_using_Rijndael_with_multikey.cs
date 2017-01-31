@@ -1,28 +1,26 @@
-﻿namespace NServiceBus.AcceptanceTests.Encryption
+﻿namespace NServiceBus.Encryption.MessageProperty.AcceptanceTests
 {
     using System.Collections.Generic;
     using System.Text;
     using System.Threading.Tasks;
     using AcceptanceTesting;
-    using EndpointTemplates;
     using NUnit.Framework;
-    using ScenarioDescriptors;
 
     public class When_using_Rijndael_with_multikey : NServiceBusAcceptanceTest
     {
         [Test]
-        public Task Should_receive_decrypted_message()
+        public async Task Should_receive_decrypted_message()
         {
-            return Scenario.Define<Context>()
-                .WithEndpoint<Sender>(b => b.When((session, context) => session.Send(new MessageWithSecretData
+            var context = await Scenario.Define<Context>()
+                .WithEndpoint<Sender>(b => b.When(session => session.Send(new MessageWithSecretData
                 {
                     Secret = "betcha can't guess my secret"
                 })))
                 .WithEndpoint<Receiver>()
                 .Done(c => c.Done)
-                .Repeat(r => r.For(Transports.Default))
-                .Should(c => Assert.AreEqual("betcha can't guess my secret", c.Secret))
                 .Run();
+
+            Assert.AreEqual("betcha can't guess my secret", context.Secret);
         }
 
         public class Context : ScenarioContext
@@ -71,7 +69,6 @@
                 }
             }
         }
-
 
         public class MessageWithSecretData : IMessage
         {
