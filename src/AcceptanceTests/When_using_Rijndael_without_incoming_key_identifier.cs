@@ -34,7 +34,10 @@
         {
             public Sender()
             {
-                EndpointSetup<DefaultServer>(builder => builder.RijndaelEncryptionService("will-be-removed-by-transport-mutator", Encoding.ASCII.GetBytes("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")))
+                EndpointSetup<DefaultServer>(builder =>
+                    {
+                        builder.RijndaelEncryptionService("will-be-removed-by-transport-mutator", Encoding.ASCII.GetBytes("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
+                    })
                     .AddMapping<MessageWithSecretData>(typeof(Receiver));
             }
         }
