@@ -8,7 +8,7 @@
         [Test]
         public void Should_clear_the_compatibility_properties()
         {
-            var svc = new FakeEncryptionService(new EncryptedValue
+            var service = new FakeEncryptionService(new EncryptedValue
             {
                 EncryptedBase64Value = EncryptedBase64Value,
                 Base64Iv = "Base64Iv"
@@ -16,7 +16,7 @@
 
             var value = (WireEncryptedString) MySecretMessage;
 
-            WireEncryptedStringConversions.EncryptValue(svc, value, null);
+            service.EncryptValue(value, null);
             Assert.AreEqual(value.EncryptedValue.EncryptedBase64Value, EncryptedBase64Value);
         }
     }

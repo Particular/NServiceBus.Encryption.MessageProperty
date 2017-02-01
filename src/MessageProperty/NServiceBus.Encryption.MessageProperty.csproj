@@ -74,8 +74,8 @@
     <Compile Include="RijndaelEncryptionService.cs" />
     <Compile Include="StringConversions.cs" />
     <Compile Include="Utils\Guard.cs" />
-    <Compile Include="Utils\Reflection\DelegateFactory.cs" />
-    <Compile Include="Utils\Reflection\ExtensionMethods.cs" />
+    <Compile Include="Utils\DelegateFactory.cs" />
+    <Compile Include="Utils\ExtensionMethods.cs" />
     <Compile Include="WireEncryptedString.cs" />
     <Compile Include="WireEncryptedStringConversions.cs" />
   </ItemGroup>

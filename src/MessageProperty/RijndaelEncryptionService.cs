@@ -92,25 +92,19 @@ namespace NServiceBus.Encryption.MessageProperty
                 ConfigureIV(rijndael);
 
                 using (var encryptor = rijndael.CreateEncryptor())
+                using (var memoryStream = new MemoryStream())
+                using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
+                using (var writer = new StreamWriter(cryptoStream))
                 {
-                    using (var memoryStream = new MemoryStream())
+                    writer.Write(value);
+                    writer.Flush();
+                    cryptoStream.Flush();
+                    cryptoStream.FlushFinalBlock();
+                    return new EncryptedValue
                     {
-                        using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
-                        {
-                            using (var writer = new StreamWriter(cryptoStream))
-                            {
-                                writer.Write(value);
-                                writer.Flush();
-                                cryptoStream.Flush();
-                                cryptoStream.FlushFinalBlock();
-                                return new EncryptedValue
-                                {
-                                    EncryptedBase64Value = Convert.ToBase64String(memoryStream.ToArray()),
-                                    Base64Iv = Convert.ToBase64String(rijndael.IV)
-                                };
-                            }
-                        }
-                    }
+                        EncryptedBase64Value = Convert.ToBase64String(memoryStream.ToArray()),
+                        Base64Iv = Convert.ToBase64String(rijndael.IV)
+                    };
                 }
             }
         }
@@ -162,17 +156,11 @@ namespace NServiceBus.Encryption.MessageProperty
                 rijndael.Mode = CipherMode.CBC;
                 rijndael.Key = key;
                 using (var decryptor = rijndael.CreateDecryptor())
+                using (var memoryStream = new MemoryStream(encrypted))
+                using (var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
+                using (var reader = new StreamReader(cryptoStream))
                 {
-                    using (var memoryStream = new MemoryStream(encrypted))
-                    {
-                        using (var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
-                        {
-                            using (var reader = new StreamReader(cryptoStream))
-                            {
-                                return reader.ReadToEnd();
-                            }
-                        }
-                    }
+                    return reader.ReadToEnd();
                 }
             }
         }

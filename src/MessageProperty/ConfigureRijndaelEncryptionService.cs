@@ -19,7 +19,6 @@ namespace NServiceBus.Encryption.MessageProperty
         /// <param name="encryptionKey">Encryption Key.</param>
         /// <param name="decryptionKeys">A list of decryption keys.</param>
         public static void RijndaelEncryptionService(this EndpointConfiguration config, string encryptionKeyIdentifier, byte[] encryptionKey, IList<byte[]> decryptionKeys = null)
-
         {
             Guard.AgainstNull(nameof(config), config);
             Guard.AgainstNullAndEmpty(nameof(encryptionKey), encryptionKey);

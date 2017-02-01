@@ -9,7 +9,7 @@
         [Test]
         public void Should_throw_an_exception()
         {
-            var svc = new FakeEncryptionService(new EncryptedValue
+            var service = new FakeEncryptionService(new EncryptedValue
             {
                 EncryptedBase64Value = "EncryptedBase64Value",
                 Base64Iv = "Base64Iv"
@@ -21,7 +21,7 @@
             };
 
             // ReSharper disable once InvokeAsExtensionMethod
-            var exception = Assert.Throws<Exception>(() => WireEncryptedStringConversions.DecryptValue(svc, value, null));
+            var exception = Assert.Throws<Exception>(() => WireEncryptedStringConversions.DecryptValue(service, value, null));
             Assert.AreEqual("Encrypted property is missing encryption data", exception.Message);
         }
     }
