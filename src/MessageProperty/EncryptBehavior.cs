@@ -56,7 +56,7 @@
         public class EncryptRegistration : RegisterStep
         {
             public EncryptRegistration(EncryptionInspector inspector, IEncryptionService encryptionService)
-                : base("InvokeEncryption", typeof(EncryptBehavior), "Invokes the encryption logic", b => new EncryptBehavior(inspector, encryptionService))
+                : base("MessagePropertyEncryption", typeof(EncryptBehavior), "Invokes the encryption logic", b => new EncryptBehavior(inspector, encryptionService))
             {
                 InsertAfter("MutateOutgoingMessages");
             }

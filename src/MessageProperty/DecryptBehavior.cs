@@ -52,7 +52,7 @@ namespace NServiceBus.Encryption.MessageProperty
         public class DecryptRegistration : RegisterStep
         {
             public DecryptRegistration(EncryptionInspector inspector, IEncryptionService encryptionService)
-                : base("InvokeDecryption", typeof(DecryptBehavior), "Invokes the decryption logic", b => new DecryptBehavior(inspector, encryptionService))
+                : base("MessagePropertyDecryption", typeof(DecryptBehavior), "Invokes the decryption logic", b => new DecryptBehavior(inspector, encryptionService))
             {
                 InsertBefore("MutateIncomingMessages");
             }
