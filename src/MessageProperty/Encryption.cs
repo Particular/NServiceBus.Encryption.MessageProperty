@@ -7,7 +7,7 @@
         public Encryption()
         {
             Prerequisite(c => c.Settings.HasSetting(ConfigureRijndaelEncryptionService.EncryptedServiceConstructorKey), "Encryption service not defined.");
-
+            Defaults(s => s.SetDefault<Conventions>(new Conventions()));
             EnableByDefault();
         }
 
