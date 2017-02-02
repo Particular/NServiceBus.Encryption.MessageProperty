@@ -28,6 +28,8 @@
         /// <summary>
         /// The convention.
         /// </summary>
-        public Func<PropertyInfo, bool> IsEncryptedPropertyAction {get; set;} = p => typeof(WireEncryptedString).IsAssignableFrom(p.PropertyType);
+        public Func<PropertyInfo, bool> IsEncryptedPropertyAction { get; set; } = p =>
+            typeof(WireEncryptedString).IsAssignableFrom(p.PropertyType) ||
+            typeof(NServiceBus.WireEncryptedString).IsAssignableFrom(p.PropertyType);
     }
 }

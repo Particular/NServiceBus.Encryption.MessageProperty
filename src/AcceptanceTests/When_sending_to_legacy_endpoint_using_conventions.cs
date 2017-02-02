@@ -7,7 +7,7 @@
     using NUnit.Framework;
 
     [TestFixture]
-    public class When_sending_to_legacy_endpoint : NServiceBusAcceptanceTest
+    public class When_sending_to_legacy_endpoint_using_conventions : NServiceBusAcceptanceTest
     {
         const string keyIdentifier = "key";
         static readonly byte[] encryptionKey = Encoding.UTF8.GetBytes("1234567890abcdefghijKLMN");

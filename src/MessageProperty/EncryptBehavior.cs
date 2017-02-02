@@ -47,6 +47,13 @@
                 return;
             }
 
+            var legacyWireEncryptedString = valueToEncrypt as NServiceBus.WireEncryptedString;
+            if (legacyWireEncryptedString != null)
+            {
+                encryptionService.EncryptValue(legacyWireEncryptedString, context);
+                return;
+            }
+
             throw new Exception("Only string properties is supported for convention based encryption, check the configured conventions.");
         }
 

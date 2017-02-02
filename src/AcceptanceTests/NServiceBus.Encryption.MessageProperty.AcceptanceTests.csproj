@@ -55,6 +55,10 @@
     <Compile Include="When_enabling_core_encryption_feature.cs" />
     <Compile Include="When_receiving_from_legacy_endpoint.cs" />
     <Compile Include="When_sending_to_legacy_endpoint.cs" />
+    <Compile Include="When_receiving_from_legacy_endpoint_using_conventions.cs" />
+    <Compile Include="When_receiving_legacy_type.cs" />
+    <Compile Include="When_sending_legacy_type.cs" />
+    <Compile Include="When_sending_to_legacy_endpoint_using_conventions.cs" />
     <Compile Include="When_using_encryption_with_custom_service.cs" />
     <Compile Include="When_using_Rijndael_without_incoming_key_identifier.cs" />
     <Compile Include="When_using_Rijndael_with_custom.cs" />
