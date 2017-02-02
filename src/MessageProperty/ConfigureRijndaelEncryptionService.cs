@@ -100,6 +100,6 @@ namespace NServiceBus.Encryption.MessageProperty
             return settings.Get<Func<IEncryptionService>>(EncryptedServiceConstructorKey);
         }
 
-        internal const string EncryptedServiceConstructorKey = "Encryption.MessageProperty.EncryptionServiceConstructor";
+        internal const string EncryptedServiceConstructorKey = "MessagePropertyEncryptionServiceConstructor";
     }
 }
