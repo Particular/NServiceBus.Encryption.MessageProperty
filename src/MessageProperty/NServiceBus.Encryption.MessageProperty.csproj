@@ -54,11 +54,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigureRijndaelEncryptionService.cs" />
-    <Compile Include="Conventions.cs" />
+    <Compile Include="IsEncrytedPropertyConvention.cs" />
     <Compile Include="DecryptBehavior.cs" />
     <Compile Include="EncryptBehavior.cs" />
     <Compile Include="EncryptedValue.cs" />
-    <Compile Include="Encryption.cs" />
+    <Compile Include="MessagePropertyEncryption.cs" />
     <Compile Include="EncryptionConfigurationExtensions.cs" />
     <Compile Include="EncryptionInspector.cs" />
     <Compile Include="IEncryptionService.cs" />

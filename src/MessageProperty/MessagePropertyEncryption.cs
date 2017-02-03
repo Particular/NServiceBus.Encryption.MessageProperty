@@ -3,11 +3,11 @@
     using System;
     using Features;
 
-    class Encryption : Feature
+    class MessagePropertyEncryption : Feature
     {
-        public Encryption()
+        public MessagePropertyEncryption()
         {
-            Defaults(s => s.SetDefault<Conventions>(new Conventions()));
+            Defaults(s => s.SetDefault<IsEncrytedPropertyConvention>(new IsEncrytedPropertyConvention(p => typeof(WireEncryptedString).IsAssignableFrom(p.PropertyType))));
         }
 
         protected override void Setup(FeatureConfigurationContext context)
@@ -20,7 +20,7 @@
             }
 
             var encryptionService = context.Settings.GetEncryptionService();
-            var inspector = new EncryptionInspector(context.Settings.Get<Conventions>());
+            var inspector = new EncryptionInspector(context.Settings.Get<IsEncrytedPropertyConvention>());
 
             context.Pipeline.Register(new EncryptBehavior.EncryptRegistration(inspector, encryptionService));
             context.Pipeline.Register(new DecryptBehavior.DecryptRegistration(inspector, encryptionService));

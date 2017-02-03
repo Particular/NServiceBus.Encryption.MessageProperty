@@ -6,11 +6,13 @@
     /// <summary>
     /// Message convention definitions.
     /// </summary>
-    public class Conventions
+    class IsEncrytedPropertyConvention
     {
-        /// <summary>
-        /// Returns true if the given property should be encrypted.
-        /// </summary>
+        public IsEncrytedPropertyConvention(Func<PropertyInfo, bool> isEncryptedPropertyAction)
+        {
+            IsEncryptedPropertyAction = isEncryptedPropertyAction;
+        }
+
         public bool IsEncryptedProperty(PropertyInfo property)
         {
             Guard.AgainstNull(nameof(property), property);
@@ -25,11 +27,6 @@
             }
         }
 
-        /// <summary>
-        /// The convention.
-        /// </summary>
-        public Func<PropertyInfo, bool> IsEncryptedPropertyAction { get; set; } = p =>
-            typeof(WireEncryptedString).IsAssignableFrom(p.PropertyType) ||
-            typeof(NServiceBus.WireEncryptedString).IsAssignableFrom(p.PropertyType);
+        Func<PropertyInfo, bool> IsEncryptedPropertyAction;
     }
 }
