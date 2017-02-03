@@ -44,6 +44,12 @@ namespace NServiceBus.Encryption.MessageProperty
                 encryptionService.DecryptValue(ref stringToDecrypt, context);
                 property.SetValue(target, stringToDecrypt);
             }
+
+            var legacyWireEncryptedString = encryptedValue as NServiceBus.WireEncryptedString;
+            if (legacyWireEncryptedString != null)
+            {
+                encryptionService.DecryptValue(legacyWireEncryptedString, context);
+            }
         }
 
         IEncryptionService encryptionService;

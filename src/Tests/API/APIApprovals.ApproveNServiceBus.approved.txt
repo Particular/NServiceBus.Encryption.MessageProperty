@@ -13,6 +13,7 @@ namespace NServiceBus.Encryption.MessageProperty
     public class Conventions
     {
         public Conventions() { }
+        public System.Func<System.Reflection.PropertyInfo, bool> IsEncryptedPropertyAction { get; set; }
         public bool IsEncryptedProperty(System.Reflection.PropertyInfo property) { }
     }
     public class EncryptedValue

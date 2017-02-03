@@ -25,6 +25,11 @@
             }
         }
 
-        internal Func<PropertyInfo, bool> IsEncryptedPropertyAction = p => typeof(WireEncryptedString).IsAssignableFrom(p.PropertyType);
+        /// <summary>
+        /// The convention.
+        /// </summary>
+        public Func<PropertyInfo, bool> IsEncryptedPropertyAction { get; set; } = p =>
+            typeof(WireEncryptedString).IsAssignableFrom(p.PropertyType) ||
+            typeof(NServiceBus.WireEncryptedString).IsAssignableFrom(p.PropertyType);
     }
 }
