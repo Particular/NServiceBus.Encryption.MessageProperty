@@ -33,7 +33,7 @@
         {
             public Sender()
             {
-                EndpointSetup<DefaultServer>(builder => builder.RijndaelEncryptionService("1st", Encoding.ASCII.GetBytes("gdDbqRpqdRbTs3mhdZh9qCaDaxJXl+e6")))
+                EndpointSetup<DefaultServer>(builder => builder.EnableMessagePropertyEncryption(new RijndaelEncryptionService("1st", Encoding.ASCII.GetBytes("gdDbqRpqdRbTs3mhdZh9qCaDaxJXl+e6"))))
                     .AddMapping<MessageWithSecretData>(typeof(Receiver));
             }
         }
@@ -53,7 +53,7 @@
                 {
                     key
                 };
-                EndpointSetup<DefaultServer>(builder => builder.RijndaelEncryptionService("2nd", keys, expiredKeys));
+                EndpointSetup<DefaultServer>(builder => builder.EnableMessagePropertyEncryption(new RijndaelEncryptionService("2nd", keys, expiredKeys)));
             }
 
             public class Handler : IHandleMessages<MessageWithSecretData>

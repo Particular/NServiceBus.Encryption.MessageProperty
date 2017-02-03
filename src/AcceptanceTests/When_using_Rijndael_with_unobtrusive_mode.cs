@@ -74,11 +74,11 @@ namespace NServiceBus.Encryption.MessageProperty.AcceptanceTests
                             .DefiningCommandsAs(t => t.Namespace != null && t.FullName == typeof(MessageWithSecretData).FullName)
                             .DefiningEncryptedPropertiesAs(t => t.Name.StartsWith("Encrypted"));
 
-                        c.RijndaelEncryptionService("1st", Keys);
+                        c.EnableMessagePropertyEncryption(new RijndaelEncryptionService("1st", Keys));
                     })
                     .AddMapping<MessageWithSecretData>(typeof(Receiver))
                     // remove that type from assembly scanning to simulate what would happen with true unobtrusive mode
-                    .ExcludeType<MessageWithSecretData>(); 
+                    .ExcludeType<MessageWithSecretData>();
             }
         }
 
@@ -92,7 +92,7 @@ namespace NServiceBus.Encryption.MessageProperty.AcceptanceTests
                         .DefiningCommandsAs(t => t.Namespace != null && t.FullName == typeof(MessageWithSecretData).FullName)
                         .DefiningEncryptedPropertiesAs(t => t.Name.StartsWith("Encrypted"));
 
-                    c.RijndaelEncryptionService("1st", Keys);
+                    c.EnableMessagePropertyEncryption(new RijndaelEncryptionService("1st", Keys));
                 });
             }
 

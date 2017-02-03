@@ -4,12 +4,6 @@
 [assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5.2", FrameworkDisplayName=".NET Framework 4.5.2")]
 namespace NServiceBus.Encryption.MessageProperty
 {
-    public class static ConfigureRijndaelEncryptionService
-    {
-        public static void RegisterEncryptionService(this NServiceBus.EndpointConfiguration config, System.Func<NServiceBus.Encryption.MessageProperty.IEncryptionService> func) { }
-        public static void RijndaelEncryptionService(this NServiceBus.EndpointConfiguration config, string encryptionKeyIdentifier, byte[] encryptionKey, System.Collections.Generic.IList<byte[]> decryptionKeys = null) { }
-        public static void RijndaelEncryptionService(this NServiceBus.EndpointConfiguration config, string encryptionKeyIdentifier, System.Collections.Generic.IDictionary<string, byte[]> keys, System.Collections.Generic.IList<byte[]> decryptionKeys = null) { }
-    }
     public class Conventions
     {
         public Conventions() { }
@@ -22,10 +16,25 @@ namespace NServiceBus.Encryption.MessageProperty
         public string Base64Iv { get; set; }
         public string EncryptedBase64Value { get; set; }
     }
+    public class static EncryptionConfigurationExtensions
+    {
+        public static void EnableMessagePropertyEncryption(this NServiceBus.EndpointConfiguration configuration, NServiceBus.Encryption.MessageProperty.IEncryptionService encryptionService) { }
+    }
     public interface IEncryptionService
     {
         string Decrypt(NServiceBus.Encryption.MessageProperty.EncryptedValue encryptedValue, NServiceBus.Pipeline.IIncomingLogicalMessageContext context);
         NServiceBus.Encryption.MessageProperty.EncryptedValue Encrypt(string value, NServiceBus.Pipeline.IOutgoingLogicalMessageContext context);
+    }
+    public class RijndaelEncryptionService : NServiceBus.Encryption.MessageProperty.IEncryptionService
+    {
+        public RijndaelEncryptionService(string encryptionKeyIdentifier, byte[] key) { }
+        public RijndaelEncryptionService(string encryptionKeyIdentifier, System.Collections.Generic.IDictionary<string, byte[]> keys) { }
+        public RijndaelEncryptionService(string encryptionKeyIdentifier, System.Collections.Generic.IDictionary<string, byte[]> keys, System.Collections.Generic.IList<byte[]> decryptionKeys) { }
+        protected virtual void AddKeyIdentifierHeader(NServiceBus.Pipeline.IOutgoingLogicalMessageContext context) { }
+        protected virtual void ConfigureIV(System.Security.Cryptography.RijndaelManaged rijndael) { }
+        public string Decrypt(NServiceBus.Encryption.MessageProperty.EncryptedValue encryptedValue, NServiceBus.Pipeline.IIncomingLogicalMessageContext context) { }
+        public NServiceBus.Encryption.MessageProperty.EncryptedValue Encrypt(string value, NServiceBus.Pipeline.IOutgoingLogicalMessageContext context) { }
+        protected virtual bool TryGetKeyIdentifierHeader(out string keyIdentifier, NServiceBus.Pipeline.IIncomingLogicalMessageContext context) { }
     }
     public class WireEncryptedString : System.Runtime.Serialization.ISerializable
     {

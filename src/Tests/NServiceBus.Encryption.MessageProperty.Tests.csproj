@@ -78,7 +78,6 @@
     <Compile Include="API\APIApprovals.cs" />
     <Compile Include="API\ApprovalTestConfig.cs" />
     <Compile Include="App_Packages\PublicApiGenerator.6.0.0\ApiGenerator.cs" />
-    <Compile Include="ConfigureRijndaelEncryptionServiceTests.cs" />
     <Compile Include="ConventionBasedEncryptedStringSpecs.cs" />
     <Compile Include="FakeEncryptionService.cs" />
     <Compile Include="Issue_701.cs" />

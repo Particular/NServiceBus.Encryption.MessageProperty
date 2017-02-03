@@ -59,6 +59,7 @@
     <Compile Include="EncryptBehavior.cs" />
     <Compile Include="EncryptedValue.cs" />
     <Compile Include="Encryption.cs" />
+    <Compile Include="EncryptionConfigurationExtensions.cs" />
     <Compile Include="EncryptionInspector.cs" />
     <Compile Include="IEncryptionService.cs" />
     <Compile Include="InternalsVisibleTo.cs" />

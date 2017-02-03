@@ -29,11 +29,12 @@
                 EndpointSetup<DefaultServer>(c =>
                 {
                     // ReSharper disable once InvokeAsExtensionMethod
-                    ConfigureRijndaelEncryptionService.RijndaelEncryptionService(c, "keyIdentifier1", new Dictionary<string, byte[]>()
+                    c.EnableMessagePropertyEncryption(new RijndaelEncryptionService("keyIdentifier1", new Dictionary<string, byte[]>
                     {
                         {"keyIdentifier1", Encoding.ASCII.GetBytes("aaaaaaaaaabbbbbbbbbbcccc")}
-                    });
-                    NServiceBus.ConfigureRijndaelEncryptionService.RijndaelEncryptionService(c, "keyIdentifier2", new Dictionary<string, byte[]>
+                    }));
+
+                    c.RijndaelEncryptionService("keyIdentifier2", new Dictionary<string, byte[]>
                     {
                         {"keyIdentifier2", Encoding.ASCII.GetBytes("ddddddddddeeeeeeeeeeffff")}
                     });

@@ -66,7 +66,7 @@
                     {"1st", Encoding.ASCII.GetBytes("gdDbqRpqdRbTs3mhdZh9qCaDaxJXl+e6")}
                 };
 
-                EndpointSetup<DefaultServer>(builder => builder.RijndaelEncryptionService("1st", keys));
+                EndpointSetup<DefaultServer>(builder => builder.EnableMessagePropertyEncryption(new RijndaelEncryptionService("1st", keys)));
             }
 
             public class Handler : IHandleMessages<MessageWithSecretData>

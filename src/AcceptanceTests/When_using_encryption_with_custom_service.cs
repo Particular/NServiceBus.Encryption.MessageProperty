@@ -62,7 +62,7 @@
         {
             public Endpoint()
             {
-                EndpointSetup<DefaultServer>(builder => builder.RegisterEncryptionService(() => new MyEncryptionService()));
+                EndpointSetup<DefaultServer>(builder => builder.EnableMessagePropertyEncryption(new MyEncryptionService()));
             }
 
             public class Handler : IHandleMessages<MessageWithSecretData>

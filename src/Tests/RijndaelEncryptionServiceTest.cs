@@ -151,12 +151,11 @@
         public void Encrypt_using_missing_key_identifier_must_throw()
         {
             var encryptionKey1 = Encoding.ASCII.GetBytes("gdDbqRpqdRbTs3mhdZh9qCaDaxJXl+e6");
-            var service1 = new RijndaelEncryptionService(null, new Dictionary<string, byte[]>
+
+            Assert.Catch<ArgumentNullException>(() => new RijndaelEncryptionService(null, new Dictionary<string, byte[]>
             {
                 {"some-key", encryptionKey1}
-            }, new List<byte[]>());
-
-            Assert.Catch<InvalidOperationException>(() => service1.Encrypt("string to encrypt", null), "It is required to set the rijndael key identifier.");
+            }, new List<byte[]>()));
         }
 
         [Test]
