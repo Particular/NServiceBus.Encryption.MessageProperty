@@ -3,7 +3,6 @@
     using System.Text;
     using System.Threading.Tasks;
     using AcceptanceTesting;
-    using Configuration.AdvanceExtensibility;
     using NUnit.Framework;
 
     [TestFixture]
@@ -36,14 +35,10 @@
             public SendingEndpoint()
             {
                 EndpointSetup<DefaultServer>(c =>
-                {
-                    // NServiceBus.Encryption.MessageProperty encryption feature
-                    c.RijndaelEncryptionService(keyIdentifier, encryptionKey);
-                    c.GetSettings().Set<Conventions>(new Conventions
                     {
-                        IsEncryptedPropertyAction = p => p.Name == "Value"
-                    });
-                })
+                        // NServiceBus.Encryption.MessageProperty encryption feature
+                        c.EnableMessagePropertyEncryption(new RijndaelEncryptionService(keyIdentifier, encryptionKey), p => p.Name == "Value");
+                    })
                     .AddMapping<MessageWithEncryptedProperty>(typeof(ReceivingEndpoint));
             }
         }
@@ -55,7 +50,7 @@
                 EndpointSetup<DefaultServer>(c =>
                 {
                     // NServiceBus.Core encryption feature
-                    NServiceBus.ConfigureRijndaelEncryptionService.RijndaelEncryptionService(c, keyIdentifier, encryptionKey);
+                    c.RijndaelEncryptionService(keyIdentifier, encryptionKey);
                     c.Conventions().DefiningEncryptedPropertiesAs(p => p.Name == "Value");
                 });
             }
