@@ -54,7 +54,7 @@
                 return;
             }
 
-            throw new Exception("Only string properties is supported for convention based encryption, check the configured conventions.");
+            throw new Exception("Only string properties are supported for convention based encryption. Check the configured conventions.");
         }
 
         IEncryptionService encryptionService;
