@@ -7,7 +7,10 @@
     {
         public MessagePropertyEncryption()
         {
-            Defaults(s => s.SetDefault<IsEncrytedPropertyConvention>(new IsEncrytedPropertyConvention(p => typeof(WireEncryptedString).IsAssignableFrom(p.PropertyType))));
+            Defaults(s => s.SetDefault<IsEncrytedPropertyConvention>(
+                new IsEncrytedPropertyConvention(p =>
+                typeof(WireEncryptedString).IsAssignableFrom(p.PropertyType)
+                || typeof(NServiceBus.WireEncryptedString).IsAssignableFrom(p.PropertyType))));
         }
 
         protected override void Setup(FeatureConfigurationContext context)
