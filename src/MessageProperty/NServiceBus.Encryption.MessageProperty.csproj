@@ -53,7 +53,6 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConfigureRijndaelEncryptionService.cs" />
     <Compile Include="IsEncrytedPropertyConvention.cs" />
     <Compile Include="DecryptBehavior.cs" />
     <Compile Include="EncryptBehavior.cs" />
