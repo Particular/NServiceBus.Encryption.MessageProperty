@@ -7,8 +7,8 @@
     {
         public MessagePropertyEncryption()
         {
-            Defaults(s => s.SetDefault<IsEncrytedPropertyConvention>(
-                new IsEncrytedPropertyConvention(p =>
+            Defaults(s => s.SetDefault<IsEncryptedPropertyConvention>(
+                new IsEncryptedPropertyConvention(p =>
                 typeof(WireEncryptedString).IsAssignableFrom(p.PropertyType)
                 || typeof(NServiceBus.WireEncryptedString).IsAssignableFrom(p.PropertyType))));
         }
@@ -23,7 +23,7 @@
             }
 
             var encryptionService = context.Settings.GetEncryptionService();
-            var inspector = new EncryptionInspector(context.Settings.Get<IsEncrytedPropertyConvention>());
+            var inspector = new EncryptionInspector(context.Settings.Get<IsEncryptedPropertyConvention>());
 
             context.Pipeline.Register(new EncryptBehavior.EncryptRegistration(inspector, encryptionService));
             context.Pipeline.Register(new DecryptBehavior.DecryptRegistration(inspector, encryptionService));

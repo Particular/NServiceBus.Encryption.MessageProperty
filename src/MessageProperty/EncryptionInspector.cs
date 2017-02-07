@@ -9,7 +9,7 @@ namespace NServiceBus.Encryption.MessageProperty
 
     class EncryptionInspector
     {
-        public EncryptionInspector(IsEncrytedPropertyConvention encryptedPropertyConvention)
+        public EncryptionInspector(IsEncryptedPropertyConvention encryptedPropertyConvention)
         {
             this.encryptedPropertyConvention = encryptedPropertyConvention;
         }
@@ -155,7 +155,7 @@ namespace NServiceBus.Encryption.MessageProperty
             });
         }
 
-        IsEncrytedPropertyConvention encryptedPropertyConvention;
+        IsEncryptedPropertyConvention encryptedPropertyConvention;
 
         static List<MemberInfo> NoMembers = new List<MemberInfo>(0);
 

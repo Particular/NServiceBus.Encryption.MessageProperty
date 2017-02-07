@@ -6,9 +6,9 @@
     /// <summary>
     /// Message convention definitions.
     /// </summary>
-    class IsEncrytedPropertyConvention
+    class IsEncryptedPropertyConvention
     {
-        public IsEncrytedPropertyConvention(Func<PropertyInfo, bool> isEncryptedPropertyAction)
+        public IsEncryptedPropertyConvention(Func<PropertyInfo, bool> isEncryptedPropertyAction)
         {
             IsEncryptedPropertyAction = isEncryptedPropertyAction;
         }

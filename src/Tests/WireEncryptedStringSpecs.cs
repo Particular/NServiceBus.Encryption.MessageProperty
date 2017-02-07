@@ -214,7 +214,7 @@
         public void BaseSetUp()
         {
             conventions = BuildConventions();
-            inspector = new EncryptionInspector(new IsEncrytedPropertyConvention(conventions));
+            inspector = new EncryptionInspector(new IsEncryptedPropertyConvention(conventions));
         }
 
         protected virtual Func<PropertyInfo, bool> BuildConventions()

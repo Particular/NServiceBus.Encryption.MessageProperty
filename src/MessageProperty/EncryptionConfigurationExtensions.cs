@@ -35,7 +35,7 @@
             Guard.AgainstNull(nameof(encryptedPropertyConvention), encryptedPropertyConvention);
 
             configuration.EnableMessagePropertyEncryption(encryptionService);
-            configuration.GetSettings().Set<IsEncrytedPropertyConvention>(new IsEncrytedPropertyConvention(encryptedPropertyConvention));
+            configuration.GetSettings().Set<IsEncryptedPropertyConvention>(new IsEncryptedPropertyConvention(encryptedPropertyConvention));
         }
 
         internal static IEncryptionService GetEncryptionService(this ReadOnlySettings settings)
