@@ -2,6 +2,7 @@
 {
     using System;
     using System.Linq;
+    using System.Reflection;
     using NUnit.Framework;
 
     [TestFixture]
@@ -35,12 +36,9 @@
 
     public class UserDefinedConventionContext : WireEncryptedStringContext
     {
-        protected override Conventions BuildConventions()
+        protected override Func<PropertyInfo, bool> BuildConventions()
         {
-            return new Conventions
-            {
-                IsEncryptedPropertyAction = p => p.Name.StartsWith("Encrypted")
-            };
+            return p => p.Name.StartsWith("Encrypted");
         }
     }
 

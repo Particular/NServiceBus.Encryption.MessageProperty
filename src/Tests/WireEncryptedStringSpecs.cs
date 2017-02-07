@@ -4,6 +4,7 @@
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
     using NUnit.Framework;
 
     [TestFixture]
@@ -207,21 +208,18 @@
 
         protected string EncryptedBase64Value = "encrypted value";
         protected string MySecretMessage = "A secret";
-        protected Conventions conventions;
+        protected Func<PropertyInfo, bool> conventions;
 
         [SetUp]
         public void BaseSetUp()
         {
             conventions = BuildConventions();
-            inspector = new EncryptionInspector(conventions);
+            inspector = new EncryptionInspector(new IsEncryptedPropertyConvention(conventions));
         }
 
-        protected virtual Conventions BuildConventions()
+        protected virtual Func<PropertyInfo, bool> BuildConventions()
         {
-            return new Conventions
-            {
-                IsEncryptedPropertyAction = property => typeof(WireEncryptedString).IsAssignableFrom(property.PropertyType)
-            };
+            return property => typeof(WireEncryptedString).IsAssignableFrom(property.PropertyType);
         }
 
         protected WireEncryptedString Create()

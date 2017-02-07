@@ -9,9 +9,9 @@ namespace NServiceBus.Encryption.MessageProperty
 
     class EncryptionInspector
     {
-        public EncryptionInspector(Conventions conventions)
+        public EncryptionInspector(IsEncryptedPropertyConvention encryptedPropertyConvention)
         {
-            this.conventions = conventions;
+            this.encryptedPropertyConvention = encryptedPropertyConvention;
         }
 
         static bool IsIndexedProperty(MemberInfo member)
@@ -28,7 +28,7 @@ namespace NServiceBus.Encryption.MessageProperty
             {
                 if (propertyInfo.GetIndexParameters().Length > 0)
                 {
-                    if (conventions.IsEncryptedProperty(propertyInfo))
+                    if (encryptedPropertyConvention.IsEncryptedProperty(propertyInfo))
                     {
                         throw new Exception("Cannot encrypt or decrypt indexed properties that return a WireEncryptedString.");
                     }
@@ -36,7 +36,7 @@ namespace NServiceBus.Encryption.MessageProperty
                     return false;
                 }
 
-                return conventions.IsEncryptedProperty(propertyInfo);
+                return encryptedPropertyConvention.IsEncryptedProperty(propertyInfo);
             }
 
             var fieldInfo = arg as FieldInfo;
@@ -155,7 +155,7 @@ namespace NServiceBus.Encryption.MessageProperty
             });
         }
 
-        Conventions conventions;
+        IsEncryptedPropertyConvention encryptedPropertyConvention;
 
         static List<MemberInfo> NoMembers = new List<MemberInfo>(0);
 

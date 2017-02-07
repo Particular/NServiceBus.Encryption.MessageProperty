@@ -36,14 +36,53 @@ namespace NServiceBus.Encryption.MessageProperty
     using Logging;
     using Pipeline;
 
-    class RijndaelEncryptionService : IEncryptionService
+    /// <summary>
+    /// An <see cref="NServiceBus.IEncryptionService"/> implementation usable for message property encryption using the Rijndael algorithm.
+    /// </summary>
+    public class RijndaelEncryptionService : IEncryptionService
     {
+        /// <summary>
+        /// Creates a new instance of <see cref="NServiceBus.RijndaelEncryptionService" />
+        /// </summary>
+        /// <param name="encryptionKeyIdentifier">An identifier for the encryption key to be used to encrypt values.</param>
+        /// <param name="key">The encryption key to be used for encryption and decryption.</param>
+        public RijndaelEncryptionService(
+            string encryptionKeyIdentifier,
+            byte[] key) : this(encryptionKeyIdentifier, new Dictionary<string, byte[]>
+        {
+            {
+                encryptionKeyIdentifier, key
+            }
+        }, new List<byte[]>(0))
+        {
+        }
+
+        /// <summary>
+        /// Creates a new instance of <see cref="NServiceBus.RijndaelEncryptionService"/>
+        /// </summary>
+        /// <param name="encryptionKeyIdentifier">An identifier for the encryption key to be used to encrypt values.</param>
+        /// <param name="keys">A dictionary of available encryption keys and their identifiers for encryption and decryption.</param>
+        public RijndaelEncryptionService(
+            string encryptionKeyIdentifier,
+            IDictionary<string, byte[]> keys) : this(encryptionKeyIdentifier, keys, new List<byte[]>(0))
+        {
+        }
+
+        /// <summary>
+        /// Creates a new instance of <see cref="NServiceBus.RijndaelEncryptionService"/>
+        /// </summary>
+        /// <param name="encryptionKeyIdentifier">An identifier for the encryption key to be used to encrypt values.</param>
+        /// <param name="keys">A dictionary of available encryption keys and their identifiers for encryption and decryption.</param>
+        /// <param name="decryptionKeys">A list of outdated encryption keys without identifiers which can be used for decryption.</param>
         public RijndaelEncryptionService(
             string encryptionKeyIdentifier,
             IDictionary<string, byte[]> keys,
-            IList<byte[]> decryptionKeys
-            )
+            IList<byte[]> decryptionKeys)
         {
+            Guard.AgainstNullAndEmpty(nameof(encryptionKeyIdentifier), encryptionKeyIdentifier);
+            Guard.AgainstNull(nameof(keys), keys);
+            Guard.AgainstNull(nameof(decryptionKeys), decryptionKeys);
+
             this.encryptionKeyIdentifier = encryptionKeyIdentifier;
             this.decryptionKeys = decryptionKeys;
             this.keys = keys;
@@ -64,6 +103,9 @@ namespace NServiceBus.Encryption.MessageProperty
             VerifyExpiredKeys(decryptionKeys);
         }
 
+        /// <summary>
+        /// Decrypts the given EncryptedValue object returning the source string.
+        /// </summary>
         public string Decrypt(EncryptedValue encryptedValue, IIncomingLogicalMessageContext context)
         {
             string keyIdentifier;
@@ -76,6 +118,9 @@ namespace NServiceBus.Encryption.MessageProperty
             return DecryptUsingAllKeys(encryptedValue);
         }
 
+        /// <summary>
+        /// Encrypts the given value returning an EncryptedValue.
+        /// </summary>
         public EncryptedValue Encrypt(string value, IOutgoingLogicalMessageContext context)
         {
             if (string.IsNullOrEmpty(encryptionKeyIdentifier))
@@ -205,16 +250,25 @@ namespace NServiceBus.Encryption.MessageProperty
             }
         }
 
+        /// <summary>
+        /// Adds the key identifier of the currently used encryption key to the outgoing message's headers.
+        /// </summary>
         protected virtual void AddKeyIdentifierHeader(IOutgoingLogicalMessageContext context)
         {
             context.Headers[Headers.RijndaelKeyIdentifier] = encryptionKeyIdentifier;
         }
 
+        /// <summary>
+        /// Tries to locate an encryption key identfier from an incoming message.
+        /// </summary>
         protected virtual bool TryGetKeyIdentifierHeader(out string keyIdentifier, IIncomingLogicalMessageContext context)
         {
             return context.Headers.TryGetValue(Headers.RijndaelKeyIdentifier, out keyIdentifier);
         }
 
+        /// <summary>
+        /// Configures the initialization vector.
+        /// </summary>
         protected virtual void ConfigureIV(RijndaelManaged rijndael)
         {
             rijndael.GenerateIV();

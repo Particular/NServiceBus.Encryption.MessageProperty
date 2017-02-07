@@ -36,7 +36,7 @@
             {
                 EndpointSetup<DefaultServer>(builder =>
                     {
-                        builder.RijndaelEncryptionService("will-be-removed-by-transport-mutator", Encoding.ASCII.GetBytes("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
+                        builder.EnableMessagePropertyEncryption(new RijndaelEncryptionService("will-be-removed-by-transport-mutator", Encoding.ASCII.GetBytes("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")));
                     })
                     .AddMapping<MessageWithSecretData>(typeof(Receiver));
             }
@@ -55,7 +55,7 @@
                 {
                     Encoding.ASCII.GetBytes("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                 };
-                EndpointSetup<DefaultServer>(builder => builder.RijndaelEncryptionService("new", keys, expiredKeys));
+                EndpointSetup<DefaultServer>(builder => builder.EnableMessagePropertyEncryption(new RijndaelEncryptionService("new", keys, expiredKeys)));
             }
 
             public class Handler : IHandleMessages<MessageWithSecretData>

@@ -37,7 +37,7 @@
                 EndpointSetup<DefaultServer>(c =>
                     {
                         // NServiceBus.Encryption.MessageProperty encryption feature
-                        c.RijndaelEncryptionService(keyIdentifier, encryptionKey);
+                        c.EnableMessagePropertyEncryption(new RijndaelEncryptionService(keyIdentifier, encryptionKey));
                     })
                     .AddMapping<MessageWithLegacyEncryptedPropertyType>(typeof(ReceivingEndpoint));
             }
@@ -50,7 +50,7 @@
                 EndpointSetup<DefaultServer>(c =>
                 {
                     // NServiceBus.Core encryption feature
-                    NServiceBus.ConfigureRijndaelEncryptionService.RijndaelEncryptionService(c, keyIdentifier, encryptionKey);
+                    c.RijndaelEncryptionService(keyIdentifier, encryptionKey);
                 });
             }
 
