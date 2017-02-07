@@ -19,7 +19,7 @@
                     .Done(c => c.EndpointsStarted)
                     .Run());
 
-            StringAssert.Contains("The message property encryption extension as well as NServiceBus.Core's encryption feature are enabled. Disable one of the encryption features to avoid message payload corruption.", exception.Message);
+            StringAssert.Contains("Both NServiceBus.Encryption.MessageProperty.MessagePropertyEncryption and NServiceBus.Core's encryption feature are enabled. Disable one of the encryption features to avoid message payload corruption.", exception.Message);
         }
 
         class EncryptionEndpoint : EndpointConfigurationBuilder
