@@ -42,7 +42,7 @@ namespace NServiceBus.Encryption.MessageProperty
             var fieldInfo = arg as FieldInfo;
             if (fieldInfo != null)
             {
-                return fieldInfo.FieldType == typeof(WireEncryptedString) || fieldInfo.FieldType == typeof(NServiceBus.WireEncryptedString);
+                return fieldInfo.FieldType == typeof(EncryptedString) || fieldInfo.FieldType == typeof(WireEncryptedString);
             }
 
             return false;
@@ -72,7 +72,7 @@ namespace NServiceBus.Encryption.MessageProperty
                 if (IsEncryptedMember(member) && member.GetValue(root) != null)
                 {
                     var value = member.GetValue(root);
-                    if (value is string || value is WireEncryptedString || value is NServiceBus.WireEncryptedString)
+                    if (value is string || value is EncryptedString || value is WireEncryptedString)
                     {
                         properties.Add(Tuple.Create(root, member));
                         continue;
@@ -87,7 +87,7 @@ namespace NServiceBus.Encryption.MessageProperty
                 }
 
                 // don't try to recurse over members of WireEncryptedString
-                if (member.DeclaringType == typeof(WireEncryptedString) || member.DeclaringType == typeof(NServiceBus.WireEncryptedString))
+                if (member.DeclaringType == typeof(EncryptedString) || member.DeclaringType == typeof(WireEncryptedString))
                 {
                     continue;
                 }

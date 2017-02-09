@@ -3,15 +3,15 @@ namespace NServiceBus.Encryption.MessageProperty
     using System;
     using Pipeline;
 
-    static class WireEncryptedStringConversions
+    static class EncryptedStringConversions
     {
-        public static void EncryptValue(this IEncryptionService encryptionService, WireEncryptedString wireEncryptedString, IOutgoingLogicalMessageContext context)
+        public static void EncryptValue(this IEncryptionService encryptionService, EncryptedString encryptedString, IOutgoingLogicalMessageContext context)
         {
-            wireEncryptedString.EncryptedValue = encryptionService.Encrypt(wireEncryptedString.Value, context);
-            wireEncryptedString.Value = null;
+            encryptedString.EncryptedValue = encryptionService.Encrypt(encryptedString.Value, context);
+            encryptedString.Value = null;
         }
 
-        public static void EncryptValue(this IEncryptionService encryptionService, NServiceBus.WireEncryptedString wireEncryptedString, IOutgoingLogicalMessageContext context)
+        public static void EncryptValue(this IEncryptionService encryptionService, WireEncryptedString wireEncryptedString, IOutgoingLogicalMessageContext context)
         {
             var ev = encryptionService.Encrypt(wireEncryptedString.Value, context);
             wireEncryptedString.EncryptedValue = new NServiceBus.EncryptedValue
@@ -22,17 +22,17 @@ namespace NServiceBus.Encryption.MessageProperty
             wireEncryptedString.Value = null;
         }
 
-        public static void DecryptValue(this IEncryptionService encryptionService, WireEncryptedString wireEncryptedString, IIncomingLogicalMessageContext context)
+        public static void DecryptValue(this IEncryptionService encryptionService, EncryptedString encryptedString, IIncomingLogicalMessageContext context)
         {
-            if (wireEncryptedString.EncryptedValue == null)
+            if (encryptedString.EncryptedValue == null)
             {
                 throw new Exception("Encrypted property is missing encryption data");
             }
 
-            wireEncryptedString.Value = encryptionService.Decrypt(wireEncryptedString.EncryptedValue, context);
+            encryptedString.Value = encryptionService.Decrypt(encryptedString.EncryptedValue, context);
         }
 
-        public static void DecryptValue(this IEncryptionService encryptionService, NServiceBus.WireEncryptedString wireEncryptedString, IIncomingLogicalMessageContext context)
+        public static void DecryptValue(this IEncryptionService encryptionService, WireEncryptedString wireEncryptedString, IIncomingLogicalMessageContext context)
         {
             if (wireEncryptedString.EncryptedValue == null)
             {

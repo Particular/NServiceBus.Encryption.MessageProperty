@@ -70,8 +70,8 @@
     <Compile Include="Utils\Guard.cs" />
     <Compile Include="Utils\DelegateFactory.cs" />
     <Compile Include="Utils\ExtensionMethods.cs" />
-    <Compile Include="WireEncryptedString.cs" />
-    <Compile Include="WireEncryptedStringConversions.cs" />
+    <Compile Include="EncryptedString.cs" />
+    <Compile Include="EncryptedStringConversions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

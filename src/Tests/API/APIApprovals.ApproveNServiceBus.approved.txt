@@ -4,6 +4,14 @@
 [assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5.2", FrameworkDisplayName=".NET Framework 4.5.2")]
 namespace NServiceBus.Encryption.MessageProperty
 {
+    public class EncryptedString : System.Runtime.Serialization.ISerializable
+    {
+        public EncryptedString() { }
+        public EncryptedString(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
+        public NServiceBus.Encryption.MessageProperty.EncryptedValue EncryptedValue { get; set; }
+        public string Value { get; set; }
+        public void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
+    }
     public class EncryptedValue
     {
         public EncryptedValue() { }
@@ -30,13 +38,5 @@ namespace NServiceBus.Encryption.MessageProperty
         public string Decrypt(NServiceBus.Encryption.MessageProperty.EncryptedValue encryptedValue, NServiceBus.Pipeline.IIncomingLogicalMessageContext context) { }
         public NServiceBus.Encryption.MessageProperty.EncryptedValue Encrypt(string value, NServiceBus.Pipeline.IOutgoingLogicalMessageContext context) { }
         protected virtual bool TryGetKeyIdentifierHeader(out string keyIdentifier, NServiceBus.Pipeline.IIncomingLogicalMessageContext context) { }
-    }
-    public class WireEncryptedString : System.Runtime.Serialization.ISerializable
-    {
-        public WireEncryptedString() { }
-        public WireEncryptedString(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
-        public NServiceBus.Encryption.MessageProperty.EncryptedValue EncryptedValue { get; set; }
-        public string Value { get; set; }
-        public void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
     }
 }

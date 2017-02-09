@@ -74,7 +74,7 @@
                 set { indexedList[index] = value; }
             }
 
-            public WireEncryptedString Secret { get; set; }
+            public EncryptedString Secret { get; set; }
         }
     }
 
@@ -95,9 +95,9 @@
 
         public class MessageWithIndexedProperties : IMessage
         {
-            WireEncryptedString[] indexedList = new WireEncryptedString[2];
+            EncryptedString[] indexedList = new EncryptedString[2];
 
-            public WireEncryptedString this[int index]
+            public EncryptedString this[int index]
             {
                 get { return indexedList[index]; }
                 set { indexedList[index] = value; }
@@ -142,16 +142,16 @@
             inspector
                 .ScanObject(message)
                 .ToList()
-                .ForEach(x => x.Item2.SetValue(x.Item1, (WireEncryptedString)MySecretMessage));
+                .ForEach(x => x.Item2.SetValue(x.Item1, (EncryptedString)MySecretMessage));
 
             Assert.AreEqual(MySecretMessage, message.MySecret.Value);
         }
 
         public class MessageWithPropertyWithBackingPublicField : IMessage
         {
-            public WireEncryptedString mySuperSecret;
+            public EncryptedString mySuperSecret;
 
-            public WireEncryptedString MySecret
+            public EncryptedString MySecret
             {
                 get { return mySuperSecret; }
                 set { mySuperSecret = value; }
@@ -219,12 +219,12 @@
 
         protected virtual Func<PropertyInfo, bool> BuildConventions()
         {
-            return property => typeof(WireEncryptedString).IsAssignableFrom(property.PropertyType);
+            return property => typeof(EncryptedString).IsAssignableFrom(property.PropertyType);
         }
 
-        protected WireEncryptedString Create()
+        protected EncryptedString Create()
         {
-            return new WireEncryptedString
+            return new EncryptedString
             {
                 EncryptedValue = new EncryptedValue
                 {
@@ -243,10 +243,10 @@
 
     public class Customer : IMessage
     {
-        public WireEncryptedString Secret { get; set; }
-        public WireEncryptedString SecretField;
+        public EncryptedString Secret { get; set; }
+        public EncryptedString SecretField;
         public CreditCardDetails CreditCard { get; set; }
-        public WireEncryptedString SecretThatIsNull { get; set; }
+        public EncryptedString SecretThatIsNull { get; set; }
         public DateTime DateTime { get; set; }
         public List<CreditCardDetails> ListOfCreditCards { get; set; }
         public ArrayList ListOfSecrets { get; set; }
@@ -255,17 +255,17 @@
 
     public class CreditCardDetails
     {
-        public WireEncryptedString CreditCardNumber { get; set; }
+        public EncryptedString CreditCardNumber { get; set; }
     }
 
     public class SecureMessageWithProtectedSetter : IMessage
     {
-        public SecureMessageWithProtectedSetter(WireEncryptedString secret)
+        public SecureMessageWithProtectedSetter(EncryptedString secret)
         {
             Secret = secret;
         }
 
-        public WireEncryptedString Secret { get; protected set; }
+        public EncryptedString Secret { get; protected set; }
     }
 
     public class MessageWithCircularReferences : IMessage
@@ -276,13 +276,13 @@
 
     public class MessageWithMissingData : IMessage
     {
-        public WireEncryptedString Secret { get; set; }
+        public EncryptedString Secret { get; set; }
     }
 
     public class SubProperty
     {
         public MessageWithCircularReferences Parent { get; set; }
-        public WireEncryptedString Secret { get; set; }
+        public EncryptedString Secret { get; set; }
         public SubProperty Self { get; set; }
     }
 
