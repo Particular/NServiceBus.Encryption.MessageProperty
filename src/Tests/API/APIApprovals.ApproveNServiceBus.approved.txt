@@ -1,0 +1,42 @@
+﻿[assembly: System.CLSCompliantAttribute(true)]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute(@"NServiceBus.Encryption.MessageProperty.Tests, PublicKey=0024000004800000940000000602000000240000525341310004000001000100dde965e6172e019ac82c2639ffe494dd2e7dd16347c34762a05732b492e110f2e4e2e1b5ef2d85c848ccfb671ee20a47c8d1376276708dc30a90ff1121b647ba3b7259a6bc383b2034938ef0e275b58b920375ac605076178123693c6c4f1331661a62eba28c249386855637780e3ff5f23a6d854700eaa6803ef48907513b92")]
+[assembly: System.Runtime.InteropServices.ComVisibleAttribute(false)]
+[assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5.2", FrameworkDisplayName=".NET Framework 4.5.2")]
+namespace NServiceBus.Encryption.MessageProperty
+{
+    public class EncryptedString : System.Runtime.Serialization.ISerializable
+    {
+        public EncryptedString() { }
+        public EncryptedString(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
+        public NServiceBus.Encryption.MessageProperty.EncryptedValue EncryptedValue { get; set; }
+        public string Value { get; set; }
+        public void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
+    }
+    public class EncryptedValue
+    {
+        public EncryptedValue() { }
+        public string Base64Iv { get; set; }
+        public string EncryptedBase64Value { get; set; }
+    }
+    public class static EncryptionConfigurationExtensions
+    {
+        public static void EnableMessagePropertyEncryption(this NServiceBus.EndpointConfiguration configuration, NServiceBus.Encryption.MessageProperty.IEncryptionService encryptionService) { }
+        public static void EnableMessagePropertyEncryption(this NServiceBus.EndpointConfiguration configuration, NServiceBus.Encryption.MessageProperty.IEncryptionService encryptionService, System.Func<System.Reflection.PropertyInfo, bool> encryptedPropertyConvention) { }
+    }
+    public interface IEncryptionService
+    {
+        string Decrypt(NServiceBus.Encryption.MessageProperty.EncryptedValue encryptedValue, NServiceBus.Pipeline.IIncomingLogicalMessageContext context);
+        NServiceBus.Encryption.MessageProperty.EncryptedValue Encrypt(string value, NServiceBus.Pipeline.IOutgoingLogicalMessageContext context);
+    }
+    public class RijndaelEncryptionService : NServiceBus.Encryption.MessageProperty.IEncryptionService
+    {
+        public RijndaelEncryptionService(string encryptionKeyIdentifier, byte[] key) { }
+        public RijndaelEncryptionService(string encryptionKeyIdentifier, System.Collections.Generic.IDictionary<string, byte[]> keys) { }
+        public RijndaelEncryptionService(string encryptionKeyIdentifier, System.Collections.Generic.IDictionary<string, byte[]> keys, System.Collections.Generic.IList<byte[]> decryptionKeys) { }
+        protected virtual void AddKeyIdentifierHeader(NServiceBus.Pipeline.IOutgoingLogicalMessageContext context) { }
+        protected virtual void ConfigureIV(System.Security.Cryptography.RijndaelManaged rijndael) { }
+        public string Decrypt(NServiceBus.Encryption.MessageProperty.EncryptedValue encryptedValue, NServiceBus.Pipeline.IIncomingLogicalMessageContext context) { }
+        public NServiceBus.Encryption.MessageProperty.EncryptedValue Encrypt(string value, NServiceBus.Pipeline.IOutgoingLogicalMessageContext context) { }
+        protected virtual bool TryGetKeyIdentifierHeader(out string keyIdentifier, NServiceBus.Pipeline.IIncomingLogicalMessageContext context) { }
+    }
+}
