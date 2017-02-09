@@ -31,7 +31,7 @@
         {
             var valueToEncrypt = member.GetValue(message);
 
-            var wireEncryptedString = valueToEncrypt as WireEncryptedString;
+            var wireEncryptedString = valueToEncrypt as EncryptedString;
             if (wireEncryptedString != null)
             {
                 encryptionService.EncryptValue(wireEncryptedString, context);
@@ -47,7 +47,7 @@
                 return;
             }
 
-            var legacyWireEncryptedString = valueToEncrypt as NServiceBus.WireEncryptedString;
+            var legacyWireEncryptedString = valueToEncrypt as WireEncryptedString;
             if (legacyWireEncryptedString != null)
             {
                 encryptionService.EncryptValue(legacyWireEncryptedString, context);

@@ -32,7 +32,7 @@ namespace NServiceBus.Encryption.MessageProperty
         {
             var encryptedValue = property.GetValue(target);
 
-            var wireEncryptedString = encryptedValue as WireEncryptedString;
+            var wireEncryptedString = encryptedValue as EncryptedString;
             if (wireEncryptedString != null)
             {
                 encryptionService.DecryptValue(wireEncryptedString, context);
@@ -45,7 +45,7 @@ namespace NServiceBus.Encryption.MessageProperty
                 property.SetValue(target, stringToDecrypt);
             }
 
-            var legacyWireEncryptedString = encryptedValue as NServiceBus.WireEncryptedString;
+            var legacyWireEncryptedString = encryptedValue as WireEncryptedString;
             if (legacyWireEncryptedString != null)
             {
                 encryptionService.DecryptValue(legacyWireEncryptedString, context);

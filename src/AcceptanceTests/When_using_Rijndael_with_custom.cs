@@ -94,7 +94,7 @@
 
         public class MessageWithSecretData : IMessage
         {
-            public WireEncryptedString Secret { get; set; }
+            public EncryptedString Secret { get; set; }
             public MySecretSubProperty SubProperty { get; set; }
             public List<CreditCardDetails> CreditCards { get; set; }
         }
@@ -102,12 +102,12 @@
         public class CreditCardDetails
         {
             public DateTime ValidTo { get; set; }
-            public WireEncryptedString Number { get; set; }
+            public EncryptedString Number { get; set; }
         }
 
         public class MySecretSubProperty
         {
-            public WireEncryptedString Secret { get; set; }
+            public EncryptedString Secret { get; set; }
         }
     }
 }

@@ -72,7 +72,7 @@
 
         public class MessageWithSecretData : IMessage
         {
-            public WireEncryptedString Secret { get; set; }
+            public EncryptedString Secret { get; set; }
         }
     }
 }

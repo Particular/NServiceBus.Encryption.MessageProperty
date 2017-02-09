@@ -15,13 +15,13 @@
                 Base64Iv = "Base64Iv"
             });
 
-            var value = new WireEncryptedString
+            var value = new EncryptedString
             {
                 Value = "The real value"
             };
 
             // ReSharper disable once InvokeAsExtensionMethod
-            var exception = Assert.Throws<Exception>(() => WireEncryptedStringConversions.DecryptValue(service, value, null));
+            var exception = Assert.Throws<Exception>(() => EncryptedStringConversions.DecryptValue(service, value, null));
             Assert.AreEqual("Encrypted property is missing encryption data", exception.Message);
         }
     }

@@ -29,7 +29,7 @@
         /// </summary>
         /// <param name="configuration">The endpoint configurartion to extend.</param>
         /// <param name="encryptionService">The encryption service used to encrypt and decrypt message properties.</param>
-        /// <param name="encryptedPropertyConvention">The convention which defines which properties should be encrypted. By default, all properties of type <see cref="NServiceBus.WireEncryptedString"/> will be encrypted.</param>
+        /// <param name="encryptedPropertyConvention">The convention which defines which properties should be encrypted. By default, all properties of type <see cref="EncryptedString"/> and <see cref="WireEncryptedString"/> will be encrypted.</param>
         public static void EnableMessagePropertyEncryption(this EndpointConfiguration configuration, IEncryptionService encryptionService, Func<PropertyInfo, bool> encryptedPropertyConvention)
         {
             Guard.AgainstNull(nameof(encryptedPropertyConvention), encryptedPropertyConvention);

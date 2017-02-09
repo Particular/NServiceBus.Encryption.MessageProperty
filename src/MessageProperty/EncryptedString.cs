@@ -7,19 +7,19 @@
     /// A string whose value will be encrypted when sent over the wire.
     /// </summary>
     [Serializable]
-    public class WireEncryptedString : ISerializable
+    public class EncryptedString : ISerializable
     {
         /// <summary>
-        /// Initializes a new instance of <see cref="WireEncryptedString" />.
+        /// Initializes a new instance of <see cref="EncryptedString" />.
         /// </summary>
-        public WireEncryptedString()
+        public EncryptedString()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of <see cref="WireEncryptedString" />.
+        /// Initializes a new instance of <see cref="EncryptedString" />.
         /// </summary>
-        public WireEncryptedString(SerializationInfo info, StreamingContext context)
+        public EncryptedString(SerializationInfo info, StreamingContext context)
         {
             Guard.AgainstNull(nameof(info), info);
             EncryptedValue = info.GetValue("EncryptedValue", typeof(EncryptedValue)) as EncryptedValue;
@@ -53,7 +53,7 @@
         /// <summary>
         /// Gets the string value from the WireEncryptedString.
         /// </summary>
-        public static implicit operator string(WireEncryptedString s)
+        public static implicit operator string(EncryptedString s)
         {
             return s?.Value;
         }
@@ -61,9 +61,9 @@
         /// <summary>
         /// Creates a new WireEncryptedString from the given string.
         /// </summary>
-        public static implicit operator WireEncryptedString(string s)
+        public static implicit operator EncryptedString(string s)
         {
-            return new WireEncryptedString
+            return new EncryptedString
             {
                 Value = s
             };

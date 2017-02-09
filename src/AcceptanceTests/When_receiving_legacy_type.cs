@@ -73,7 +73,7 @@
 
         class MessageWithLegacyEncryptedPropertyType : ICommand
         {
-            public NServiceBus.WireEncryptedString Value { get; set; }
+            public WireEncryptedString Value { get; set; }
         }
     }
 }
