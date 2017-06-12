@@ -6,6 +6,7 @@ namespace NServiceBus.Encryption.MessageProperty.AcceptanceTests
     using System.Text;
     using System.Threading.Tasks;
     using AcceptanceTesting;
+    using AcceptanceTesting.Customization;
     using NUnit.Framework;
 
     public class When_using_Rijndael_with_unobtrusive_mode : NServiceBusAcceptanceTest
@@ -69,14 +70,17 @@ namespace NServiceBus.Encryption.MessageProperty.AcceptanceTests
             public Sender()
             {
                 EndpointSetup<DefaultServer>(c =>
-                    {
-                        c.Conventions().DefiningCommandsAs(t => t.Namespace != null && t.FullName == typeof(MessageWithSecretData).FullName);
+                {
+                    c.Conventions().DefiningCommandsAs(t => t.Namespace != null && t.FullName == typeof(MessageWithSecretData).FullName);
 
-                        c.EnableMessagePropertyEncryption(new RijndaelEncryptionService("1st", Keys), t => t.Name.StartsWith("Encrypted"));
-                    })
-                    .AddMapping<MessageWithSecretData>(typeof(Receiver))
-                    // remove that type from assembly scanning to simulate what would happen with true unobtrusive mode
-                    .ExcludeType<MessageWithSecretData>();
+                    c.EnableMessagePropertyEncryption(new RijndaelEncryptionService("1st", Keys), t => t.Name.StartsWith("Encrypted"));
+
+                    c.UseTransport<MsmqTransport>()
+                        .Routing()
+                        .RouteToEndpoint(typeof(MessageWithSecretData), Conventions.EndpointNamingConvention(typeof(Receiver)));
+                })
+                // remove that type from assembly scanning to simulate what would happen with true unobtrusive mode
+                .ExcludeType<MessageWithSecretData>();
             }
         }
 

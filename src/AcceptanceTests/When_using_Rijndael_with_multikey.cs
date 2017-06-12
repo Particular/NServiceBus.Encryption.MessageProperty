@@ -4,6 +4,7 @@
     using System.Text;
     using System.Threading.Tasks;
     using AcceptanceTesting;
+    using AcceptanceTesting.Customization;
     using NUnit.Framework;
 
     public class When_using_Rijndael_with_multikey : NServiceBusAcceptanceTest
@@ -33,8 +34,13 @@
         {
             public Sender()
             {
-                EndpointSetup<DefaultServer>(builder => builder.EnableMessagePropertyEncryption(new RijndaelEncryptionService("1st", Encoding.ASCII.GetBytes("gdDbqRpqdRbTs3mhdZh9qCaDaxJXl+e6"))))
-                    .AddMapping<MessageWithSecretData>(typeof(Receiver));
+                EndpointSetup<DefaultServer>(builder =>
+                {
+                    builder.EnableMessagePropertyEncryption(new RijndaelEncryptionService("1st", Encoding.ASCII.GetBytes("gdDbqRpqdRbTs3mhdZh9qCaDaxJXl+e6")));
+                    builder.UseTransport<MsmqTransport>()
+                        .Routing()
+                        .RouteToEndpoint(typeof(MessageWithSecretData), Conventions.EndpointNamingConvention(typeof(Receiver)));
+                });
             }
         }
 
