@@ -5,7 +5,7 @@
 
 namespace NServiceBus.Encryption.MessageProperty
 {
-
+    
     public class EncryptedString : System.Runtime.Serialization.ISerializable
     {
         public EncryptedString() { }
