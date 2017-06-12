@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Infrastructure\DefaultServer.cs" />
+    <Compile Include="Infrastructure\EndpointConfigurationExtensions.cs" />
     <Compile Include="Infrastructure\EndpointCustomizationConfigurationExtensions.cs" />
     <Compile Include="Infrastructure\NServiceBusAcceptanceTest.cs" />
     <Compile Include="When_enabling_core_encryption_feature.cs" />

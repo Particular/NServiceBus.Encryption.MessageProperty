@@ -75,7 +75,7 @@ namespace NServiceBus.Encryption.MessageProperty.AcceptanceTests
 
                     c.EnableMessagePropertyEncryption(new RijndaelEncryptionService("1st", Keys), t => t.Name.StartsWith("Encrypted"));
 
-                    c.UseTransport<MsmqTransport>()
+                    c.ConfigureTransport()
                         .Routing()
                         .RouteToEndpoint(typeof(MessageWithSecretData), Conventions.EndpointNamingConvention(typeof(Receiver)));
                 })

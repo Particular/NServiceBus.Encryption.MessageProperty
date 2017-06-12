@@ -39,7 +39,7 @@
                 {
                     // NServiceBus.Encryption.MessageProperty encryption feature
                     c.EnableMessagePropertyEncryption(new RijndaelEncryptionService(keyIdentifier, encryptionKey), p => p.Name == "Value");
-                    c.UseTransport<MsmqTransport>()
+                    c.ConfigureTransport()
                         .Routing()
                         .RouteToEndpoint(typeof(MessageWithEncryptedProperty), Conventions.EndpointNamingConvention(typeof(ReceivingEndpoint)));
                 });

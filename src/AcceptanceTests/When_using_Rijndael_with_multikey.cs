@@ -37,7 +37,7 @@
                 EndpointSetup<DefaultServer>(builder =>
                 {
                     builder.EnableMessagePropertyEncryption(new RijndaelEncryptionService("1st", Encoding.ASCII.GetBytes("gdDbqRpqdRbTs3mhdZh9qCaDaxJXl+e6")));
-                    builder.UseTransport<MsmqTransport>()
+                    builder.ConfigureTransport()
                         .Routing()
                         .RouteToEndpoint(typeof(MessageWithSecretData), Conventions.EndpointNamingConvention(typeof(Receiver)));
                 });

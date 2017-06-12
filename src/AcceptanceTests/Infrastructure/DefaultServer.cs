@@ -38,18 +38,8 @@
             var recoverability = configuration.Recoverability();
             recoverability.Delayed(delayed => delayed.NumberOfRetries(0));
             recoverability.Immediate(immediate => immediate.NumberOfRetries(0));
-            configuration.SendFailedMessagesTo("error");
 
-            var transportConfig = configuration.UseTransport<MsmqTransport>();
-            var routingConfig = transportConfig.Routing();
-
-            foreach (var publisher in endpointConfiguration.PublisherMetadata.Publishers)
-            {
-                foreach (var eventType in publisher.Events)
-                {
-                    routingConfig.RegisterPublisher(eventType, publisher.PublisherName);
-                }
-            }
+            configuration.UseTransport<LearningTransport>();
 
             configuration.RegisterComponents(r =>
             {
