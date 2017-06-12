@@ -33,12 +33,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NServiceBus.AcceptanceTesting, Version=6.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NServiceBus.AcceptanceTesting.6.2.0-alpha0166\lib\net452\NServiceBus.AcceptanceTesting.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\NServiceBus.AcceptanceTesting.6.3.4\lib\net452\NServiceBus.AcceptanceTesting.dll</HintPath>
     </Reference>
     <Reference Include="NServiceBus.Core, Version=6.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NServiceBus.6.2.0-alpha0166\lib\net452\NServiceBus.Core.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\NServiceBus.6.3.4\lib\net452\NServiceBus.Core.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=3.6.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.6.0\lib\net45\nunit.framework.dll</HintPath>
@@ -50,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Infrastructure\DefaultServer.cs" />
+    <Compile Include="Infrastructure\EndpointConfigurationExtensions.cs" />
     <Compile Include="Infrastructure\EndpointCustomizationConfigurationExtensions.cs" />
     <Compile Include="Infrastructure\NServiceBusAcceptanceTest.cs" />
     <Compile Include="When_enabling_core_encryption_feature.cs" />

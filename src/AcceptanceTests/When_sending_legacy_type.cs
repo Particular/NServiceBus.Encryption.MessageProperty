@@ -3,6 +3,7 @@
     using System.Text;
     using System.Threading.Tasks;
     using AcceptanceTesting;
+    using AcceptanceTesting.Customization;
     using NUnit.Framework;
 
     [TestFixture]
@@ -35,11 +36,13 @@
             public SendingEndpoint()
             {
                 EndpointSetup<DefaultServer>(c =>
-                    {
-                        // NServiceBus.Encryption.MessageProperty encryption feature
-                        c.EnableMessagePropertyEncryption(new RijndaelEncryptionService(keyIdentifier, encryptionKey));
-                    })
-                    .AddMapping<MessageWithLegacyEncryptedPropertyType>(typeof(ReceivingEndpoint));
+                {
+                    // NServiceBus.Encryption.MessageProperty encryption feature
+                    c.EnableMessagePropertyEncryption(new RijndaelEncryptionService(keyIdentifier, encryptionKey));
+                    c.ConfigureTransport()
+                        .Routing()
+                        .RouteToEndpoint(typeof(MessageWithLegacyEncryptedPropertyType), Conventions.EndpointNamingConvention(typeof(ReceivingEndpoint)));
+                });
             }
         }
 
