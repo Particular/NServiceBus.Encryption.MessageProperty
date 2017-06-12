@@ -76,7 +76,9 @@
 
         class MessageWithLegacyEncryptedPropertyType : ICommand
         {
+#pragma warning disable 618
             public WireEncryptedString Value { get; set; }
+#pragma warning restore 618
         }
     }
 }
