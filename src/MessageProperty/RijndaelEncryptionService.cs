@@ -37,12 +37,12 @@ namespace NServiceBus.Encryption.MessageProperty
     using Pipeline;
 
     /// <summary>
-    /// An <see cref="NServiceBus.IEncryptionService"/> implementation usable for message property encryption using the Rijndael algorithm.
+    /// An <see cref="IEncryptionService"/> implementation usable for message property encryption using the Rijndael algorithm.
     /// </summary>
     public class RijndaelEncryptionService : IEncryptionService
     {
         /// <summary>
-        /// Creates a new instance of <see cref="NServiceBus.RijndaelEncryptionService" />
+        /// Creates a new instance of <see cref="RijndaelEncryptionService" />
         /// </summary>
         /// <param name="encryptionKeyIdentifier">An identifier for the encryption key to be used to encrypt values.</param>
         /// <param name="key">The encryption key to be used for encryption and decryption.</param>
@@ -58,7 +58,7 @@ namespace NServiceBus.Encryption.MessageProperty
         }
 
         /// <summary>
-        /// Creates a new instance of <see cref="NServiceBus.RijndaelEncryptionService"/>
+        /// Creates a new instance of <see cref="RijndaelEncryptionService"/>
         /// </summary>
         /// <param name="encryptionKeyIdentifier">An identifier for the encryption key to be used to encrypt values.</param>
         /// <param name="keys">A dictionary of available encryption keys and their identifiers for encryption and decryption.</param>
@@ -69,7 +69,7 @@ namespace NServiceBus.Encryption.MessageProperty
         }
 
         /// <summary>
-        /// Creates a new instance of <see cref="NServiceBus.RijndaelEncryptionService"/>
+        /// Creates a new instance of <see cref="RijndaelEncryptionService"/>
         /// </summary>
         /// <param name="encryptionKeyIdentifier">An identifier for the encryption key to be used to encrypt values.</param>
         /// <param name="keys">A dictionary of available encryption keys and their identifiers for encryption and decryption.</param>
