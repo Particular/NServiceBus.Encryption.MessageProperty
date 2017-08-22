@@ -5,7 +5,6 @@
     using System.Threading.Tasks;
     using AcceptanceTesting.Customization;
     using AcceptanceTesting.Support;
-    using Config.ConfigurationSource;
     using Configuration.AdvancedExtensibility;
     using Features;
 
