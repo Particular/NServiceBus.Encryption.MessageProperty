@@ -9,8 +9,7 @@
         {
             Defaults(s => s.SetDefault<IsEncryptedPropertyConvention>(
                 new IsEncryptedPropertyConvention(p =>
-                typeof(EncryptedString).IsAssignableFrom(p.PropertyType)
-                || typeof(WireEncryptedString).IsAssignableFrom(p.PropertyType))));
+                typeof(EncryptedString).IsAssignableFrom(p.PropertyType))));
         }
 
         protected override void Setup(FeatureConfigurationContext context)
