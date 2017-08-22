@@ -6,7 +6,7 @@
     using AcceptanceTesting.Customization;
     using AcceptanceTesting.Support;
     using Config.ConfigurationSource;
-    using Configuration.AdvanceExtensibility;
+    using Configuration.AdvancedExtensibility;
     using Features;
 
     public class DefaultServer : IEndpointSetupTemplate
@@ -22,7 +22,7 @@
         }
 
 #pragma warning disable 618
-        public Task<EndpointConfiguration> GetConfiguration(RunDescriptor runDescriptor, EndpointCustomizationConfiguration endpointConfiguration, IConfigurationSource configSource, Action<EndpointConfiguration> configurationBuilderCustomization)
+        public Task<EndpointConfiguration> GetConfiguration(RunDescriptor runDescriptor, EndpointCustomizationConfiguration endpointConfiguration, Action<EndpointConfiguration> configurationBuilderCustomization)
 #pragma warning restore 618
         {
             var types = endpointConfiguration.GetTypesScopedByTestClass();
@@ -32,7 +32,6 @@
             var configuration = new EndpointConfiguration(endpointConfiguration.EndpointName);
 
             configuration.TypesToIncludeInScan(typesToInclude);
-            configuration.CustomConfigurationSource(configSource);
             configuration.EnableInstallers();
 
             configuration.DisableFeature<TimeoutManager>();
