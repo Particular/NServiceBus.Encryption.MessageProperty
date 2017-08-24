@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFrameworks>net452;netstandard2.0</TargetFrameworks>
     <AssemblyName>NServiceBus.Encryption.MessageProperty</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <SignAssembly>true</SignAssembly>
@@ -14,11 +14,17 @@
     <NoWarn>CS0419</NoWarn>
     <UpdateAssemblyInfo>true</UpdateAssemblyInfo>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>NServiceBus.Encryption.MessageProperty</PackageId>
+    <Description>Selectively encrypt NServiceBus message properties</Description>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="NServiceBus" Version="6.0.0" />
-    <PackageReference Include="Particular.CodeRules" Version="0.2.0" />
-    <PackageReference Include="GitVersionTask" Version="4.0.0-beta0012" />
+    <PackageReference Include="NServiceBus" Version="[7.0.0-*, 8.0.0)" />
+    <PackageReference Include="Particular.CodeRules" Version="0.2.0" PrivateAssets="All" />
+    <PackageReference Include="GitVersionTask" Version="4.0.0-beta0012" PrivateAssets="All" />
     <None Include="..\..\GitVersion.yml" Link="GitVersion.yml" />
-    <None Include="..\..\packaging\nuget\NServiceBus.Encryption.MessageProperty.nuspec" Link="NServiceBus.Encryption.MessageProperty.nuspec" />
   </ItemGroup>
 </Project>
