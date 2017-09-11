@@ -1,7 +1,6 @@
 ﻿namespace NServiceBus.Encryption.MessageProperty.Tests
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
@@ -39,8 +38,8 @@
             Assert.AreEqual(EncryptedBase64Value, message.ListOfCreditCards[0].CreditCardNumber.EncryptedValue.EncryptedBase64Value);
             Assert.AreEqual(EncryptedBase64Value, message.ListOfCreditCards[1].CreditCardNumber.EncryptedValue.EncryptedBase64Value);
 
-            Assert.AreEqual(EncryptedBase64Value, ((CreditCardDetails)message.ListOfSecrets[0]).CreditCardNumber.EncryptedValue.EncryptedBase64Value);
-            Assert.AreEqual(EncryptedBase64Value, ((CreditCardDetails)message.ListOfSecrets[1]).CreditCardNumber.EncryptedValue.EncryptedBase64Value);
+            Assert.AreEqual(EncryptedBase64Value, (message.ListOfSecrets[0]).CreditCardNumber.EncryptedValue.EncryptedBase64Value);
+            Assert.AreEqual(EncryptedBase64Value, (message.ListOfSecrets[1]).CreditCardNumber.EncryptedValue.EncryptedBase64Value);
         }
     }
 
