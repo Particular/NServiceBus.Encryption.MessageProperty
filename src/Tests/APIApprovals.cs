@@ -3,9 +3,10 @@ using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using ApprovalTests;
-using NServiceBus.Encryption.MessageProperty;
 using NUnit.Framework;
 using PublicApiGenerator;
+using System.IO;
+using System.Reflection;
 
 [TestFixture]
 public class APIApprovals
@@ -14,7 +15,9 @@ public class APIApprovals
     [MethodImpl(MethodImplOptions.NoInlining)]
     public void Approve()
     {
-        var publicApi = Filter(ApiGenerator.GeneratePublicApi(typeof(RijndaelEncryptionService).Assembly));
+        var combine = Path.Combine(TestContext.CurrentContext.TestDirectory, "NServiceBus.Encryption.MessageProperty.dll");
+        var assembly = Assembly.LoadFile(combine);
+        var publicApi = Filter(ApiGenerator.GeneratePublicApi(assembly));
         Approvals.Verify(publicApi);
     }
 

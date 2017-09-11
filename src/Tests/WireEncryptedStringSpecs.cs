@@ -26,7 +26,7 @@
                                 new CreditCardDetails {CreditCardNumber = MySecretMessage}
                             }
                 };
-            message.ListOfSecrets = new ArrayList(message.ListOfCreditCards);
+            message.ListOfSecrets = new List<CreditCardDetails>(message.ListOfCreditCards);
 
             var result = inspector.ScanObject(message).ToList();
             result.ForEach(x => x.Item2.SetValue(x.Item1, Create()));
@@ -249,7 +249,7 @@
         public EncryptedString SecretThatIsNull { get; set; }
         public DateTime DateTime { get; set; }
         public List<CreditCardDetails> ListOfCreditCards { get; set; }
-        public ArrayList ListOfSecrets { get; set; }
+        public List<CreditCardDetails> ListOfSecrets { get; set; }
         public byte[] LargeByteArray{ get; set; }
     }
 
