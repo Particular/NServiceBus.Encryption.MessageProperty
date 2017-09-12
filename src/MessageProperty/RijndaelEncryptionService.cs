@@ -253,7 +253,7 @@ namespace NServiceBus.Encryption.MessageProperty
         /// <summary>
         /// Adds the key identifier of the currently used encryption key to the outgoing message's headers.
         /// </summary>
-        protected virtual void AddKeyIdentifierHeader(IOutgoingLogicalMessageContext context)
+        protected internal virtual void AddKeyIdentifierHeader(IOutgoingLogicalMessageContext context)
         {
             context.Headers[Headers.RijndaelKeyIdentifier] = encryptionKeyIdentifier;
         }
@@ -261,7 +261,7 @@ namespace NServiceBus.Encryption.MessageProperty
         /// <summary>
         /// Tries to locate an encryption key identfier from an incoming message.
         /// </summary>
-        protected virtual bool TryGetKeyIdentifierHeader(out string keyIdentifier, IIncomingLogicalMessageContext context)
+        protected internal virtual bool TryGetKeyIdentifierHeader(out string keyIdentifier, IIncomingLogicalMessageContext context)
         {
             return context.Headers.TryGetValue(Headers.RijndaelKeyIdentifier, out keyIdentifier);
         }
@@ -269,7 +269,7 @@ namespace NServiceBus.Encryption.MessageProperty
         /// <summary>
         /// Configures the initialization vector.
         /// </summary>
-        protected virtual void ConfigureIV(RijndaelManaged rijndael)
+        protected internal virtual void ConfigureIV(RijndaelManaged rijndael)
         {
             rijndael.GenerateIV();
         }
