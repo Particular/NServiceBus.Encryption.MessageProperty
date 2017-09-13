@@ -33,10 +33,10 @@ namespace NServiceBus.Encryption.MessageProperty
         public RijndaelEncryptionService(string encryptionKeyIdentifier, byte[] key) { }
         public RijndaelEncryptionService(string encryptionKeyIdentifier, System.Collections.Generic.IDictionary<string, byte[]> keys) { }
         public RijndaelEncryptionService(string encryptionKeyIdentifier, System.Collections.Generic.IDictionary<string, byte[]> keys, System.Collections.Generic.IList<byte[]> decryptionKeys) { }
-        protected virtual void AddKeyIdentifierHeader(NServiceBus.Pipeline.IOutgoingLogicalMessageContext context) { }
-        protected virtual void ConfigureIV(System.Security.Cryptography.RijndaelManaged rijndael) { }
+        protected internal void AddKeyIdentifierHeader(NServiceBus.Pipeline.IOutgoingLogicalMessageContext context) { }
+        protected internal void ConfigureIV(System.Security.Cryptography.RijndaelManaged rijndael) { }
         public string Decrypt(NServiceBus.Encryption.MessageProperty.EncryptedValue encryptedValue, NServiceBus.Pipeline.IIncomingLogicalMessageContext context) { }
         public NServiceBus.Encryption.MessageProperty.EncryptedValue Encrypt(string value, NServiceBus.Pipeline.IOutgoingLogicalMessageContext context) { }
-        protected virtual bool TryGetKeyIdentifierHeader(out string keyIdentifier, NServiceBus.Pipeline.IIncomingLogicalMessageContext context) { }
+        protected internal bool TryGetKeyIdentifierHeader(out string keyIdentifier, NServiceBus.Pipeline.IIncomingLogicalMessageContext context) { }
     }
 }
