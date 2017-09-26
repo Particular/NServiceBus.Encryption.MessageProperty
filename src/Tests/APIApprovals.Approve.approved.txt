@@ -23,6 +23,10 @@ namespace NServiceBus.Encryption.MessageProperty
         public static void EnableMessagePropertyEncryption(this NServiceBus.EndpointConfiguration configuration, NServiceBus.Encryption.MessageProperty.IEncryptionService encryptionService) { }
         public static void EnableMessagePropertyEncryption(this NServiceBus.EndpointConfiguration configuration, NServiceBus.Encryption.MessageProperty.IEncryptionService encryptionService, System.Func<System.Reflection.PropertyInfo, bool> encryptedPropertyConvention) { }
     }
+    public class static EncryptionHeaders
+    {
+        public const string RijndaelKeyIdentifier = "NServiceBus.RijndaelKeyIdentifier";
+    }
     public interface IEncryptionService
     {
         string Decrypt(NServiceBus.Encryption.MessageProperty.EncryptedValue encryptedValue, NServiceBus.Pipeline.IIncomingLogicalMessageContext context);
