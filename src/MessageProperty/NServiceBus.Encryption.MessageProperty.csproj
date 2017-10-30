@@ -5,21 +5,15 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(SolutionDir)NServiceBus.snk</AssemblyOriginatorKeyFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <OutputPath>..\..\binaries\</OutputPath>
     <NoWarn>CS0419</NoWarn>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <PackageId>NServiceBus.Encryption.MessageProperty</PackageId>
     <Description>Selectively encrypt NServiceBus message properties</Description>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="NServiceBus" Version="[7.0.0-*, 8.0.0)" />
     <PackageReference Include="Particular.CodeRules" Version="0.2.0" PrivateAssets="All" />
-    <PackageReference Include="GitVersionTask" Version="4.0.0-beta0012" PrivateAssets="All" />
+    <PackageReference Include="Particular.Packaging" Version="0.1.0" PrivateAssets="All" />
   </ItemGroup>
 
 </Project>
