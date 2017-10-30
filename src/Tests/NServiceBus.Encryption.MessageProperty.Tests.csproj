@@ -4,7 +4,6 @@
     <TargetFrameworks>net452;netcoreapp2.0</TargetFrameworks>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>$(SolutionDir)NServiceBus.snk</AssemblyOriginatorKeyFile>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <Optimize>false</Optimize>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
@@ -12,7 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\MessageProperty\NServiceBus.Encryption.MessageProperty.csproj" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Compile Remove="NServiceBus.Encryption.MessageProperty.approved.cs" />
     <PackageReference Include="ApprovalTests" Version="3.*" NoWarn="NU1701" />
@@ -23,7 +22,7 @@
     <PackageReference Include="NUnit3TestAdapter" Version="3.8.0-alpha1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
   </ItemGroup>
-  
+
   <ItemGroup Condition="'$(TargetFramework)' == 'net452'">
     <PackageReference Include="NUnit.ApplicationDomain" Version="11.0.0" />
     <PackageReference Include="PublicApiGenerator" Version="6.1.0-beta2" />

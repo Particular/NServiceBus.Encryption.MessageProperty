@@ -2,7 +2,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net452;netcoreapp2.0</TargetFrameworks>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>PCR0001;CS0618</NoWarn>
     <Optimize>false</Optimize>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
@@ -11,7 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\MessageProperty\NServiceBus.Encryption.MessageProperty.csproj" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="NServiceBus.AcceptanceTesting" Version="[7.0.0-*, 8.0.0)" />
     <PackageReference Include="NServiceBus" Version="[7.0.0-*, 8.0.0)" />
