@@ -1,13 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.13
+VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBus.Encryption.MessageProperty", "MessageProperty\NServiceBus.Encryption.MessageProperty.csproj", "{63EE7112-93F3-43B9-9895-D593EAADEA9B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NServiceBus.Encryption.MessageProperty", "MessageProperty\NServiceBus.Encryption.MessageProperty.csproj", "{63EE7112-93F3-43B9-9895-D593EAADEA9B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBus.Encryption.MessageProperty.Tests", "Tests\NServiceBus.Encryption.MessageProperty.Tests.csproj", "{FC966BE4-840F-4824-A600-D3F92FB1F562}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NServiceBus.Encryption.MessageProperty.Tests", "Tests\NServiceBus.Encryption.MessageProperty.Tests.csproj", "{FC966BE4-840F-4824-A600-D3F92FB1F562}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NServiceBus.Encryption.MessageProperty.AcceptanceTests", "AcceptanceTests\NServiceBus.Encryption.MessageProperty.AcceptanceTests.csproj", "{322DD595-9FF9-4A48-82F0-74BE4A8833E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NServiceBus.Encryption.MessageProperty.AcceptanceTests", "AcceptanceTests\NServiceBus.Encryption.MessageProperty.AcceptanceTests.csproj", "{322DD595-9FF9-4A48-82F0-74BE4A8833E2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8C364D7E-AB8E-412E-886C-E7E2311B17B5}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+		..\GitVersion.yml = ..\GitVersion.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,5 +64,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A4B84BEB-E7DF-4948-BDD0-E7214E3FB15E}
 	EndGlobalSection
 EndGlobal

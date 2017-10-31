@@ -1,28 +1,22 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFrameworks>net452;netstandard2.0</TargetFrameworks>
-    <AssemblyName>NServiceBus.Encryption.MessageProperty</AssemblyName>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>$(SolutionDir)NServiceBus.snk</AssemblyOriginatorKeyFile>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <OutputPath>..\..\binaries\</OutputPath>
-    <NoWarn>CS0419</NoWarn>
-    <UpdateAssemblyInfo>true</UpdateAssemblyInfo>
-  </PropertyGroup>
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <PackageId>NServiceBus.Encryption.MessageProperty</PackageId>
+    <TargetFrameworks>net452;netstandard2.0</TargetFrameworks>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>$(SolutionDir)NServiceBus.snk</AssemblyOriginatorKeyFile>
+    <OutputPath>..\..\binaries\</OutputPath>
     <Description>Selectively encrypt NServiceBus message properties</Description>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="NServiceBus" Version="[7.0.0-*, 8.0.0)" />
     <PackageReference Include="Particular.CodeRules" Version="0.2.0" PrivateAssets="All" />
-    <PackageReference Include="GitVersionTask" Version="4.0.0-beta0012" PrivateAssets="All" />
-    <None Include="..\..\GitVersion.yml" Link="GitVersion.yml" />
+    <PackageReference Include="Particular.Packaging" Version="0.1.0" PrivateAssets="All" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SourceLink.Create.GitHub" Version="2.5.0" PrivateAssets="All" />
+    <DotNetCliToolReference Include="dotnet-sourcelink-git" Version="2.5.0" />
+  </ItemGroup>
+
 </Project>
