@@ -5,8 +5,7 @@
     using System.Threading.Tasks;
     using AcceptanceTesting.Customization;
     using AcceptanceTesting.Support;
-    using Config.ConfigurationSource;
-    using Configuration.AdvanceExtensibility;
+    using Configuration.AdvancedExtensibility;
     using Features;
 
     public class DefaultServer : IEndpointSetupTemplate
@@ -21,7 +20,9 @@
             this.typesToInclude = typesToInclude;
         }
 
-        public Task<EndpointConfiguration> GetConfiguration(RunDescriptor runDescriptor, EndpointCustomizationConfiguration endpointConfiguration, IConfigurationSource configSource, Action<EndpointConfiguration> configurationBuilderCustomization)
+#pragma warning disable 618
+        public Task<EndpointConfiguration> GetConfiguration(RunDescriptor runDescriptor, EndpointCustomizationConfiguration endpointConfiguration, Action<EndpointConfiguration> configurationBuilderCustomization)
+#pragma warning restore 618
         {
             var types = endpointConfiguration.GetTypesScopedByTestClass();
 
@@ -30,7 +31,6 @@
             var configuration = new EndpointConfiguration(endpointConfiguration.EndpointName);
 
             configuration.TypesToIncludeInScan(typesToInclude);
-            configuration.CustomConfigurationSource(configSource);
             configuration.EnableInstallers();
 
             configuration.DisableFeature<TimeoutManager>();
@@ -39,16 +39,7 @@
             recoverability.Delayed(delayed => delayed.NumberOfRetries(0));
             recoverability.Immediate(immediate => immediate.NumberOfRetries(0));
 
-            var transportConfig = configuration.UseTransport<MsmqTransport>();
-            var routingConfig = transportConfig.Routing();
-
-            foreach (var publisher in endpointConfiguration.PublisherMetadata.Publishers)
-            {
-                foreach (var eventType in publisher.Events)
-                {
-                    routingConfig.RegisterPublisher(eventType, publisher.PublisherName);
-                }
-            }
+            configuration.UseTransport<LearningTransport>();
 
             configuration.RegisterComponents(r =>
             {

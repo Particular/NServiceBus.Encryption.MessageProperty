@@ -37,12 +37,12 @@ namespace NServiceBus.Encryption.MessageProperty
     using Pipeline;
 
     /// <summary>
-    /// An <see cref="NServiceBus.IEncryptionService"/> implementation usable for message property encryption using the Rijndael algorithm.
+    /// An <see cref="IEncryptionService"/> implementation usable for message property encryption using the Rijndael algorithm.
     /// </summary>
     public class RijndaelEncryptionService : IEncryptionService
     {
         /// <summary>
-        /// Creates a new instance of <see cref="NServiceBus.RijndaelEncryptionService" />
+        /// Creates a new instance of <see cref="RijndaelEncryptionService" />
         /// </summary>
         /// <param name="encryptionKeyIdentifier">An identifier for the encryption key to be used to encrypt values.</param>
         /// <param name="key">The encryption key to be used for encryption and decryption.</param>
@@ -58,7 +58,7 @@ namespace NServiceBus.Encryption.MessageProperty
         }
 
         /// <summary>
-        /// Creates a new instance of <see cref="NServiceBus.RijndaelEncryptionService"/>
+        /// Creates a new instance of <see cref="RijndaelEncryptionService"/>
         /// </summary>
         /// <param name="encryptionKeyIdentifier">An identifier for the encryption key to be used to encrypt values.</param>
         /// <param name="keys">A dictionary of available encryption keys and their identifiers for encryption and decryption.</param>
@@ -69,7 +69,7 @@ namespace NServiceBus.Encryption.MessageProperty
         }
 
         /// <summary>
-        /// Creates a new instance of <see cref="NServiceBus.RijndaelEncryptionService"/>
+        /// Creates a new instance of <see cref="RijndaelEncryptionService"/>
         /// </summary>
         /// <param name="encryptionKeyIdentifier">An identifier for the encryption key to be used to encrypt values.</param>
         /// <param name="keys">A dictionary of available encryption keys and their identifiers for encryption and decryption.</param>
@@ -114,7 +114,7 @@ namespace NServiceBus.Encryption.MessageProperty
             {
                 return DecryptUsingKeyIdentifier(encryptedValue, keyIdentifier);
             }
-            Log.Warn($"Encrypted message has no '{Headers.RijndaelKeyIdentifier}' header. Possibility of data corruption. Upgrade endpoints that send message with encrypted properties.");
+            Log.Warn($"Encrypted message has no '{EncryptionHeaders.RijndaelKeyIdentifier}' header. Possibility of data corruption. Upgrade endpoints that send message with encrypted properties.");
             return DecryptUsingAllKeys(encryptedValue);
         }
 
@@ -253,23 +253,23 @@ namespace NServiceBus.Encryption.MessageProperty
         /// <summary>
         /// Adds the key identifier of the currently used encryption key to the outgoing message's headers.
         /// </summary>
-        protected virtual void AddKeyIdentifierHeader(IOutgoingLogicalMessageContext context)
+        protected internal virtual void AddKeyIdentifierHeader(IOutgoingLogicalMessageContext context)
         {
-            context.Headers[Headers.RijndaelKeyIdentifier] = encryptionKeyIdentifier;
+            context.Headers[EncryptionHeaders.RijndaelKeyIdentifier] = encryptionKeyIdentifier;
         }
 
         /// <summary>
         /// Tries to locate an encryption key identfier from an incoming message.
         /// </summary>
-        protected virtual bool TryGetKeyIdentifierHeader(out string keyIdentifier, IIncomingLogicalMessageContext context)
+        protected internal virtual bool TryGetKeyIdentifierHeader(out string keyIdentifier, IIncomingLogicalMessageContext context)
         {
-            return context.Headers.TryGetValue(Headers.RijndaelKeyIdentifier, out keyIdentifier);
+            return context.Headers.TryGetValue(EncryptionHeaders.RijndaelKeyIdentifier, out keyIdentifier);
         }
 
         /// <summary>
         /// Configures the initialization vector.
         /// </summary>
-        protected virtual void ConfigureIV(RijndaelManaged rijndael)
+        protected internal virtual void ConfigureIV(RijndaelManaged rijndael)
         {
             rijndael.GenerateIV();
         }

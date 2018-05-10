@@ -47,13 +47,6 @@
                 return;
             }
 
-            var legacyWireEncryptedString = valueToEncrypt as WireEncryptedString;
-            if (legacyWireEncryptedString != null)
-            {
-                encryptionService.EncryptValue(legacyWireEncryptedString, context);
-                return;
-            }
-
             throw new Exception("Only string properties are supported for convention based encryption. Check the configured conventions.");
         }
 

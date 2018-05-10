@@ -1,7 +1,6 @@
 ﻿namespace NServiceBus.Encryption.MessageProperty.Tests
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
@@ -26,7 +25,7 @@
                                 new CreditCardDetails {CreditCardNumber = MySecretMessage}
                             }
                 };
-            message.ListOfSecrets = new ArrayList(message.ListOfCreditCards);
+            message.ListOfSecrets = new List<CreditCardDetails>(message.ListOfCreditCards);
 
             var result = inspector.ScanObject(message).ToList();
             result.ForEach(x => x.Item2.SetValue(x.Item1, Create()));
@@ -39,8 +38,8 @@
             Assert.AreEqual(EncryptedBase64Value, message.ListOfCreditCards[0].CreditCardNumber.EncryptedValue.EncryptedBase64Value);
             Assert.AreEqual(EncryptedBase64Value, message.ListOfCreditCards[1].CreditCardNumber.EncryptedValue.EncryptedBase64Value);
 
-            Assert.AreEqual(EncryptedBase64Value, ((CreditCardDetails)message.ListOfSecrets[0]).CreditCardNumber.EncryptedValue.EncryptedBase64Value);
-            Assert.AreEqual(EncryptedBase64Value, ((CreditCardDetails)message.ListOfSecrets[1]).CreditCardNumber.EncryptedValue.EncryptedBase64Value);
+            Assert.AreEqual(EncryptedBase64Value, (message.ListOfSecrets[0]).CreditCardNumber.EncryptedValue.EncryptedBase64Value);
+            Assert.AreEqual(EncryptedBase64Value, (message.ListOfSecrets[1]).CreditCardNumber.EncryptedValue.EncryptedBase64Value);
         }
     }
 
@@ -249,7 +248,7 @@
         public EncryptedString SecretThatIsNull { get; set; }
         public DateTime DateTime { get; set; }
         public List<CreditCardDetails> ListOfCreditCards { get; set; }
-        public ArrayList ListOfSecrets { get; set; }
+        public List<CreditCardDetails> ListOfSecrets { get; set; }
         public byte[] LargeByteArray{ get; set; }
     }
 

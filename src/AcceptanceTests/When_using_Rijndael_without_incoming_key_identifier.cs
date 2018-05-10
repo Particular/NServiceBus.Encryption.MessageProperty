@@ -4,6 +4,7 @@
     using System.Text;
     using System.Threading.Tasks;
     using AcceptanceTesting;
+    using AcceptanceTesting.Customization;
     using MessageMutator;
     using NUnit.Framework;
 
@@ -35,10 +36,12 @@
             public Sender()
             {
                 EndpointSetup<DefaultServer>(builder =>
-                    {
-                        builder.EnableMessagePropertyEncryption(new RijndaelEncryptionService("will-be-removed-by-transport-mutator", Encoding.ASCII.GetBytes("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")));
-                    })
-                    .AddMapping<MessageWithSecretData>(typeof(Receiver));
+                {
+                    builder.EnableMessagePropertyEncryption(new RijndaelEncryptionService("will-be-removed-by-transport-mutator", Encoding.ASCII.GetBytes("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")));
+                    builder.ConfigureTransport()
+                        .Routing()
+                        .RouteToEndpoint(typeof(MessageWithSecretData), Conventions.EndpointNamingConvention(typeof(Receiver)));
+                });
             }
         }
 
@@ -80,7 +83,7 @@
         {
             public Task MutateIncoming(MutateIncomingTransportMessageContext context)
             {
-                context.Headers.Remove(Headers.RijndaelKeyIdentifier);
+                context.Headers.Remove(EncryptionHeaders.RijndaelKeyIdentifier);
                 return Task.FromResult(0);
             }
 

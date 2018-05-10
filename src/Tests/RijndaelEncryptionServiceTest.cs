@@ -199,18 +199,18 @@
             public string IncomingKeyIdentifier { private get; set; }
             public byte[] EncryptionIV { get; set; }
 
-            protected override void AddKeyIdentifierHeader(IOutgoingLogicalMessageContext context)
+            protected internal override void AddKeyIdentifierHeader(IOutgoingLogicalMessageContext context)
             {
                 OutgoingKeyIdentifierSet = true;
             }
 
-            protected override bool TryGetKeyIdentifierHeader(out string keyIdentifier, IIncomingLogicalMessageContext context)
+            protected internal override bool TryGetKeyIdentifierHeader(out string keyIdentifier, IIncomingLogicalMessageContext context)
             {
                 keyIdentifier = IncomingKeyIdentifier;
                 return IncomingKeyIdentifier != null;
             }
 
-            protected override void ConfigureIV(RijndaelManaged rijndael)
+            protected internal override void ConfigureIV(RijndaelManaged rijndael)
             {
                 if (EncryptionIV != null)
                 {
