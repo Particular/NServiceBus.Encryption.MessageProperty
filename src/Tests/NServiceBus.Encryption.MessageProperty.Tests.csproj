@@ -7,7 +7,6 @@
     <Optimize>false</Optimize>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
-   
   <ItemGroup>
     <ProjectReference Include="..\MessageProperty\NServiceBus.Encryption.MessageProperty.csproj" />
   </ItemGroup>
