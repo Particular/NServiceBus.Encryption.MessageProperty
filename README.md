@@ -9,4 +9,3 @@ Taken from [rhino-esb](https://github.com/hibernating-rhinos/rhino-esb/blob/mast
 
 Moo
 Moo
-Moo
