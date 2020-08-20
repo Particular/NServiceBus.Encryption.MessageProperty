@@ -64,12 +64,17 @@
 
             public class Handler : IHandleMessages<MessageWithSecretData>
             {
-                public Context Context { get; set; }
+                Context testContext;
+
+                public Handler(Context testContext)
+                {
+                    this.testContext = testContext;
+                }
 
                 public Task Handle(MessageWithSecretData message, IMessageHandlerContext context)
                 {
-                    Context.Secret = message.Secret.Value;
-                    Context.Done = true;
+                    testContext.Secret = message.Secret.Value;
+                    testContext.Done = true;
 
                     return Task.FromResult(0);
                 }

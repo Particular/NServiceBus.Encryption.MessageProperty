@@ -98,21 +98,26 @@ namespace NServiceBus.Encryption.MessageProperty.AcceptanceTests
 
             public class Handler : IHandleMessages<MessageWithSecretData>
             {
-                public Context Context { get; set; }
+                Context testContext;
+
+                public Handler(Context testContext)
+                {
+                    this.testContext = testContext;
+                }
 
                 public Task Handle(MessageWithSecretData message, IMessageHandlerContext context)
                 {
-                    Context.Secret = message.EncryptedSecret;
+                    testContext.Secret = message.EncryptedSecret;
 
-                    Context.SubPropertySecret = message.SubProperty.EncryptedSecret;
+                    testContext.SubPropertySecret = message.SubProperty.EncryptedSecret;
 
-                    Context.CreditCards = new List<string>
+                    testContext.CreditCards = new List<string>
                     {
                         message.CreditCards[0].EncryptedNumber,
                         message.CreditCards[1].EncryptedNumber
                     };
 
-                    Context.GetTheMessage = true;
+                    testContext.GetTheMessage = true;
 
                     return Task.FromResult(0);
                 }
