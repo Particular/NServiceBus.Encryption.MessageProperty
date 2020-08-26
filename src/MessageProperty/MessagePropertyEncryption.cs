@@ -7,9 +7,7 @@
     {
         public MessagePropertyEncryption()
         {
-            Defaults(s => s.SetDefault<IsEncryptedPropertyConvention>(
-                new IsEncryptedPropertyConvention(p =>
-                typeof(EncryptedString).IsAssignableFrom(p.PropertyType))));
+            Defaults(s => s.SetDefault(new IsEncryptedPropertyConvention(p =>typeof(EncryptedString).IsAssignableFrom(p.PropertyType))));
         }
 
         protected override void Setup(FeatureConfigurationContext context)

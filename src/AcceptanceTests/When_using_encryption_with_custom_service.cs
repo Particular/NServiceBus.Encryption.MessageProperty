@@ -67,21 +67,26 @@
 
             public class Handler : IHandleMessages<MessageWithSecretData>
             {
-                public Context Context { get; set; }
+                Context testContext;
+
+                public Handler(Context testContext)
+                {
+                    this.testContext = testContext;
+                }
 
                 public Task Handle(MessageWithSecretData message, IMessageHandlerContext context)
                 {
-                    Context.Secret = message.Secret.Value;
+                    testContext.Secret = message.Secret.Value;
 
-                    Context.SubPropertySecret = message.SubProperty.Secret.Value;
+                    testContext.SubPropertySecret = message.SubProperty.Secret.Value;
 
-                    Context.CreditCards = new List<string>
+                    testContext.CreditCards = new List<string>
                     {
                         message.CreditCards[0].Number.Value,
                         message.CreditCards[1].Number.Value
                     };
 
-                    Context.GotTheMessage = true;
+                    testContext.GotTheMessage = true;
 
                     return Task.FromResult(0);
                 }
