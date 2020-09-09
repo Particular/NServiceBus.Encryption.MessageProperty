@@ -7,6 +7,7 @@
     using AcceptanceTesting.Support;
     using Configuration.AdvancedExtensibility;
     using Features;
+    using Microsoft.Extensions.DependencyInjection;
 
     public class DefaultServer : IEndpointSetupTemplate
     {
@@ -46,7 +47,7 @@
                 var type = runDescriptor.ScenarioContext.GetType();
                 while (type != typeof(object))
                 {
-                    r.RegisterSingleton(type, runDescriptor.ScenarioContext);
+                    r.AddSingleton(type, runDescriptor.ScenarioContext);
                     type = type.BaseType;
                 }
             });
