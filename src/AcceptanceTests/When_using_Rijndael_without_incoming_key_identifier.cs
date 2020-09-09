@@ -58,7 +58,11 @@
                 {
                     Encoding.ASCII.GetBytes("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                 };
-                EndpointSetup<DefaultServer>(builder => builder.EnableMessagePropertyEncryption(new RijndaelEncryptionService("new", keys, expiredKeys)));
+                EndpointSetup<DefaultServer>(builder =>
+                {
+                    builder.EnableMessagePropertyEncryption(new RijndaelEncryptionService("new", keys, expiredKeys));
+                    builder.RegisterMessageMutator(new RemoveKeyIdentifierHeaderMutator());
+                });
             }
 
             public class Handler : IHandleMessages<MessageWithSecretData>
@@ -84,17 +88,12 @@
             public EncryptedString Secret { get; set; }
         }
 
-        class RemoveKeyIdentifierHeaderMutator : IMutateIncomingTransportMessages, INeedInitialization
+        class RemoveKeyIdentifierHeaderMutator : IMutateIncomingTransportMessages
         {
             public Task MutateIncoming(MutateIncomingTransportMessageContext context)
             {
                 context.Headers.Remove(EncryptionHeaders.RijndaelKeyIdentifier);
                 return Task.FromResult(0);
-            }
-
-            public void Customize(EndpointConfiguration configuration)
-            {
-                configuration.RegisterComponents(c => c.ConfigureComponent<RemoveKeyIdentifierHeaderMutator>(DependencyLifecycle.InstancePerCall));
             }
         }
     }
