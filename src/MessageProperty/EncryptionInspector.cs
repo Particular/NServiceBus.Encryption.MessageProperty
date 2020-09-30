@@ -1,4 +1,3 @@
-// ReSharper disable ReturnTypeCanBeEnumerable.Local
 namespace NServiceBus.Encryption.MessageProperty
 {
     using System;

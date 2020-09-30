@@ -9,7 +9,7 @@
         [Test]
         public void Should_ignore_those_properties_and_fields()
         {
-            var message = new BogusEntityMessage{ Entity = new BogusEntity()};
+            var message = new BogusEntityMessage { Entity = new BogusEntity() };
 
             Assert.IsEmpty(inspector.ScanObject(message));
         }
@@ -22,7 +22,6 @@
         public class BogusEntity
         {
             //This field generates a stackoverflow
-
             public BogusEntity()
             {
                 ExposesReadOnlyField = "Foo";
