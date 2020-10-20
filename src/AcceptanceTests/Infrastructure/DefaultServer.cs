@@ -52,7 +52,7 @@
                 }
             });
 
-            configuration.UsePersistence<InMemoryPersistence>();
+            configuration.UsePersistence<AcceptanceTestingPersistence>();
 
             configuration.GetSettings().SetDefault("ScaleOut.UseSingleBrokerQueue", true);
             configurationBuilderCustomization(configuration);
