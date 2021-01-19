@@ -31,15 +31,13 @@
         {
             var valueToEncrypt = member.GetValue(message);
 
-            var wireEncryptedString = valueToEncrypt as EncryptedString;
-            if (wireEncryptedString != null)
+            if (valueToEncrypt is EncryptedString wireEncryptedString)
             {
                 encryptionService.EncryptValue(wireEncryptedString, context);
                 return;
             }
 
-            var stringToEncrypt = valueToEncrypt as string;
-            if (stringToEncrypt != null)
+            if (valueToEncrypt is string stringToEncrypt)
             {
                 encryptionService.EncryptValue(ref stringToEncrypt, context);
 

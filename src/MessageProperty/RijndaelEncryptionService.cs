@@ -106,9 +106,8 @@ namespace NServiceBus.Encryption.MessageProperty
         /// </summary>
         public string Decrypt(EncryptedValue encryptedValue, IIncomingLogicalMessageContext context)
         {
-            string keyIdentifier;
 
-            if (TryGetKeyIdentifierHeader(out keyIdentifier, context))
+            if (TryGetKeyIdentifierHeader(out string keyIdentifier, context))
             {
                 return DecryptUsingKeyIdentifier(encryptedValue, keyIdentifier);
             }
@@ -154,9 +153,8 @@ namespace NServiceBus.Encryption.MessageProperty
 
         string DecryptUsingKeyIdentifier(EncryptedValue encryptedValue, string keyIdentifier)
         {
-            byte[] decryptionKey;
 
-            if (!keys.TryGetValue(keyIdentifier, out decryptionKey))
+            if (!keys.TryGetValue(keyIdentifier, out byte[] decryptionKey))
             {
                 throw new InvalidOperationException($"Decryption key not available for key identifier '{keyIdentifier}'. Add this key to the rijndael encryption service configuration. Key identifiers are case sensitive.");
             }
@@ -236,7 +234,7 @@ namespace NServiceBus.Encryption.MessageProperty
         {
             using (var rijndael = new RijndaelManaged())
             {
-                var bitLength = key.Length*8;
+                var bitLength = key.Length * 8;
 
                 var maxValidKeyBitLength = rijndael.LegalKeySizes.Max(keyLength => keyLength.MaxSize);
                 if (bitLength < maxValidKeyBitLength)

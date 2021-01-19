@@ -15,7 +15,7 @@ namespace NServiceBus.Encryption.MessageProperty
                 return field.Invoke(source);
             }
 
-            var propertyInfo = (PropertyInfo) member;
+            var propertyInfo = (PropertyInfo)member;
 
             if (!propertyInfo.CanRead)
             {

@@ -98,8 +98,7 @@ namespace NServiceBus.Encryption.MessageProperty
 
                 var child = member.GetValue(root);
 
-                var items = child as IEnumerable;
-                if (items != null)
+                if (child is IEnumerable items)
                 {
                     foreach (var item in items)
                     {

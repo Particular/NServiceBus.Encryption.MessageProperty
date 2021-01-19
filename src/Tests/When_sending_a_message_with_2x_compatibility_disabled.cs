@@ -14,7 +14,7 @@
                 Base64Iv = "Base64Iv"
             });
 
-            var value = (EncryptedString) MySecretMessage;
+            var value = (EncryptedString)MySecretMessage;
 
             service.EncryptValue(value, null);
             Assert.AreEqual(value.EncryptedValue.EncryptedBase64Value, EncryptedBase64Value);

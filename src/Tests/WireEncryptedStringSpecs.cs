@@ -13,18 +13,18 @@
         public void Should_use_the_wireEncrypted_string()
         {
             var message = new Customer
-                {
-                    Secret = MySecretMessage,
-                    SecretField = MySecretMessage,
-                    CreditCard = new CreditCardDetails {CreditCardNumber = MySecretMessage},
-                    LargeByteArray = new byte[1000000],
-                    ListOfCreditCards =
+            {
+                Secret = MySecretMessage,
+                SecretField = MySecretMessage,
+                CreditCard = new CreditCardDetails { CreditCardNumber = MySecretMessage },
+                LargeByteArray = new byte[1000000],
+                ListOfCreditCards =
                         new List<CreditCardDetails>
                             {
                                 new CreditCardDetails {CreditCardNumber = MySecretMessage},
                                 new CreditCardDetails {CreditCardNumber = MySecretMessage}
                             }
-                };
+            };
             message.ListOfSecrets = new List<CreditCardDetails>(message.ListOfCreditCards);
 
             var result = inspector.ScanObject(message).ToList();
@@ -38,8 +38,8 @@
             Assert.AreEqual(EncryptedBase64Value, message.ListOfCreditCards[0].CreditCardNumber.EncryptedValue.EncryptedBase64Value);
             Assert.AreEqual(EncryptedBase64Value, message.ListOfCreditCards[1].CreditCardNumber.EncryptedValue.EncryptedBase64Value);
 
-            Assert.AreEqual(EncryptedBase64Value, (message.ListOfSecrets[0]).CreditCardNumber.EncryptedValue.EncryptedBase64Value);
-            Assert.AreEqual(EncryptedBase64Value, (message.ListOfSecrets[1]).CreditCardNumber.EncryptedValue.EncryptedBase64Value);
+            Assert.AreEqual(EncryptedBase64Value, message.ListOfSecrets[0].CreditCardNumber.EncryptedValue.EncryptedBase64Value);
+            Assert.AreEqual(EncryptedBase64Value, message.ListOfSecrets[1].CreditCardNumber.EncryptedValue.EncryptedBase64Value);
         }
     }
 
@@ -110,12 +110,12 @@
         [Test]
         public void Should_match_the_property_correctly()
         {
-            var child = new SubProperty {Secret = MySecretMessage};
+            var child = new SubProperty { Secret = MySecretMessage };
 
             var message = new MessageWithCircularReferences
-                {
-                    Child = child
-                };
+            {
+                Child = child
+            };
             child.Self = child;
             child.Parent = message;
 
@@ -133,10 +133,10 @@
         public void Should_match_the_property_correctly()
         {
             var message = new MessageWithPropertyWithBackingPublicField
-                {
-                    MySecret = Create(),
+            {
+                MySecret = Create(),
 
-                };
+            };
 
             inspector
                 .ScanObject(message)
@@ -183,10 +183,10 @@
         public void Should_use_the_wireEncrypted_string()
         {
             var message = new Customer
-                {
-                    Secret = Create(),
-                    SecretField = Create(),
-                    CreditCard = new CreditCardDetails {CreditCardNumber = Create()}
+            {
+                Secret = Create(),
+                SecretField = Create(),
+                CreditCard = new CreditCardDetails { CreditCardNumber = Create() }
 
             };
 
@@ -249,7 +249,7 @@
         public DateTime DateTime { get; set; }
         public List<CreditCardDetails> ListOfCreditCards { get; set; }
         public List<CreditCardDetails> ListOfSecrets { get; set; }
-        public byte[] LargeByteArray{ get; set; }
+        public byte[] LargeByteArray { get; set; }
     }
 
     public class CreditCardDetails
