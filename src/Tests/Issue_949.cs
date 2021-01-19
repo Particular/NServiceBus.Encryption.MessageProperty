@@ -6,7 +6,7 @@
     public class Issue_949 : WireEncryptedStringContext
     {
         [Test]
-        public void null_element_in_primitive_array()
+        public void Null_element_in_primitive_array()
         {
             var message = new TestMessageWithPrimitives
             {
@@ -19,7 +19,7 @@
         }
 
         [Test]
-        public void null_element_in_object_array()
+        public void Null_element_in_object_array()
         {
             var message = new TestMessageWithObjects
             {

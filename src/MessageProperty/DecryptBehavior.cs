@@ -32,14 +32,12 @@ namespace NServiceBus.Encryption.MessageProperty
         {
             var encryptedValue = property.GetValue(target);
 
-            var wireEncryptedString = encryptedValue as EncryptedString;
-            if (wireEncryptedString != null)
+            if (encryptedValue is EncryptedString wireEncryptedString)
             {
                 encryptionService.DecryptValue(wireEncryptedString, context);
             }
 
-            var stringToDecrypt = encryptedValue as string;
-            if (stringToDecrypt != null)
+            if (encryptedValue is string stringToDecrypt)
             {
                 encryptionService.DecryptValue(ref stringToDecrypt, context);
                 property.SetValue(target, stringToDecrypt);

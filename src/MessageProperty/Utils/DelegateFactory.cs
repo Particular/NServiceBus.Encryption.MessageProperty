@@ -10,9 +10,8 @@ namespace NServiceBus.Encryption.MessageProperty
     {
         public static Func<object, object> CreateGet(PropertyInfo property)
         {
-            Func<object, object> lateBoundPropertyGet;
 
-            if (!PropertyInfoToLateBoundProperty.TryGetValue(property, out lateBoundPropertyGet))
+            if (!PropertyInfoToLateBoundProperty.TryGetValue(property, out Func<object, object> lateBoundPropertyGet))
             {
                 var instanceParameter = Expression.Parameter(typeof(object), "target");
 
@@ -32,9 +31,8 @@ namespace NServiceBus.Encryption.MessageProperty
 
         public static Func<object, object> CreateGet(FieldInfo field)
         {
-            Func<object, object> lateBoundFieldGet;
 
-            if (!FieldInfoToLateBoundField.TryGetValue(field, out lateBoundFieldGet))
+            if (!FieldInfoToLateBoundField.TryGetValue(field, out Func<object, object> lateBoundFieldGet))
             {
                 var instanceParameter = Expression.Parameter(typeof(object), "target");
 
@@ -54,9 +52,8 @@ namespace NServiceBus.Encryption.MessageProperty
 
         public static Action<object, object> CreateSet(FieldInfo field)
         {
-            Action<object, object> callback;
 
-            if (!FieldInfoToLateBoundFieldSet.TryGetValue(field, out callback))
+            if (!FieldInfoToLateBoundFieldSet.TryGetValue(field, out Action<object, object> callback))
             {
                 var sourceType = field.DeclaringType;
                 var method = new DynamicMethod("Set" + field.Name, null, new[]
@@ -73,7 +70,7 @@ namespace NServiceBus.Encryption.MessageProperty
                 gen.Emit(OpCodes.Stfld, field); // Set the value to the input field
                 gen.Emit(OpCodes.Ret);
 
-                callback = (Action<object, object>) method.CreateDelegate(typeof(Action<object, object>));
+                callback = (Action<object, object>)method.CreateDelegate(typeof(Action<object, object>));
                 FieldInfoToLateBoundFieldSet[field] = callback;
             }
 
@@ -82,9 +79,8 @@ namespace NServiceBus.Encryption.MessageProperty
 
         public static Action<object, object> CreateSet(PropertyInfo property)
         {
-            Action<object, object> result;
 
-            if (!PropertyInfoToLateBoundPropertySet.TryGetValue(property, out result))
+            if (!PropertyInfoToLateBoundPropertySet.TryGetValue(property, out Action<object, object> result))
             {
                 var method = new DynamicMethod("Set" + property.Name, null, new[]
                 {
@@ -103,7 +99,7 @@ namespace NServiceBus.Encryption.MessageProperty
                 gen.Emit(OpCodes.Callvirt, setter); // Call the setter method
                 gen.Emit(OpCodes.Ret);
 
-                result = (Action<object, object>) method.CreateDelegate(typeof(Action<object, object>));
+                result = (Action<object, object>)method.CreateDelegate(typeof(Action<object, object>));
                 PropertyInfoToLateBoundPropertySet[property] = result;
             }
 
