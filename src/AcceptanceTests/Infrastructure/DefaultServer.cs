@@ -6,7 +6,6 @@
     using AcceptanceTesting.Customization;
     using AcceptanceTesting.Support;
     using Configuration.AdvancedExtensibility;
-    using Features;
     using Microsoft.Extensions.DependencyInjection;
 
     public class DefaultServer : IEndpointSetupTemplate
@@ -21,9 +20,7 @@
             this.typesToInclude = typesToInclude;
         }
 
-#pragma warning disable 618
         public Task<EndpointConfiguration> GetConfiguration(RunDescriptor runDescriptor, EndpointCustomizationConfiguration endpointConfiguration, Action<EndpointConfiguration> configurationBuilderCustomization)
-#pragma warning restore 618
         {
             var types = endpointConfiguration.GetTypesScopedByTestClass();
 
@@ -34,13 +31,11 @@
             configuration.TypesToIncludeInScan(typesToInclude);
             configuration.EnableInstallers();
 
-            configuration.DisableFeature<TimeoutManager>();
-
             var recoverability = configuration.Recoverability();
             recoverability.Delayed(delayed => delayed.NumberOfRetries(0));
             recoverability.Immediate(immediate => immediate.NumberOfRetries(0));
 
-            configuration.UseTransport<LearningTransport>();
+            configuration.UseTransport(new LearningTransport());
 
             configuration.RegisterComponents(r =>
             {

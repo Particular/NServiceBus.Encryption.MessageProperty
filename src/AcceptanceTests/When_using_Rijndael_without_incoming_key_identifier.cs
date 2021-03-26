@@ -38,8 +38,7 @@
                 EndpointSetup<DefaultServer>(builder =>
                 {
                     builder.EnableMessagePropertyEncryption(new RijndaelEncryptionService("will-be-removed-by-transport-mutator", Encoding.ASCII.GetBytes("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")));
-                    builder.ConfigureTransport()
-                        .Routing()
+                    builder.ConfigureRouting()
                         .RouteToEndpoint(typeof(MessageWithSecretData), Conventions.EndpointNamingConvention(typeof(Receiver)));
                 });
             }
