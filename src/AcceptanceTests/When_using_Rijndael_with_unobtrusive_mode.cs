@@ -75,8 +75,7 @@ namespace NServiceBus.Encryption.MessageProperty.AcceptanceTests
 
                     c.EnableMessagePropertyEncryption(new RijndaelEncryptionService("1st", Keys), t => t.Name.StartsWith("Encrypted"));
 
-                    c.ConfigureTransport()
-                        .Routing()
+                    c.ConfigureRouting()
                         .RouteToEndpoint(typeof(MessageWithSecretData), Conventions.EndpointNamingConvention(typeof(Receiver)));
                 })
                 // remove that type from assembly scanning to simulate what would happen with true unobtrusive mode
