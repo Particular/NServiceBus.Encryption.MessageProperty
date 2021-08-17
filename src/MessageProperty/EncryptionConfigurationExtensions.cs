@@ -38,7 +38,7 @@
             configuration.GetSettings().Set(new IsEncryptedPropertyConvention(encryptedPropertyConvention));
         }
 
-        internal static IEncryptionService GetEncryptionService(this ReadOnlySettings settings)
+        internal static IEncryptionService GetEncryptionService(this IReadOnlySettings settings)
         {
             return settings.Get<IEncryptionService>(EncryptionServiceConfigurationKey);
         }
