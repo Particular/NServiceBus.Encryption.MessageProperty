@@ -210,7 +210,9 @@
                 return IncomingKeyIdentifier != null;
             }
 
+#pragma warning disable SYSLIB0022 // Type or member is obsolete
             protected internal override void ConfigureIV(RijndaelManaged rijndael)
+#pragma warning restore SYSLIB0022 // Type or member is obsolete
             {
                 if (EncryptionIV != null)
                 {
