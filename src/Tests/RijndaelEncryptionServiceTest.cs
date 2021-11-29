@@ -1,11 +1,11 @@
 ﻿namespace NServiceBus.Encryption.MessageProperty.Tests
 {
+    using NUnit.Framework;
+    using Pipeline;
     using System;
     using System.Collections.Generic;
     using System.Security.Cryptography;
     using System.Text;
-    using NUnit.Framework;
-    using Pipeline;
 
     [TestFixture]
     public class RijndaelEncryptionServiceTest
@@ -210,7 +210,9 @@
                 return IncomingKeyIdentifier != null;
             }
 
+#pragma warning disable SYSLIB0022 // Type or member is obsolete
             protected internal override void ConfigureIV(RijndaelManaged rijndael)
+#pragma warning restore SYSLIB0022 // Type or member is obsolete
             {
                 if (EncryptionIV != null)
                 {
