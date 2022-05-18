@@ -71,7 +71,7 @@ namespace NServiceBus.Encryption.MessageProperty
                 if (IsEncryptedMember(member) && member.GetValue(root) != null)
                 {
                     var value = member.GetValue(root);
-                    if (value is string || value is EncryptedString)
+                    if (value is string or EncryptedString)
                     {
                         properties.Add(Tuple.Create(root, member));
                         continue;
