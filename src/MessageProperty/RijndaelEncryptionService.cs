@@ -127,7 +127,9 @@ namespace NServiceBus.Encryption.MessageProperty
 
             AddKeyIdentifierHeader(context);
 
+#pragma warning disable SYSLIB0022
             using (var rijndael = new RijndaelManaged())
+#pragma warning restore SYSLIB0022
             {
                 rijndael.Key = encryptionKey;
                 rijndael.Mode = CipherMode.CBC;
@@ -190,7 +192,9 @@ namespace NServiceBus.Encryption.MessageProperty
 
         static string Decrypt(EncryptedValue encryptedValue, byte[] key)
         {
+#pragma warning disable SYSLIB0022
             using (var rijndael = new RijndaelManaged())
+#pragma warning restore SYSLIB0022
             {
                 var encrypted = Convert.FromBase64String(encryptedValue.EncryptedBase64Value);
                 rijndael.IV = Convert.FromBase64String(encryptedValue.Base64Iv);
@@ -232,7 +236,9 @@ namespace NServiceBus.Encryption.MessageProperty
 
         static bool IsValidKey(byte[] key)
         {
+#pragma warning disable SYSLIB0022
             using (var rijndael = new RijndaelManaged())
+#pragma warning restore SYSLIB0022
             {
                 var bitLength = key.Length * 8;
 
@@ -265,7 +271,9 @@ namespace NServiceBus.Encryption.MessageProperty
         /// <summary>
         /// Configures the initialization vector.
         /// </summary>
+#pragma warning disable SYSLIB0022
         protected internal virtual void ConfigureIV(RijndaelManaged rijndael)
+#pragma warning restore SYSLIB0022
         {
             rijndael.GenerateIV();
         }
