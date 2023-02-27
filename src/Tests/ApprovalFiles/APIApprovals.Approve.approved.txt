@@ -3,6 +3,17 @@
 [assembly: System.Runtime.InteropServices.ComVisible(false)]
 namespace NServiceBus.Encryption.MessageProperty
 {
+    public class AesEncryptionService : NServiceBus.Encryption.MessageProperty.IEncryptionService
+    {
+        public AesEncryptionService(string encryptionKeyIdentifier, byte[] key) { }
+        public AesEncryptionService(string encryptionKeyIdentifier, System.Collections.Generic.IDictionary<string, byte[]> keys) { }
+        public AesEncryptionService(string encryptionKeyIdentifier, System.Collections.Generic.IDictionary<string, byte[]> keys, System.Collections.Generic.IList<byte[]> decryptionKeys) { }
+        protected virtual void AddKeyIdentifierHeader(NServiceBus.Pipeline.IOutgoingLogicalMessageContext context) { }
+        protected virtual void ConfigureIV(System.Security.Cryptography.Aes aes) { }
+        public string Decrypt(NServiceBus.Encryption.MessageProperty.EncryptedValue encryptedValue, NServiceBus.Pipeline.IIncomingLogicalMessageContext context) { }
+        public NServiceBus.Encryption.MessageProperty.EncryptedValue Encrypt(string value, NServiceBus.Pipeline.IOutgoingLogicalMessageContext context) { }
+        protected virtual bool TryGetKeyIdentifierHeader(out string keyIdentifier, NServiceBus.Pipeline.IIncomingLogicalMessageContext context) { }
+    }
     [System.Serializable]
     public class EncryptedString : System.Runtime.Serialization.ISerializable
     {
@@ -28,6 +39,7 @@ namespace NServiceBus.Encryption.MessageProperty
     }
     public static class EncryptionHeaders
     {
+        public const string AesKeyIdentifier = "NServiceBus.AesKeyIdentifier";
         public const string RijndaelKeyIdentifier = "NServiceBus.RijndaelKeyIdentifier";
     }
     public interface IEncryptionService
