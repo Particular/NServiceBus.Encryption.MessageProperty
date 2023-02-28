@@ -197,7 +197,9 @@ namespace NServiceBus.Encryption.MessageProperty
 #pragma warning restore SYSLIB0022
             {
                 var encrypted = Convert.FromBase64String(encryptedValue.EncryptedBase64Value);
-                rijndael.IV = Convert.FromBase64String(encryptedValue.Base64Iv);
+                var iv = Convert.FromBase64String(encryptedValue.Base64Iv);
+                rijndael.BlockSize = iv.Length * 8;
+                rijndael.IV = iv;
                 rijndael.Mode = CipherMode.CBC;
                 rijndael.Key = key;
                 using (var decryptor = rijndael.CreateDecryptor())
