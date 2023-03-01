@@ -1,4 +1,6 @@
-﻿namespace NServiceBus.Encryption.MessageProperty.AcceptanceTests
+﻿#if NETFRAMEWORK
+
+namespace NServiceBus.Encryption.MessageProperty.AcceptanceTests
 {
     using System.Collections.Generic;
     using System.Security.Cryptography;
@@ -81,13 +83,11 @@
             {
             }
 
-#pragma warning disable SYSLIB0022
             protected override void ConfigureIV(RijndaelManaged rijndael)
             {
                 rijndael.BlockSize = 192;
                 base.ConfigureIV(rijndael);
             }
-#pragma warning restore SYSLIB0022
         }
 
         public class MessageWithSecretData : IMessage
@@ -96,3 +96,5 @@
         }
     }
 }
+
+#endif
