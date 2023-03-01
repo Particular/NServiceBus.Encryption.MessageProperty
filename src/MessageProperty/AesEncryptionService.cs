@@ -190,18 +190,42 @@ namespace NServiceBus.Encryption.MessageProperty
 
         static string Decrypt(EncryptedValue encryptedValue, byte[] key)
         {
-            using (var aes = Aes.Create())
+            var iv = Convert.FromBase64String(encryptedValue.Base64Iv);
+            if (iv.Length == 16)
             {
-                var encrypted = Convert.FromBase64String(encryptedValue.EncryptedBase64Value);
-                aes.IV = Convert.FromBase64String(encryptedValue.Base64Iv);
-                aes.Mode = CipherMode.CBC;
-                aes.Key = key;
-                using (var decryptor = aes.CreateDecryptor())
-                using (var memoryStream = new MemoryStream(encrypted))
-                using (var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
-                using (var reader = new StreamReader(cryptoStream))
+                using (var aes = Aes.Create())
                 {
-                    return reader.ReadToEnd();
+                    var encrypted = Convert.FromBase64String(encryptedValue.EncryptedBase64Value);
+                    aes.IV = iv;
+                    aes.Mode = CipherMode.CBC;
+                    aes.Key = key;
+                    using (var decryptor = aes.CreateDecryptor())
+                    using (var memoryStream = new MemoryStream(encrypted))
+                    using (var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
+                    using (var reader = new StreamReader(cryptoStream))
+                    {
+                        return reader.ReadToEnd();
+                    }
+                }
+            }
+            else
+            {
+#pragma warning disable SYSLIB0022
+                using (var rijndael = new RijndaelManaged())
+#pragma warning restore SYSLIB0022
+                {
+                    var encrypted = Convert.FromBase64String(encryptedValue.EncryptedBase64Value);
+                    rijndael.BlockSize = iv.Length * 8;
+                    rijndael.IV = iv;
+                    rijndael.Mode = CipherMode.CBC;
+                    rijndael.Key = key;
+                    using (var decryptor = rijndael.CreateDecryptor())
+                    using (var memoryStream = new MemoryStream(encrypted))
+                    using (var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
+                    using (var reader = new StreamReader(cryptoStream))
+                    {
+                        return reader.ReadToEnd();
+                    }
                 }
             }
         }
