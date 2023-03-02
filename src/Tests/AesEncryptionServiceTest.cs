@@ -8,7 +8,7 @@
     using Pipeline;
 
     [TestFixture]
-    public class RijndaelEncryptionServiceTest
+    public class AesEncryptionServiceTest
     {
         [Test]
         public void Should_encrypt_and_decrypt()
@@ -28,13 +28,11 @@
         public void Should_encrypt_and_decrypt_for_expired_key()
         {
             var encryptionKey1 = Encoding.ASCII.GetBytes("gdDbqRpqdRbTs3mhdZh9qCaDaxJXl+e6");
-            var encryptionIV = Encoding.ASCII.GetBytes("GaoKtfQo87igiaks");
             var service1 = new TestableRijndaelEncryptionService("encryptionKey1", encryptionKey1, new[]
             {
                 encryptionKey1
             })
             {
-                EncryptionIV = encryptionIV
             };
             var encryptedValue = service1.Encrypt("string to encrypt", null);
             Assert.AreNotEqual("string to encrypt", encryptedValue.EncryptedBase64Value);
@@ -152,9 +150,7 @@
         {
             var encryptionKey1 = Encoding.ASCII.GetBytes("gdDbqRpqdRbTs3mhdZh9qCaDaxJXl+e6");
 
-#pragma warning disable CS0618 // Type or member is obsolete
-            Assert.Catch<ArgumentNullException>(() => new RijndaelEncryptionService(null, new Dictionary<string, byte[]>
-#pragma warning restore CS0618 // Type or member is obsolete
+            Assert.Catch<ArgumentNullException>(() => new AesEncryptionService(null, new Dictionary<string, byte[]>
             {
                 {"some-key", encryptionKey1}
             }, new List<byte[]>()));
@@ -163,9 +159,7 @@
         [Test]
         public void Should_throw_when_passing_non_existing_key_identifier()
         {
-#pragma warning disable CS0618 // Type or member is obsolete
-            Assert.Catch<ArgumentException>(() => { new RijndaelEncryptionService("not-in-keys", new Dictionary<string, byte[]>(), null); });
-#pragma warning restore CS0618 // Type or member is obsolete
+            Assert.Catch<ArgumentException>(() => { new AesEncryptionService("not-in-keys", new Dictionary<string, byte[]>(), null); });
         }
 
         [Test]
@@ -186,9 +180,7 @@
             Assert.Catch<InvalidOperationException>(() => { service2.Decrypt(encryptedValue, null); }, "Unable to decrypt property using configured decryption key specified in key identifier header.");
         }
 
-#pragma warning disable CS0618 // Type or member is obsolete
-        class TestableRijndaelEncryptionService : RijndaelEncryptionService
-#pragma warning restore CS0618 // Type or member is obsolete
+        class TestableRijndaelEncryptionService : AesEncryptionService
         {
             public TestableRijndaelEncryptionService(
                 string encryptionKeyIdentifier,
@@ -203,7 +195,6 @@
 
             public bool OutgoingKeyIdentifierSet { get; private set; }
             public string IncomingKeyIdentifier { private get; set; }
-            public byte[] EncryptionIV { get; set; }
 
             protected internal override void AddKeyIdentifierHeader(IOutgoingLogicalMessageContext context)
             {
@@ -214,20 +205,6 @@
             {
                 keyIdentifier = IncomingKeyIdentifier;
                 return IncomingKeyIdentifier != null;
-            }
-
-#pragma warning disable SYSLIB0022 // Type or member is obsolete
-            protected internal override void ConfigureIV(RijndaelManaged rijndael)
-#pragma warning restore SYSLIB0022 // Type or member is obsolete
-            {
-                if (EncryptionIV != null)
-                {
-                    rijndael.IV = EncryptionIV;
-                }
-                else
-                {
-                    base.ConfigureIV(rijndael);
-                }
             }
         }
     }
