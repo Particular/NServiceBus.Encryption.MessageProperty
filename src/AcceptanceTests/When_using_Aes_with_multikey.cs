@@ -7,7 +7,7 @@
     using AcceptanceTesting.Customization;
     using NUnit.Framework;
 
-    public class When_using_Rijndael_with_multikey : NServiceBusAcceptanceTest
+    public class When_using_Aes_with_multikey : NServiceBusAcceptanceTest
     {
         [Test]
         public async Task Should_receive_decrypted_message()
@@ -36,9 +36,7 @@
             {
                 EndpointSetup<DefaultServer>(builder =>
                 {
-#pragma warning disable CS0618 // Type or member is obsolete
-                    builder.EnableMessagePropertyEncryption(new RijndaelEncryptionService("1st", Encoding.ASCII.GetBytes("gdDbqRpqdRbTs3mhdZh9qCaDaxJXl+e6")));
-#pragma warning restore CS0618 // Type or member is obsolete
+                    builder.EnableMessagePropertyEncryption(new AesEncryptionService("1st", Encoding.ASCII.GetBytes("gdDbqRpqdRbTs3mhdZh9qCaDaxJXl+e6")));
                     builder.ConfigureRouting()
                         .RouteToEndpoint(typeof(MessageWithSecretData), Conventions.EndpointNamingConvention(typeof(Receiver)));
                 });
@@ -60,9 +58,7 @@
                 {
                     key
                 };
-#pragma warning disable CS0618 // Type or member is obsolete
-                EndpointSetup<DefaultServer>(builder => builder.EnableMessagePropertyEncryption(new RijndaelEncryptionService("2nd", keys, expiredKeys)));
-#pragma warning restore CS0618 // Type or member is obsolete
+                EndpointSetup<DefaultServer>(builder => builder.EnableMessagePropertyEncryption(new AesEncryptionService("2nd", keys, expiredKeys)));
             }
 
             public class Handler : IHandleMessages<MessageWithSecretData>

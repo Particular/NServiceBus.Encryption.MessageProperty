@@ -1,13 +1,16 @@
-﻿namespace NServiceBus.Encryption.MessageProperty.AcceptanceTests
+﻿#if NETFRAMEWORK
+
+namespace NServiceBus.Encryption.MessageProperty.AcceptanceTests
 {
     using System.Collections.Generic;
+    using System.Security.Cryptography;
     using System.Text;
     using System.Threading.Tasks;
     using AcceptanceTesting;
     using AcceptanceTesting.Customization;
     using NUnit.Framework;
 
-    public class When_using_Rijndael_with_multikey : NServiceBusAcceptanceTest
+    public class When_sending_from_Rijndael_to_Aes_custom_block_size : NServiceBusAcceptanceTest
     {
         [Test]
         public async Task Should_receive_decrypted_message()
@@ -30,15 +33,18 @@
             public string Secret { get; set; }
         }
 
+        static Dictionary<string, byte[]> Keys = new Dictionary<string, byte[]>
+        {
+            {"1st", Encoding.ASCII.GetBytes("gdDbqRpqdRbTs3mhdZh9qCaDaxJXl+e6")}
+        };
+
         public class Sender : EndpointConfigurationBuilder
         {
             public Sender()
             {
                 EndpointSetup<DefaultServer>(builder =>
                 {
-#pragma warning disable CS0618 // Type or member is obsolete
-                    builder.EnableMessagePropertyEncryption(new RijndaelEncryptionService("1st", Encoding.ASCII.GetBytes("gdDbqRpqdRbTs3mhdZh9qCaDaxJXl+e6")));
-#pragma warning restore CS0618 // Type or member is obsolete
+                    builder.EnableMessagePropertyEncryption(new RijndaelEncryptionService192("1st", Keys));
                     builder.ConfigureRouting()
                         .RouteToEndpoint(typeof(MessageWithSecretData), Conventions.EndpointNamingConvention(typeof(Receiver)));
                 });
@@ -49,20 +55,7 @@
         {
             public Receiver()
             {
-                var key = Encoding.ASCII.GetBytes("gdDbqRpqdRbTs3mhdZh9qCaDaxJXl+e6");
-                var keys = new Dictionary<string, byte[]>
-                {
-                    {"2nd", Encoding.ASCII.GetBytes("gdDbqRpqdRbTs3mhdZh9qCaDaxJXl+e6")},
-                    {"1st", key}
-                };
-
-                var expiredKeys = new[]
-                {
-                    key
-                };
-#pragma warning disable CS0618 // Type or member is obsolete
-                EndpointSetup<DefaultServer>(builder => builder.EnableMessagePropertyEncryption(new RijndaelEncryptionService("2nd", keys, expiredKeys)));
-#pragma warning restore CS0618 // Type or member is obsolete
+                EndpointSetup<DefaultServer>(builder => builder.EnableMessagePropertyEncryption(new AesEncryptionService("1st", Keys)));
             }
 
             public class Handler : IHandleMessages<MessageWithSecretData>
@@ -84,9 +77,26 @@
             }
         }
 
+#pragma warning disable CS0618 // Type or member is obsolete
+        public class RijndaelEncryptionService192 : RijndaelEncryptionService
+#pragma warning restore CS0618 // Type or member is obsolete
+        {
+            public RijndaelEncryptionService192(string encryptionKeyIdentifier, IDictionary<string, byte[]> keys) : base(encryptionKeyIdentifier, keys)
+            {
+            }
+
+            protected override void ConfigureIV(RijndaelManaged rijndael)
+            {
+                rijndael.BlockSize = 192;
+                base.ConfigureIV(rijndael);
+            }
+        }
+
         public class MessageWithSecretData : IMessage
         {
             public EncryptedString Secret { get; set; }
         }
     }
 }
+
+#endif
