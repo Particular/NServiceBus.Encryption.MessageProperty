@@ -9,7 +9,7 @@ namespace NServiceBus.Encryption.MessageProperty.AcceptanceTests
     using AcceptanceTesting.Customization;
     using NUnit.Framework;
 
-    public class When_using_Rijndael_with_unobtrusive_mode : NServiceBusAcceptanceTest
+    public class When_using_Aes_with_unobtrusive_mode : NServiceBusAcceptanceTest
     {
         [Test]
         public async Task Should_receive_decrypted_message()
@@ -73,7 +73,7 @@ namespace NServiceBus.Encryption.MessageProperty.AcceptanceTests
                 {
                     c.Conventions().DefiningCommandsAs(t => t.Namespace != null && t.FullName == typeof(MessageWithSecretData).FullName);
 
-                    c.EnableMessagePropertyEncryption(new RijndaelEncryptionService("1st", Keys), t => t.Name.StartsWith("Encrypted"));
+                    c.EnableMessagePropertyEncryption(new AesEncryptionService("1st", Keys), t => t.Name.StartsWith("Encrypted"));
 
                     c.ConfigureRouting()
                         .RouteToEndpoint(typeof(MessageWithSecretData), Conventions.EndpointNamingConvention(typeof(Receiver)));
@@ -91,7 +91,7 @@ namespace NServiceBus.Encryption.MessageProperty.AcceptanceTests
                 {
                     c.Conventions().DefiningCommandsAs(t => t.Namespace != null && t.FullName == typeof(MessageWithSecretData).FullName);
 
-                    c.EnableMessagePropertyEncryption(new RijndaelEncryptionService("1st", Keys), t => t.Name.StartsWith("Encrypted"));
+                    c.EnableMessagePropertyEncryption(new AesEncryptionService("1st", Keys), t => t.Name.StartsWith("Encrypted"));
                 });
             }
 

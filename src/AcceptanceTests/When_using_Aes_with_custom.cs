@@ -7,7 +7,7 @@
     using AcceptanceTesting;
     using NUnit.Framework;
 
-    public class When_using_Rijndael_with_custom : NServiceBusAcceptanceTest
+    public class When_using_Aes_with_custom : NServiceBusAcceptanceTest
     {
         [Test]
         public async Task Should_receive_decrypted_message()
@@ -66,7 +66,7 @@
                     {"1st", Encoding.ASCII.GetBytes("gdDbqRpqdRbTs3mhdZh9qCaDaxJXl+e6")}
                 };
 
-                EndpointSetup<DefaultServer>(builder => builder.EnableMessagePropertyEncryption(new RijndaelEncryptionService("1st", keys)));
+                EndpointSetup<DefaultServer>(builder => builder.EnableMessagePropertyEncryption(new AesEncryptionService("1st", keys)));
             }
 
             public class Handler : IHandleMessages<MessageWithSecretData>

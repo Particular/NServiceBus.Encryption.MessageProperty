@@ -5,16 +5,15 @@
     using System.Threading.Tasks;
     using AcceptanceTesting;
     using AcceptanceTesting.Customization;
-    using MessageMutator;
     using NUnit.Framework;
 
-    public class When_using_Rijndael_without_incoming_key_identifier : NServiceBusAcceptanceTest
+    public class When_using_Aes_with_multikey : NServiceBusAcceptanceTest
     {
         [Test]
-        public async Task Should_process_decrypted_message_without_key_identifier()
+        public async Task Should_receive_decrypted_message()
         {
             var context = await Scenario.Define<Context>()
-                .WithEndpoint<Sender>(b => b.When(bus => bus.Send(new MessageWithSecretData
+                .WithEndpoint<Sender>(b => b.When(session => session.Send(new MessageWithSecretData
                 {
                     Secret = "betcha can't guess my secret"
                 })))
@@ -37,7 +36,7 @@
             {
                 EndpointSetup<DefaultServer>(builder =>
                 {
-                    builder.EnableMessagePropertyEncryption(new RijndaelEncryptionService("will-be-removed-by-transport-mutator", Encoding.ASCII.GetBytes("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")));
+                    builder.EnableMessagePropertyEncryption(new AesEncryptionService("1st", Encoding.ASCII.GetBytes("gdDbqRpqdRbTs3mhdZh9qCaDaxJXl+e6")));
                     builder.ConfigureRouting()
                         .RouteToEndpoint(typeof(MessageWithSecretData), Conventions.EndpointNamingConvention(typeof(Receiver)));
                 });
@@ -48,20 +47,18 @@
         {
             public Receiver()
             {
+                var key = Encoding.ASCII.GetBytes("gdDbqRpqdRbTs3mhdZh9qCaDaxJXl+e6");
                 var keys = new Dictionary<string, byte[]>
                 {
-                    {"new", Encoding.ASCII.GetBytes("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")}
+                    {"2nd", Encoding.ASCII.GetBytes("gdDbqRpqdRbTs3mhdZh9qCaDaxJXl+e6")},
+                    {"1st", key}
                 };
 
                 var expiredKeys = new[]
                 {
-                    Encoding.ASCII.GetBytes("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+                    key
                 };
-                EndpointSetup<DefaultServer>(builder =>
-                {
-                    builder.EnableMessagePropertyEncryption(new RijndaelEncryptionService("new", keys, expiredKeys));
-                    builder.RegisterMessageMutator(new RemoveKeyIdentifierHeaderMutator());
-                });
+                EndpointSetup<DefaultServer>(builder => builder.EnableMessagePropertyEncryption(new AesEncryptionService("2nd", keys, expiredKeys)));
             }
 
             public class Handler : IHandleMessages<MessageWithSecretData>
@@ -77,6 +74,7 @@
                 {
                     testContext.Secret = message.Secret.Value;
                     testContext.Done = true;
+
                     return Task.FromResult(0);
                 }
             }
@@ -85,15 +83,6 @@
         public class MessageWithSecretData : IMessage
         {
             public EncryptedString Secret { get; set; }
-        }
-
-        class RemoveKeyIdentifierHeaderMutator : IMutateIncomingTransportMessages
-        {
-            public Task MutateIncoming(MutateIncomingTransportMessageContext context)
-            {
-                context.Headers.Remove(EncryptionHeaders.RijndaelKeyIdentifier);
-                return Task.FromResult(0);
-            }
         }
     }
 }
