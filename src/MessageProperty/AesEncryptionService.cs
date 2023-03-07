@@ -191,21 +191,18 @@ namespace NServiceBus.Encryption.MessageProperty
         static string Decrypt(EncryptedValue encryptedValue, byte[] key)
         {
             var iv = Convert.FromBase64String(encryptedValue.Base64Iv);
-            if (iv.Length == 16)
+            using (var aes = Aes.Create())
             {
-                using (var aes = Aes.Create())
+                var encrypted = Convert.FromBase64String(encryptedValue.EncryptedBase64Value);
+                aes.IV = iv;
+                aes.Mode = CipherMode.CBC;
+                aes.Key = key;
+                using (var decryptor = aes.CreateDecryptor())
+                using (var memoryStream = new MemoryStream(encrypted))
+                using (var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
+                using (var reader = new StreamReader(cryptoStream))
                 {
-                    var encrypted = Convert.FromBase64String(encryptedValue.EncryptedBase64Value);
-                    aes.IV = iv;
-                    aes.Mode = CipherMode.CBC;
-                    aes.Key = key;
-                    using (var decryptor = aes.CreateDecryptor())
-                    using (var memoryStream = new MemoryStream(encrypted))
-                    using (var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
-                    using (var reader = new StreamReader(cryptoStream))
-                    {
-                        return reader.ReadToEnd();
-                    }
+                    return reader.ReadToEnd();
                 }
             }
         }
