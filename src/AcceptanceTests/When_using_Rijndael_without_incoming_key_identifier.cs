@@ -37,7 +37,9 @@
             {
                 EndpointSetup<DefaultServer>(builder =>
                 {
+#pragma warning disable CS0618 // Type or member is obsolete
                     builder.EnableMessagePropertyEncryption(new RijndaelEncryptionService("will-be-removed-by-transport-mutator", Encoding.ASCII.GetBytes("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")));
+#pragma warning restore CS0618 // Type or member is obsolete
                     builder.ConfigureRouting()
                         .RouteToEndpoint(typeof(MessageWithSecretData), Conventions.EndpointNamingConvention(typeof(Receiver)));
                 });
@@ -59,7 +61,9 @@
                 };
                 EndpointSetup<DefaultServer>(builder =>
                 {
+#pragma warning disable CS0618 // Type or member is obsolete
                     builder.EnableMessagePropertyEncryption(new RijndaelEncryptionService("new", keys, expiredKeys));
+#pragma warning restore CS0618 // Type or member is obsolete
                     builder.RegisterMessageMutator(new RemoveKeyIdentifierHeaderMutator());
                 });
             }

@@ -35,19 +35,16 @@ namespace NServiceBus.Encryption.MessageProperty
     using Pipeline;
 
     /// <summary>
-    /// An <see cref="IEncryptionService"/> implementation usable for message property encryption using the Rijndael algorithm.
+    /// An <see cref="IEncryptionService"/> implementation usable for message property encryption using the Aes algorithm.
     /// </summary>
-    [ObsoleteEx(ReplacementTypeOrMember = "AesEncryptionService",
-        TreatAsErrorFromVersion = "4",
-        RemoveInVersion = "5")]
-    public class RijndaelEncryptionService : IEncryptionService
+    public class AesEncryptionService : IEncryptionService
     {
         /// <summary>
-        /// Creates a new instance of <see cref="RijndaelEncryptionService" />
+        /// Creates a new instance of <see cref="AesEncryptionService" />
         /// </summary>
         /// <param name="encryptionKeyIdentifier">An identifier for the encryption key to be used to encrypt values.</param>
         /// <param name="key">The encryption key to be used for encryption and decryption.</param>
-        public RijndaelEncryptionService(
+        public AesEncryptionService(
             string encryptionKeyIdentifier,
             byte[] key) : this(encryptionKeyIdentifier, new Dictionary<string, byte[]>
         {
@@ -59,23 +56,23 @@ namespace NServiceBus.Encryption.MessageProperty
         }
 
         /// <summary>
-        /// Creates a new instance of <see cref="RijndaelEncryptionService"/>
+        /// Creates a new instance of <see cref="AesEncryptionService"/>
         /// </summary>
         /// <param name="encryptionKeyIdentifier">An identifier for the encryption key to be used to encrypt values.</param>
         /// <param name="keys">A dictionary of available encryption keys and their identifiers for encryption and decryption.</param>
-        public RijndaelEncryptionService(
+        public AesEncryptionService(
             string encryptionKeyIdentifier,
             IDictionary<string, byte[]> keys) : this(encryptionKeyIdentifier, keys, new List<byte[]>(0))
         {
         }
 
         /// <summary>
-        /// Creates a new instance of <see cref="RijndaelEncryptionService"/>
+        /// Creates a new instance of <see cref="AesEncryptionService"/>
         /// </summary>
         /// <param name="encryptionKeyIdentifier">An identifier for the encryption key to be used to encrypt values.</param>
         /// <param name="keys">A dictionary of available encryption keys and their identifiers for encryption and decryption.</param>
         /// <param name="decryptionKeys">A list of outdated encryption keys without identifiers which can be used for decryption.</param>
-        public RijndaelEncryptionService(
+        public AesEncryptionService(
             string encryptionKeyIdentifier,
             IDictionary<string, byte[]> keys,
             IList<byte[]> decryptionKeys)
@@ -90,7 +87,7 @@ namespace NServiceBus.Encryption.MessageProperty
 
             if (string.IsNullOrEmpty(encryptionKeyIdentifier))
             {
-                Log.Error("No encryption key identifier configured. Messages with encrypted properties will fail to send. Add an encryption key identifier to the rijndael encryption service configuration.");
+                Log.Error("No encryption key identifier configured. Messages with encrypted properties will fail to send. Add an encryption key identifier to the Aes encryption service configuration.");
             }
             else if (!keys.TryGetValue(encryptionKeyIdentifier, out encryptionKey))
             {
@@ -114,7 +111,7 @@ namespace NServiceBus.Encryption.MessageProperty
             {
                 return DecryptUsingKeyIdentifier(encryptedValue, keyIdentifier);
             }
-            Log.Warn($"Encrypted message has no '{EncryptionHeaders.RijndaelKeyIdentifier}' header. Possibility of data corruption. Upgrade endpoints that send message with encrypted properties.");
+            Log.Warn($"Encrypted message has no '{EncryptionHeaders.AesKeyIdentifier}' header. Possibility of data corruption. Upgrade endpoints that send message with encrypted properties.");
             return DecryptUsingAllKeys(encryptedValue);
         }
 
@@ -125,20 +122,18 @@ namespace NServiceBus.Encryption.MessageProperty
         {
             if (string.IsNullOrEmpty(encryptionKeyIdentifier))
             {
-                throw new InvalidOperationException("It is required to set the rijndael key identifier.");
+                throw new InvalidOperationException("The AES key identifier must be set.");
             }
 
             AddKeyIdentifierHeader(context);
 
-#pragma warning disable SYSLIB0022
-            using (var rijndael = new RijndaelManaged())
-#pragma warning restore SYSLIB0022
+            using (var aes = Aes.Create())
             {
-                rijndael.Key = encryptionKey;
-                rijndael.Mode = CipherMode.CBC;
-                ConfigureIV(rijndael);
+                aes.Key = encryptionKey;
+                aes.Mode = CipherMode.CBC;
+                ConfigureIV(aes);
 
-                using (var encryptor = rijndael.CreateEncryptor())
+                using (var encryptor = aes.CreateEncryptor())
                 using (var memoryStream = new MemoryStream())
                 using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
                 using (var writer = new StreamWriter(cryptoStream))
@@ -150,7 +145,7 @@ namespace NServiceBus.Encryption.MessageProperty
                     return new EncryptedValue
                     {
                         EncryptedBase64Value = Convert.ToBase64String(memoryStream.ToArray()),
-                        Base64Iv = Convert.ToBase64String(rijndael.IV)
+                        Base64Iv = Convert.ToBase64String(aes.IV)
                     };
                 }
             }
@@ -161,7 +156,7 @@ namespace NServiceBus.Encryption.MessageProperty
 
             if (!keys.TryGetValue(keyIdentifier, out byte[] decryptionKey))
             {
-                throw new InvalidOperationException($"Decryption key not available for key identifier '{keyIdentifier}'. Add this key to the rijndael encryption service configuration. Key identifiers are case sensitive.");
+                throw new InvalidOperationException($"Decryption key not available for key identifier '{keyIdentifier}'. Add this key to the AES encryption service configuration. Key identifiers are case sensitive.");
             }
 
             try
@@ -195,17 +190,14 @@ namespace NServiceBus.Encryption.MessageProperty
 
         static string Decrypt(EncryptedValue encryptedValue, byte[] key)
         {
-#pragma warning disable SYSLIB0022
-            using (var rijndael = new RijndaelManaged())
-#pragma warning restore SYSLIB0022
+            var iv = Convert.FromBase64String(encryptedValue.Base64Iv);
+            using (var aes = Aes.Create())
             {
                 var encrypted = Convert.FromBase64String(encryptedValue.EncryptedBase64Value);
-                var iv = Convert.FromBase64String(encryptedValue.Base64Iv);
-                rijndael.BlockSize = iv.Length * 8;
-                rijndael.IV = iv;
-                rijndael.Mode = CipherMode.CBC;
-                rijndael.Key = key;
-                using (var decryptor = rijndael.CreateDecryptor())
+                aes.IV = iv;
+                aes.Mode = CipherMode.CBC;
+                aes.Key = key;
+                using (var decryptor = aes.CreateDecryptor())
                 using (var memoryStream = new MemoryStream(encrypted))
                 using (var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
                 using (var reader = new StreamReader(cryptoStream))
@@ -241,19 +233,17 @@ namespace NServiceBus.Encryption.MessageProperty
 
         static bool IsValidKey(byte[] key)
         {
-#pragma warning disable SYSLIB0022
-            using (var rijndael = new RijndaelManaged())
-#pragma warning restore SYSLIB0022
+            using (var aes = Aes.Create())
             {
                 var bitLength = key.Length * 8;
 
-                var maxValidKeyBitLength = rijndael.LegalKeySizes.Max(keyLength => keyLength.MaxSize);
+                var maxValidKeyBitLength = aes.LegalKeySizes.Max(keyLength => keyLength.MaxSize);
                 if (bitLength < maxValidKeyBitLength)
                 {
                     Log.WarnFormat("Encryption key is {0} bits which is less than the maximum allowed {1} bits. Consider using a {2}-bit encryption key to obtain the maximum cipher strength", bitLength, maxValidKeyBitLength, maxValidKeyBitLength);
                 }
 
-                return rijndael.ValidKeySize(bitLength);
+                return aes.ValidKeySize(bitLength);
             }
         }
 
@@ -262,32 +252,30 @@ namespace NServiceBus.Encryption.MessageProperty
         /// </summary>
         protected internal virtual void AddKeyIdentifierHeader(IOutgoingLogicalMessageContext context)
         {
-            context.Headers[EncryptionHeaders.RijndaelKeyIdentifier] = encryptionKeyIdentifier;
             context.Headers[EncryptionHeaders.AesKeyIdentifier] = encryptionKeyIdentifier;
+            context.Headers[EncryptionHeaders.RijndaelKeyIdentifier] = encryptionKeyIdentifier;
         }
 
         /// <summary>
-        /// Tries to locate an encryption key identfier from an incoming message.
+        /// Tries to locate an encryption key identifier from an incoming message.
         /// </summary>
         protected internal virtual bool TryGetKeyIdentifierHeader(out string keyIdentifier, IIncomingLogicalMessageContext context)
         {
-            return context.Headers.TryGetValue(EncryptionHeaders.RijndaelKeyIdentifier, out keyIdentifier);
+            return context.Headers.TryGetValue(EncryptionHeaders.AesKeyIdentifier, out keyIdentifier);
         }
 
         /// <summary>
         /// Configures the initialization vector.
         /// </summary>
-#pragma warning disable SYSLIB0022
-        protected internal virtual void ConfigureIV(RijndaelManaged rijndael)
-#pragma warning restore SYSLIB0022
+        protected internal virtual void ConfigureIV(Aes aes)
         {
-            rijndael.GenerateIV();
+            aes.GenerateIV();
         }
 
         readonly string encryptionKeyIdentifier;
         IList<byte[]> decryptionKeys; // Required, as we decrypt in the configured order.
         byte[] encryptionKey;
         IDictionary<string, byte[]> keys;
-        static readonly ILog Log = LogManager.GetLogger<RijndaelEncryptionService>();
+        static readonly ILog Log = LogManager.GetLogger<AesEncryptionService>();
     }
 }
