@@ -114,7 +114,7 @@ namespace NServiceBus.Encryption.MessageProperty
             {
                 return DecryptUsingKeyIdentifier(encryptedValue, keyIdentifier);
             }
-            Log.Warn($"Encrypted message has no '{EncryptionHeaders.RijndaelKeyIdentifier}' header. Possibility of data corruption. Upgrade endpoints that send message with encrypted properties.");
+            Log.Warn($"Encrypted message has no '{EncryptionHeaders.EncryptionKeyIdentifier}' header. Possibility of data corruption. Upgrade endpoints that send message with encrypted properties.");
             return DecryptUsingAllKeys(encryptedValue);
         }
 
@@ -262,8 +262,7 @@ namespace NServiceBus.Encryption.MessageProperty
         /// </summary>
         protected internal virtual void AddKeyIdentifierHeader(IOutgoingLogicalMessageContext context)
         {
-            context.Headers[EncryptionHeaders.RijndaelKeyIdentifier] = encryptionKeyIdentifier;
-            context.Headers[EncryptionHeaders.AesKeyIdentifier] = encryptionKeyIdentifier;
+            context.Headers[EncryptionHeaders.EncryptionKeyIdentifier] = encryptionKeyIdentifier;
         }
 
         /// <summary>
@@ -271,7 +270,7 @@ namespace NServiceBus.Encryption.MessageProperty
         /// </summary>
         protected internal virtual bool TryGetKeyIdentifierHeader(out string keyIdentifier, IIncomingLogicalMessageContext context)
         {
-            return context.Headers.TryGetValue(EncryptionHeaders.RijndaelKeyIdentifier, out keyIdentifier);
+            return context.Headers.TryGetValue(EncryptionHeaders.EncryptionKeyIdentifier, out keyIdentifier);
         }
 
         /// <summary>

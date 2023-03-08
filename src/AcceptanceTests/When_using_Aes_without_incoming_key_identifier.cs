@@ -91,7 +91,7 @@
         {
             public Task MutateIncoming(MutateIncomingTransportMessageContext context)
             {
-                context.Headers.Remove(EncryptionHeaders.AesKeyIdentifier);
+                context.Headers.Remove(EncryptionHeaders.EncryptionKeyIdentifier);
                 return Task.FromResult(0);
             }
         }
