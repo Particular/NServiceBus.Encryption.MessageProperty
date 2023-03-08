@@ -95,7 +95,7 @@
         {
             public Task MutateIncoming(MutateIncomingTransportMessageContext context)
             {
-                context.Headers.Remove(EncryptionHeaders.RijndaelKeyIdentifier);
+                context.Headers.Remove(EncryptionHeaders.EncryptionKeyIdentifier);
                 return Task.FromResult(0);
             }
         }

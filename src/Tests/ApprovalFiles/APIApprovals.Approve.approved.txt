@@ -39,8 +39,7 @@ namespace NServiceBus.Encryption.MessageProperty
     }
     public static class EncryptionHeaders
     {
-        public const string AesKeyIdentifier = "NServiceBus.AesKeyIdentifier";
-        public const string RijndaelKeyIdentifier = "NServiceBus.RijndaelKeyIdentifier";
+        public const string EncryptionKeyIdentifier = "NServiceBus.RijndaelKeyIdentifier";
     }
     public interface IEncryptionService
     {
