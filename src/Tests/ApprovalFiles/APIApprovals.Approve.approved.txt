@@ -46,9 +46,4 @@ namespace NServiceBus.Encryption.MessageProperty
         string Decrypt(NServiceBus.Encryption.MessageProperty.EncryptedValue encryptedValue, NServiceBus.Pipeline.IIncomingLogicalMessageContext context);
         NServiceBus.Encryption.MessageProperty.EncryptedValue Encrypt(string value, NServiceBus.Pipeline.IOutgoingLogicalMessageContext context);
     }
-    [System.Obsolete("Use `AesEncryptionService` instead. Will be removed in version 5.0.0.", true)]
-    public class RijndaelEncryptionService
-    {
-        public RijndaelEncryptionService() { }
-    }
 }
