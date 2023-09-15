@@ -81,11 +81,11 @@
 
                     testContext.SubPropertySecret = message.SubProperty.Secret.Value;
 
-                    testContext.CreditCards = new List<string>
-                    {
+                    testContext.CreditCards =
+                    [
                         message.CreditCards[0].Number.Value,
                         message.CreditCards[1].Number.Value
-                    };
+                    ];
 
                     testContext.GotTheMessage = true;
 
