@@ -110,11 +110,11 @@ namespace NServiceBus.Encryption.MessageProperty.AcceptanceTests
 
                     testContext.SubPropertySecret = message.SubProperty.EncryptedSecret;
 
-                    testContext.CreditCards = new List<string>
-                    {
+                    testContext.CreditCards =
+                    [
                         message.CreditCards[0].EncryptedNumber,
                         message.CreditCards[1].EncryptedNumber
-                    };
+                    ];
 
                     testContext.GetTheMessage = true;
 

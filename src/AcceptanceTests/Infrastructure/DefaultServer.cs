@@ -12,7 +12,7 @@
     {
         public DefaultServer()
         {
-            typesToInclude = new List<Type>();
+            typesToInclude = [];
         }
 
         public DefaultServer(List<Type> typesToInclude)
