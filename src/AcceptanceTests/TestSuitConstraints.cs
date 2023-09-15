@@ -1,6 +1,7 @@
 ﻿namespace NServiceBus.Encryption.MessageProperty.AcceptanceTests
 {
     using System.Runtime.CompilerServices;
+    using NServiceBus.AcceptanceTesting;
     using NServiceBus.AcceptanceTesting.Support;
 
     public partial class TestSuiteConstraints : ITestSuiteConstraints
