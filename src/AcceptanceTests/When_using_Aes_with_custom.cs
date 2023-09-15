@@ -5,6 +5,7 @@
     using System.Text;
     using System.Threading.Tasks;
     using AcceptanceTesting;
+    using NServiceBus.AcceptanceTesting.EndpointTemplates;
     using NUnit.Framework;
 
     public class When_using_Aes_with_custom : NServiceBusAcceptanceTest

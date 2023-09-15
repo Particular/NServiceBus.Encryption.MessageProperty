@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using AcceptanceTesting;
+    using NServiceBus.AcceptanceTesting.EndpointTemplates;
     using NUnit.Framework;
     using Pipeline;
 

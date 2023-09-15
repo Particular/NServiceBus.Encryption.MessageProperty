@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
     using AcceptanceTesting;
     using AcceptanceTesting.Customization;
+    using NServiceBus.AcceptanceTesting.EndpointTemplates;
     using MessageMutator;
     using NUnit.Framework;
 

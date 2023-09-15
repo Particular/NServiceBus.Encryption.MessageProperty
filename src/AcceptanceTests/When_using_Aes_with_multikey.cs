@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
     using AcceptanceTesting;
     using AcceptanceTesting.Customization;
+    using NServiceBus.AcceptanceTesting.EndpointTemplates;
     using NUnit.Framework;
 
     public class When_using_Aes_with_multikey : NServiceBusAcceptanceTest
