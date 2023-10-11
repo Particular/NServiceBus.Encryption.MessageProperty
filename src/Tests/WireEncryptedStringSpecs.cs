@@ -19,11 +19,10 @@
                 CreditCard = new CreditCardDetails { CreditCardNumber = MySecretMessage },
                 LargeByteArray = new byte[1000000],
                 ListOfCreditCards =
-                        new List<CreditCardDetails>
-                            {
-                                new CreditCardDetails {CreditCardNumber = MySecretMessage},
-                                new CreditCardDetails {CreditCardNumber = MySecretMessage}
-                            }
+                [
+                    new CreditCardDetails { CreditCardNumber = MySecretMessage },
+                    new CreditCardDetails { CreditCardNumber = MySecretMessage }
+                ]
             };
             message.ListOfSecrets = new List<CreditCardDetails>(message.ListOfCreditCards);
 
