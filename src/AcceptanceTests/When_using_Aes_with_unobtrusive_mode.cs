@@ -22,8 +22,8 @@ namespace NServiceBus.Encryption.MessageProperty.AcceptanceTests
                     {
                         EncryptedSecret = "My sub secret"
                     },
-                    CreditCards = new List<CreditCardDetails>
-                    {
+                    CreditCards =
+                    [
                         new CreditCardDetails
                         {
                             ValidTo = DateTime.UtcNow.AddYears(1),
@@ -34,7 +34,7 @@ namespace NServiceBus.Encryption.MessageProperty.AcceptanceTests
                             ValidTo = DateTime.UtcNow.AddYears(2),
                             EncryptedNumber = "543645546546456"
                         }
-                    }
+                    ]
                 })))
                 .WithEndpoint<Receiver>()
                 .Done(c => c.GetTheMessage || c.FailedMessages.Any())

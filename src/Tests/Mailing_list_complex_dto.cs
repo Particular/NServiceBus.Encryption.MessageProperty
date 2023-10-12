@@ -23,7 +23,7 @@
 
         class TestOptions
         {
-            public Dictionary<TestEnum, Dictionary<string, string>> Dictionary { get; } = new Dictionary<TestEnum, Dictionary<string, string>>();
+            public Dictionary<TestEnum, Dictionary<string, string>> Dictionary { get; } = [];
 
             public bool ContainsKey(TestEnum key)
             {
@@ -34,7 +34,7 @@
 
             public Dictionary<string, string> this[TestEnum appEnum] => Dictionary.ContainsKey(appEnum)
                 ? Dictionary[appEnum]
-                : Dictionary[appEnum] = new Dictionary<string, string>();
+                : Dictionary[appEnum] = [];
         }
 
         class TestDto

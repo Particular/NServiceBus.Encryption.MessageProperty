@@ -21,8 +21,8 @@
                     {
                         Secret = "My sub secret"
                     },
-                    CreditCards = new List<CreditCardDetails>
-                    {
+                    CreditCards =
+                    [
                         new CreditCardDetails
                         {
                             ValidTo = DateTime.UtcNow.AddYears(1),
@@ -33,7 +33,7 @@
                             ValidTo = DateTime.UtcNow.AddYears(2),
                             Number = "543645546546456"
                         }
-                    }
+                    ]
                 })))
                 .Done(c => c.GotTheMessage)
                 .Run();
