@@ -128,14 +128,15 @@ namespace NServiceBus.Encryption.MessageProperty
             AddKeyIdentifierHeader(context);
 
             using var aes = Aes.Create();
-            using var encryptor = aes.CreateEncryptor();
-            using var memoryStream = new MemoryStream();
-            using var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write);
-            using var writer = new StreamWriter(cryptoStream);
 
             aes.Key = encryptionKey;
             aes.Mode = CipherMode.CBC;
             ConfigureIV(aes);
+
+            using var encryptor = aes.CreateEncryptor();
+            using var memoryStream = new MemoryStream();
+            using var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write);
+            using var writer = new StreamWriter(cryptoStream);
 
             writer.Write(value);
             writer.Flush();
@@ -192,14 +193,15 @@ namespace NServiceBus.Encryption.MessageProperty
             var encrypted = Convert.FromBase64String(encryptedValue.EncryptedBase64Value);
 
             using var aes = Aes.Create();
-            using var decryptor = aes.CreateDecryptor();
-            using var memoryStream = new MemoryStream(encrypted);
-            using var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read);
-            using var reader = new StreamReader(cryptoStream);
 
             aes.IV = iv;
             aes.Mode = CipherMode.CBC;
             aes.Key = key;
+
+            using var decryptor = aes.CreateDecryptor();
+            using var memoryStream = new MemoryStream(encrypted);
+            using var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read);
+            using var reader = new StreamReader(cryptoStream);
 
             return reader.ReadToEnd();
         }
