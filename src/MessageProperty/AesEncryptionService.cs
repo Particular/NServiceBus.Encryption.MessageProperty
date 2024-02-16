@@ -77,9 +77,9 @@ namespace NServiceBus.Encryption.MessageProperty
             IDictionary<string, byte[]> keys,
             IList<byte[]> decryptionKeys)
         {
-            Guard.AgainstNullAndEmpty(nameof(encryptionKeyIdentifier), encryptionKeyIdentifier);
-            Guard.AgainstNull(nameof(keys), keys);
-            Guard.AgainstNull(nameof(decryptionKeys), decryptionKeys);
+            ArgumentException.ThrowIfNullOrEmpty(encryptionKeyIdentifier, nameof(encryptionKeyIdentifier));
+            ArgumentNullException.ThrowIfNull(keys, nameof(keys));
+            ArgumentNullException.ThrowIfNull(decryptionKeys, nameof(decryptionKeys));
 
             this.encryptionKeyIdentifier = encryptionKeyIdentifier;
             this.decryptionKeys = decryptionKeys;
@@ -127,28 +127,25 @@ namespace NServiceBus.Encryption.MessageProperty
 
             AddKeyIdentifierHeader(context);
 
-            using (var aes = Aes.Create())
-            {
-                aes.Key = encryptionKey;
-                aes.Mode = CipherMode.CBC;
-                ConfigureIV(aes);
+            using var aes = Aes.Create();
+            using var encryptor = aes.CreateEncryptor();
+            using var memoryStream = new MemoryStream();
+            using var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write);
+            using var writer = new StreamWriter(cryptoStream);
 
-                using (var encryptor = aes.CreateEncryptor())
-                using (var memoryStream = new MemoryStream())
-                using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
-                using (var writer = new StreamWriter(cryptoStream))
-                {
-                    writer.Write(value);
-                    writer.Flush();
-                    cryptoStream.Flush();
-                    cryptoStream.FlushFinalBlock();
-                    return new EncryptedValue
-                    {
-                        EncryptedBase64Value = Convert.ToBase64String(memoryStream.ToArray()),
-                        Base64Iv = Convert.ToBase64String(aes.IV)
-                    };
-                }
-            }
+            aes.Key = encryptionKey;
+            aes.Mode = CipherMode.CBC;
+            ConfigureIV(aes);
+
+            writer.Write(value);
+            writer.Flush();
+            cryptoStream.Flush();
+            cryptoStream.FlushFinalBlock();
+            return new EncryptedValue
+            {
+                EncryptedBase64Value = Convert.ToBase64String(memoryStream.ToArray()),
+                Base64Iv = Convert.ToBase64String(aes.IV)
+            };
         }
 
         string DecryptUsingKeyIdentifier(EncryptedValue encryptedValue, string keyIdentifier)
@@ -191,20 +188,20 @@ namespace NServiceBus.Encryption.MessageProperty
         static string Decrypt(EncryptedValue encryptedValue, byte[] key)
         {
             var iv = Convert.FromBase64String(encryptedValue.Base64Iv);
-            using (var aes = Aes.Create())
-            {
-                var encrypted = Convert.FromBase64String(encryptedValue.EncryptedBase64Value);
-                aes.IV = iv;
-                aes.Mode = CipherMode.CBC;
-                aes.Key = key;
-                using (var decryptor = aes.CreateDecryptor())
-                using (var memoryStream = new MemoryStream(encrypted))
-                using (var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
-                using (var reader = new StreamReader(cryptoStream))
-                {
-                    return reader.ReadToEnd();
-                }
-            }
+
+            var encrypted = Convert.FromBase64String(encryptedValue.EncryptedBase64Value);
+
+            using var aes = Aes.Create();
+            using var decryptor = aes.CreateDecryptor();
+            using var memoryStream = new MemoryStream(encrypted);
+            using var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read);
+            using var reader = new StreamReader(cryptoStream);
+
+            aes.IV = iv;
+            aes.Mode = CipherMode.CBC;
+            aes.Key = key;
+
+            return reader.ReadToEnd();
         }
 
         static void VerifyExpiredKeys(IList<byte[]> keys)
@@ -233,48 +230,39 @@ namespace NServiceBus.Encryption.MessageProperty
 
         static bool IsValidKey(byte[] key)
         {
-            using (var aes = Aes.Create())
+            using var aes = Aes.Create();
+
+            var bitLength = key.Length * 8;
+
+            var maxValidKeyBitLength = aes.LegalKeySizes.Max(keyLength => keyLength.MaxSize);
+            if (bitLength < maxValidKeyBitLength)
             {
-                var bitLength = key.Length * 8;
-
-                var maxValidKeyBitLength = aes.LegalKeySizes.Max(keyLength => keyLength.MaxSize);
-                if (bitLength < maxValidKeyBitLength)
-                {
-                    Log.WarnFormat("Encryption key is {0} bits which is less than the maximum allowed {1} bits. Consider using a {2}-bit encryption key to obtain the maximum cipher strength", bitLength, maxValidKeyBitLength, maxValidKeyBitLength);
-                }
-
-                return aes.ValidKeySize(bitLength);
+                Log.WarnFormat("Encryption key is {0} bits which is less than the maximum allowed {1} bits. Consider using a {2}-bit encryption key to obtain the maximum cipher strength", bitLength, maxValidKeyBitLength, maxValidKeyBitLength);
             }
+
+            return aes.ValidKeySize(bitLength);
         }
 
         /// <summary>
         /// Adds the key identifier of the currently used encryption key to the outgoing message's headers.
         /// </summary>
-        protected internal virtual void AddKeyIdentifierHeader(IOutgoingLogicalMessageContext context)
-        {
-            context.Headers[EncryptionHeaders.EncryptionKeyIdentifier] = encryptionKeyIdentifier;
-        }
+        protected internal virtual void AddKeyIdentifierHeader(IOutgoingLogicalMessageContext context) => context.Headers[EncryptionHeaders.EncryptionKeyIdentifier] = encryptionKeyIdentifier;
 
         /// <summary>
         /// Tries to locate an encryption key identifier from an incoming message.
         /// </summary>
-        protected internal virtual bool TryGetKeyIdentifierHeader(out string keyIdentifier, IIncomingLogicalMessageContext context)
-        {
-            return context.Headers.TryGetValue(EncryptionHeaders.EncryptionKeyIdentifier, out keyIdentifier);
-        }
+        protected internal virtual bool TryGetKeyIdentifierHeader(out string keyIdentifier, IIncomingLogicalMessageContext context) => context.Headers.TryGetValue(EncryptionHeaders.EncryptionKeyIdentifier, out keyIdentifier);
 
         /// <summary>
         /// Configures the initialization vector.
         /// </summary>
-        protected internal virtual void ConfigureIV(Aes aes)
-        {
-            aes.GenerateIV();
-        }
+        protected internal virtual void ConfigureIV(Aes aes) => aes.GenerateIV();
 
         readonly string encryptionKeyIdentifier;
-        IList<byte[]> decryptionKeys; // Required, as we decrypt in the configured order.
-        byte[] encryptionKey;
-        IDictionary<string, byte[]> keys;
+        readonly IList<byte[]> decryptionKeys; // Required, as we decrypt in the configured order.
+        readonly byte[] encryptionKey;
+        readonly IDictionary<string, byte[]> keys;
+
         static readonly ILog Log = LogManager.GetLogger<AesEncryptionService>();
     }
 }

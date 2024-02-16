@@ -6,16 +6,12 @@
     /// <summary>
     /// Message convention definitions.
     /// </summary>
-    class IsEncryptedPropertyConvention
+    class IsEncryptedPropertyConvention(Func<PropertyInfo, bool> isEncryptedPropertyAction)
     {
-        public IsEncryptedPropertyConvention(Func<PropertyInfo, bool> isEncryptedPropertyAction)
-        {
-            IsEncryptedPropertyAction = isEncryptedPropertyAction;
-        }
-
         public bool IsEncryptedProperty(PropertyInfo property)
         {
-            Guard.AgainstNull(nameof(property), property);
+            ArgumentNullException.ThrowIfNull(property, nameof(property));
+
             try
             {
                 //the message mutator will cache the whole message so we don't need to cache here
@@ -27,6 +23,6 @@
             }
         }
 
-        Func<PropertyInfo, bool> IsEncryptedPropertyAction;
+        readonly Func<PropertyInfo, bool> IsEncryptedPropertyAction = isEncryptedPropertyAction;
     }
 }
