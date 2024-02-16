@@ -38,11 +38,11 @@
             Assert.AreNotEqual("string to encrypt", encryptedValue.EncryptedBase64Value);
 
             var encryptionKey2 = Encoding.ASCII.GetBytes("vznkynwuvateefgduvsqjsufqfrrfcya");
-            var service2 = new TestableRijndaelEncryptionService("encryptionKey2", encryptionKey2, new List<byte[]>
-            {
+            var service2 = new TestableRijndaelEncryptionService("encryptionKey2", encryptionKey2,
+            [
                 encryptionKey2,
                 encryptionKey1
-            });
+            ]);
 
             var decryptedValue = service2.Decrypt(encryptedValue, null);
             Assert.AreEqual("string to encrypt", decryptedValue);
@@ -53,7 +53,7 @@
         public void Should_throw_when_decrypt_with_wrong_key()
         {
             var usedKey = Encoding.ASCII.GetBytes("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-            var service1 = new TestableRijndaelEncryptionService("should-be-ignored-in-next-arrange", usedKey, new List<byte[]>());
+            var service1 = new TestableRijndaelEncryptionService("should-be-ignored-in-next-arrange", usedKey, []);
             var encryptedValue = service1.Encrypt("string to encrypt", null);
             Assert.AreNotEqual("string to encrypt", encryptedValue.EncryptedBase64Value);
 
@@ -78,7 +78,7 @@
         public void Should_throw_for_invalid_key()
         {
             var invalidKey = Encoding.ASCII.GetBytes("invalidKey");
-            var exception = Assert.Throws<Exception>(() => new TestableRijndaelEncryptionService("keyid", invalidKey, new List<byte[]>()));
+            var exception = Assert.Throws<Exception>(() => new TestableRijndaelEncryptionService("keyid", invalidKey, []));
             Assert.AreEqual("The encryption key has an invalid length of 10 bytes.", exception.Message);
         }
 
@@ -98,7 +98,7 @@
         public void Encrypt_must_set_header()
         {
             var encryptionKey1 = Encoding.ASCII.GetBytes("gdDbqRpqdRbTs3mhdZh9qCaDaxJXl+e6");
-            var service1 = new TestableRijndaelEncryptionService("encryptionKey1", encryptionKey1, new List<byte[]>());
+            var service1 = new TestableRijndaelEncryptionService("encryptionKey1", encryptionKey1, []);
 
             Assert.AreEqual(false, service1.OutgoingKeyIdentifierSet);
             service1.Encrypt("string to encrypt", null);
@@ -109,7 +109,7 @@
         public void Decrypt_using_key_identifier()
         {
             var encryptionKey1 = Encoding.ASCII.GetBytes("gdDbqRpqdRbTs3mhdZh9qCaDaxJXl+e6");
-            var service1 = new TestableRijndaelEncryptionService("encryptionKey1", encryptionKey1, new List<byte[]>());
+            var service1 = new TestableRijndaelEncryptionService("encryptionKey1", encryptionKey1, []);
             var encryptedValue = service1.Encrypt("string to encrypt", null);
 
             var expiredKeys = new List<byte[]>
@@ -129,7 +129,7 @@
         public void Decrypt_using_missing_key_identifier_must_throw()
         {
             var encryptionKey1 = Encoding.ASCII.GetBytes("gdDbqRpqdRbTs3mhdZh9qCaDaxJXl+e6");
-            var service1 = new TestableRijndaelEncryptionService("encryptionKey1", encryptionKey1, new List<byte[]>());
+            var service1 = new TestableRijndaelEncryptionService("encryptionKey1", encryptionKey1, []);
             var encryptedValue = service1.Encrypt("string to encrypt", null);
 
             var encryptionKey2 = Encoding.ASCII.GetBytes("vznkynwuvateefgduvsqjsufqfrrfcya");
@@ -153,7 +153,7 @@
             Assert.Catch<ArgumentNullException>(() => new AesEncryptionService(null, new Dictionary<string, byte[]>
             {
                 {"some-key", encryptionKey1}
-            }, new List<byte[]>()));
+            }, []));
         }
 
         [Test]
@@ -168,11 +168,11 @@
             var keyIdentifier = "encryptionKey1";
 
             var key1 = Encoding.ASCII.GetBytes("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-            var service1 = new TestableRijndaelEncryptionService(keyIdentifier, key1, new List<byte[]>());
+            var service1 = new TestableRijndaelEncryptionService(keyIdentifier, key1, []);
             var encryptedValue = service1.Encrypt("string to encrypt", null);
 
             var key2 = Encoding.ASCII.GetBytes("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
-            var service2 = new TestableRijndaelEncryptionService(keyIdentifier, key2, new List<byte[]>())
+            var service2 = new TestableRijndaelEncryptionService(keyIdentifier, key2, [])
             {
                 IncomingKeyIdentifier = "encryptionKey1"
             };

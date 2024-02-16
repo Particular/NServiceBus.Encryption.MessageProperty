@@ -30,7 +30,7 @@
             public string ExposesReadOnlyField { get; private set; }
 
             //This property generates a stackoverflow
-            public List<BogusEntity> ExposesGetOnlyProperty => new List<BogusEntity> { new BogusEntity() };
+            public List<BogusEntity> ExposesGetOnlyProperty => [new BogusEntity()];
         }
     }
 }

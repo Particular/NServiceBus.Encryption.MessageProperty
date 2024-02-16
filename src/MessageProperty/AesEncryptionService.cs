@@ -51,7 +51,7 @@ namespace NServiceBus.Encryption.MessageProperty
             {
                 encryptionKeyIdentifier, key
             }
-        }, new List<byte[]>(0))
+        }, [])
         {
         }
 
@@ -62,7 +62,7 @@ namespace NServiceBus.Encryption.MessageProperty
         /// <param name="keys">A dictionary of available encryption keys and their identifiers for encryption and decryption.</param>
         public AesEncryptionService(
             string encryptionKeyIdentifier,
-            IDictionary<string, byte[]> keys) : this(encryptionKeyIdentifier, keys, new List<byte[]>(0))
+            IDictionary<string, byte[]> keys) : this(encryptionKeyIdentifier, keys, [])
         {
         }
 

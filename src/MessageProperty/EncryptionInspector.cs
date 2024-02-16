@@ -155,9 +155,9 @@ namespace NServiceBus.Encryption.MessageProperty
 
         IsEncryptedPropertyConvention encryptedPropertyConvention;
 
-        static List<MemberInfo> NoMembers = new List<MemberInfo>(0);
+        static List<MemberInfo> NoMembers = [];
 
-        static List<Tuple<object, MemberInfo>> AlreadyVisited = new List<Tuple<object, MemberInfo>>(0);
+        static List<Tuple<object, MemberInfo>> AlreadyVisited = [];
 
         static ConcurrentDictionary<RuntimeTypeHandle, List<MemberInfo>> cache = new ConcurrentDictionary<RuntimeTypeHandle, List<MemberInfo>>();
     }
