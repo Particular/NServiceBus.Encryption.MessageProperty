@@ -21,7 +21,7 @@
         /// </summary>
         public EncryptedString(SerializationInfo info, StreamingContext context)
         {
-            Guard.AgainstNull(nameof(info), info);
+            ArgumentNullException.ThrowIfNull(info);
             EncryptedValue = info.GetValue("EncryptedValue", typeof(EncryptedValue)) as EncryptedValue;
         }
 
@@ -35,8 +35,8 @@
         /// </summary>
         public EncryptedValue EncryptedValue
         {
-            get { return encryptedValue; }
-            set { encryptedValue = value; }
+            get => encryptedValue;
+            set => encryptedValue = value;
         }
 
         // we need to duplicate to make versions > 3.2.7 backwards compatible with 2.X
@@ -46,28 +46,22 @@
         /// </summary>
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            Guard.AgainstNull(nameof(info), info);
+            ArgumentNullException.ThrowIfNull(info);
             info.AddValue("EncryptedValue", EncryptedValue);
         }
 
         /// <summary>
         /// Gets the string value from the WireEncryptedString.
         /// </summary>
-        public static implicit operator string(EncryptedString s)
-        {
-            return s?.Value;
-        }
+        public static implicit operator string(EncryptedString s) => s?.Value;
 
         /// <summary>
         /// Creates a new WireEncryptedString from the given string.
         /// </summary>
-        public static implicit operator EncryptedString(string s)
+        public static implicit operator EncryptedString(string s) => new()
         {
-            return new EncryptedString
-            {
-                Value = s
-            };
-        }
+            Value = s
+        };
 
         EncryptedValue encryptedValue;
     }
