@@ -77,9 +77,9 @@ namespace NServiceBus.Encryption.MessageProperty
             IDictionary<string, byte[]> keys,
             IList<byte[]> decryptionKeys)
         {
-            ArgumentException.ThrowIfNullOrEmpty(encryptionKeyIdentifier, nameof(encryptionKeyIdentifier));
-            ArgumentNullException.ThrowIfNull(keys, nameof(keys));
-            ArgumentNullException.ThrowIfNull(decryptionKeys, nameof(decryptionKeys));
+            ArgumentException.ThrowIfNullOrWhiteSpace(encryptionKeyIdentifier);
+            ArgumentNullException.ThrowIfNull(keys);
+            ArgumentNullException.ThrowIfNull(decryptionKeys);
 
             this.encryptionKeyIdentifier = encryptionKeyIdentifier;
             this.decryptionKeys = decryptionKeys;

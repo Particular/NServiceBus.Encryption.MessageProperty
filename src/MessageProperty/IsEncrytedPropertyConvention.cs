@@ -10,7 +10,7 @@
     {
         public bool IsEncryptedProperty(PropertyInfo property)
         {
-            ArgumentNullException.ThrowIfNull(property, nameof(property));
+            ArgumentNullException.ThrowIfNull(property);
 
             try
             {

@@ -17,8 +17,8 @@
         /// <param name="encryptionService">The encryption service used to encrypt and decrypt message properties.</param>
         public static void EnableMessagePropertyEncryption(this EndpointConfiguration configuration, IEncryptionService encryptionService)
         {
-            ArgumentNullException.ThrowIfNull(configuration, nameof(configuration));
-            ArgumentNullException.ThrowIfNull(encryptionService, nameof(encryptionService));
+            ArgumentNullException.ThrowIfNull(configuration);
+            ArgumentNullException.ThrowIfNull(encryptionService);
 
             configuration.GetSettings().Set(EncryptionServiceConfigurationKey, encryptionService);
             configuration.EnableFeature<MessagePropertyEncryption>();
@@ -32,7 +32,7 @@
         /// <param name="encryptedPropertyConvention">The convention which defines which properties should be encrypted. By default, all properties of type <see cref="EncryptedString"/> will be encrypted.</param>
         public static void EnableMessagePropertyEncryption(this EndpointConfiguration configuration, IEncryptionService encryptionService, Func<PropertyInfo, bool> encryptedPropertyConvention)
         {
-            ArgumentNullException.ThrowIfNull(encryptedPropertyConvention, nameof(encryptedPropertyConvention));
+            ArgumentNullException.ThrowIfNull(encryptedPropertyConvention);
 
             configuration.EnableMessagePropertyEncryption(encryptionService);
             configuration.GetSettings().Set(new IsEncryptedPropertyConvention(encryptedPropertyConvention));

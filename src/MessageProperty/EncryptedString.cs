@@ -21,7 +21,7 @@
         /// </summary>
         public EncryptedString(SerializationInfo info, StreamingContext context)
         {
-            ArgumentNullException.ThrowIfNull(info, nameof(info));
+            ArgumentNullException.ThrowIfNull(info);
             EncryptedValue = info.GetValue("EncryptedValue", typeof(EncryptedValue)) as EncryptedValue;
         }
 
@@ -46,7 +46,7 @@
         /// </summary>
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            ArgumentNullException.ThrowIfNull(info, nameof(info));
+            ArgumentNullException.ThrowIfNull(info);
             info.AddValue("EncryptedValue", EncryptedValue);
         }
 
