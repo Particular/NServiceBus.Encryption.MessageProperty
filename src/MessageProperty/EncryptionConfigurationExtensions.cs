@@ -13,7 +13,7 @@
         /// <summary>
         /// Enable message property encryption using the given encryption service.
         /// </summary>
-        /// <param name="configuration">The endpoint configurartion to extend.</param>
+        /// <param name="configuration">The endpoint configuration to extend.</param>
         /// <param name="encryptionService">The encryption service used to encrypt and decrypt message properties.</param>
         public static void EnableMessagePropertyEncryption(this EndpointConfiguration configuration, IEncryptionService encryptionService)
         {
@@ -27,7 +27,7 @@
         /// <summary>
         /// Enable message property encryption using the given encryption service.
         /// </summary>
-        /// <param name="configuration">The endpoint configurartion to extend.</param>
+        /// <param name="configuration">The endpoint configuration to extend.</param>
         /// <param name="encryptionService">The encryption service used to encrypt and decrypt message properties.</param>
         /// <param name="encryptedPropertyConvention">The convention which defines which properties should be encrypted. By default, all properties of type <see cref="EncryptedString"/> will be encrypted.</param>
         public static void EnableMessagePropertyEncryption(this EndpointConfiguration configuration, IEncryptionService encryptionService, Func<PropertyInfo, bool> encryptedPropertyConvention)
