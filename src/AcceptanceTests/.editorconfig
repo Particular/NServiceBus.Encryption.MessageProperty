@@ -11,3 +11,6 @@ dotnet_diagnostic.NSB0002.severity = suggestion
 
 # CancellationToken not supported in tests
 dotnet_diagnostic.PS0013.severity = suggestion
+
+# IDE0028: Collection initialization can be simplified
+dotnet_diagnostic.IDE0028.severity = suggestion
