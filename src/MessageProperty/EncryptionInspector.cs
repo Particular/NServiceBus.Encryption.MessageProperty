@@ -49,11 +49,15 @@ namespace NServiceBus.Encryption.MessageProperty
 
         public List<Tuple<object, MemberInfo>> ScanObject(object root)
         {
+#pragma warning disable PS0025 // Dictionary keys should implement IEquatable<T> - Valid use for object counting
             var visitedMembers = new HashSet<object>();
+#pragma warning restore PS0025 // Dictionary keys should implement IEquatable<T>
             return ScanObject(root, visitedMembers);
         }
 
+#pragma warning disable PS0025 // Dictionary keys should implement IEquatable<T> - Valid use for object counting
         List<Tuple<object, MemberInfo>> ScanObject(object root, HashSet<object> visitedMembers)
+#pragma warning restore PS0025 // Dictionary keys should implement IEquatable<T>
         {
             if (root == null || visitedMembers.Contains(root))
             {
