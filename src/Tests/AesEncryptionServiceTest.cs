@@ -21,7 +21,7 @@
             var encryptedValue = service.Encrypt("string to encrypt", null);
             Assert.AreNotEqual("string to encrypt", encryptedValue.EncryptedBase64Value);
             var decryptedValue = service.Decrypt(encryptedValue, null);
-            Assert.AreEqual("string to encrypt", decryptedValue);
+            Assert.That(decryptedValue, Is.EqualTo("string to encrypt"));
         }
 
         [Test]
@@ -45,7 +45,7 @@
             ]);
 
             var decryptedValue = service2.Decrypt(encryptedValue, null);
-            Assert.AreEqual("string to encrypt", decryptedValue);
+            Assert.That(decryptedValue, Is.EqualTo("string to encrypt"));
         }
 
         [Ignore("flaky: https://github.com/Particular/NServiceBus/issues/4295")]
@@ -66,8 +66,8 @@
             var service2 = new TestableRijndaelEncryptionService("should-be-ignored", usedKey, unusedExpiredKeys);
 
             var exception = Assert.Throws<AggregateException>(() => service2.Decrypt(encryptedValue, null));
-            Assert.AreEqual("Could not decrypt message. Tried 2 keys.", exception.Message);
-            Assert.AreEqual(2, exception.InnerExceptions.Count);
+            Assert.That(exception.Message, Is.EqualTo("Could not decrypt message. Tried 2 keys."));
+            Assert.That(exception.InnerExceptions.Count, Is.EqualTo(2));
             foreach (var inner in exception.InnerExceptions)
             {
                 Assert.IsInstanceOf<CryptographicException>(inner);
@@ -79,7 +79,7 @@
         {
             var invalidKey = Encoding.ASCII.GetBytes("invalidKey");
             var exception = Assert.Throws<Exception>(() => new TestableRijndaelEncryptionService("keyid", invalidKey, []));
-            Assert.AreEqual("The encryption key has an invalid length of 10 bytes.", exception.Message);
+            Assert.That(exception.Message, Is.EqualTo("The encryption key has an invalid length of 10 bytes."));
         }
 
         [Test]
@@ -91,7 +91,7 @@
                 Encoding.ASCII.GetBytes("invalidKey")
             };
             var exception = Assert.Throws<Exception>(() => new TestableRijndaelEncryptionService("keyid", validKey, expiredKeys));
-            Assert.AreEqual("The expired key at index 0 has an invalid length of 10 bytes.", exception.Message);
+            Assert.That(exception.Message, Is.EqualTo("The expired key at index 0 has an invalid length of 10 bytes."));
         }
 
         [Test]
@@ -100,9 +100,9 @@
             var encryptionKey1 = Encoding.ASCII.GetBytes("gdDbqRpqdRbTs3mhdZh9qCaDaxJXl+e6");
             var service1 = new TestableRijndaelEncryptionService("encryptionKey1", encryptionKey1, []);
 
-            Assert.AreEqual(false, service1.OutgoingKeyIdentifierSet);
+            Assert.That(service1.OutgoingKeyIdentifierSet, Is.EqualTo(false));
             service1.Encrypt("string to encrypt", null);
-            Assert.AreEqual(true, service1.OutgoingKeyIdentifierSet);
+            Assert.That(service1.OutgoingKeyIdentifierSet, Is.EqualTo(true));
         }
 
         [Test]
@@ -122,7 +122,7 @@
             };
 
             var decryptedValue = service2.Decrypt(encryptedValue, null);
-            Assert.AreEqual("string to encrypt", decryptedValue);
+            Assert.That(decryptedValue, Is.EqualTo("string to encrypt"));
         }
 
         [Test]

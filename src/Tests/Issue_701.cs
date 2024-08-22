@@ -16,7 +16,7 @@
 
             var result = inspector.ScanObject(message).ToList();
 
-            Assert.AreEqual(0, result.Count);
+            Assert.That(result.Count, Is.EqualTo(0));
         }
 
         [Test]
@@ -29,7 +29,7 @@
 
             var result = inspector.ScanObject(message).ToList();
 
-            Assert.AreEqual(0, result.Count);
+            Assert.That(result.Count, Is.EqualTo(0));
         }
 
         class TestMessageWithSets

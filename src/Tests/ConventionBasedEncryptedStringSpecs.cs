@@ -18,8 +18,8 @@
 
             var result = inspector.ScanObject(message).ToList();
 
-            Assert.AreEqual(1, result.Count);
-            Assert.AreEqual("EncryptedSecret", result[0].Item2.Name);
+            Assert.That(result.Count, Is.EqualTo(1));
+            Assert.That(result[0].Item2.Name, Is.EqualTo("EncryptedSecret"));
         }
     }
 
@@ -30,7 +30,7 @@
         public void Should_throw_an_exception()
         {
             var exception = Assert.Throws<Exception>(() => inspector.ScanObject(new MessageWithNonStringSecureProperty()).ToList());
-            Assert.AreEqual("Only string properties are supported for convention based encryption. Check the configured conventions.", exception.Message);
+            Assert.That(exception.Message, Is.EqualTo("Only string properties are supported for convention based encryption. Check the configured conventions."));
         }
     }
 

@@ -37,8 +37,8 @@
                 .Done(c => c.GetTheMessage)
                 .Run();
 
-            Assert.AreEqual("betcha can't guess my secret", context.Secret);
-            Assert.AreEqual("My sub secret", context.SubPropertySecret);
+            Assert.That(context.Secret, Is.EqualTo("betcha can't guess my secret"));
+            Assert.That(context.SubPropertySecret, Is.EqualTo("My sub secret"));
             CollectionAssert.AreEquivalent(new List<string>
             {
                 "312312312312312",
