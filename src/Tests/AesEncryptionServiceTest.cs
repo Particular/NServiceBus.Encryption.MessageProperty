@@ -19,7 +19,7 @@
                 encryptionKey
             });
             var encryptedValue = service.Encrypt("string to encrypt", null);
-            Assert.AreNotEqual("string to encrypt", encryptedValue.EncryptedBase64Value);
+            Assert.That(encryptedValue.EncryptedBase64Value, Is.Not.EqualTo("string to encrypt"));
             var decryptedValue = service.Decrypt(encryptedValue, null);
             Assert.That(decryptedValue, Is.EqualTo("string to encrypt"));
         }
@@ -35,7 +35,7 @@
             {
             };
             var encryptedValue = service1.Encrypt("string to encrypt", null);
-            Assert.AreNotEqual("string to encrypt", encryptedValue.EncryptedBase64Value);
+            Assert.That(encryptedValue.EncryptedBase64Value, Is.Not.EqualTo("string to encrypt"));
 
             var encryptionKey2 = Encoding.ASCII.GetBytes("vznkynwuvateefgduvsqjsufqfrrfcya");
             var service2 = new TestableRijndaelEncryptionService("encryptionKey2", encryptionKey2,
@@ -55,7 +55,7 @@
             var usedKey = Encoding.ASCII.GetBytes("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
             var service1 = new TestableRijndaelEncryptionService("should-be-ignored-in-next-arrange", usedKey, []);
             var encryptedValue = service1.Encrypt("string to encrypt", null);
-            Assert.AreNotEqual("string to encrypt", encryptedValue.EncryptedBase64Value);
+            Assert.That(encryptedValue.EncryptedBase64Value, Is.Not.EqualTo("string to encrypt"));
 
             var unusedExpiredKeys = new List<byte[]>
             {
