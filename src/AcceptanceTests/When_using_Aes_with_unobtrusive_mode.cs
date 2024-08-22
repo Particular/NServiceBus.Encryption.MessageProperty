@@ -45,11 +45,11 @@ namespace NServiceBus.Encryption.MessageProperty.AcceptanceTests
                 Assert.That(context.Secret, Is.EqualTo("betcha can't guess my secret"));
                 Assert.That(context.SubPropertySecret, Is.EqualTo("My sub secret"));
             });
-            CollectionAssert.AreEquivalent(new List<string>
+            Assert.That(context.CreditCards, Is.EquivalentTo(new List<string>
             {
                 "312312312312312",
                 "543645546546456"
-            }, context.CreditCards);
+            }));
         }
 
         static Dictionary<string, byte[]> Keys = new Dictionary<string, byte[]>
