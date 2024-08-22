@@ -59,7 +59,7 @@
             var result = inspector.ScanObject(message).ToList();
 
             Assert.That(result.Count, Is.EqualTo(1));
-            Assert.AreSame(message.Secret, result[0].Item2.GetValue(result[0].Item1));
+            Assert.That(result[0].Item2.GetValue(result[0].Item1), Is.SameAs(message.Secret));
         }
 
         public class MessageWithIndexedProperties : IMessage
