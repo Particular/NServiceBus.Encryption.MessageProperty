@@ -31,7 +31,7 @@
 
             Assert.Multiple(() =>
             {
-                Assert.That(result.Count, Is.EqualTo(5));
+                Assert.That(result, Has.Count.EqualTo(5));
 
                 Assert.That(message.Secret.EncryptedValue.EncryptedBase64Value, Is.EqualTo(EncryptedBase64Value));
                 Assert.That(message.SecretField.EncryptedValue.EncryptedBase64Value, Is.EqualTo(EncryptedBase64Value));
@@ -61,7 +61,7 @@
 
             var result = inspector.ScanObject(message).ToList();
 
-            Assert.That(result.Count, Is.EqualTo(1));
+            Assert.That(result, Has.Count.EqualTo(1));
             Assert.That(result[0].Item2.GetValue(result[0].Item1), Is.SameAs(message.Secret));
         }
 
@@ -123,7 +123,7 @@
 
             var result = inspector.ScanObject(message).ToList();
 
-            Assert.That(result.Count, Is.EqualTo(1));
+            Assert.That(result, Has.Count.EqualTo(1));
             Assert.That(result[0].Item2.Name, Is.EqualTo("Secret"));
         }
     }

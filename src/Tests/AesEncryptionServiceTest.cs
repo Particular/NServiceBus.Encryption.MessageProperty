@@ -69,7 +69,7 @@
             Assert.Multiple(() =>
             {
                 Assert.That(exception.Message, Is.EqualTo("Could not decrypt message. Tried 2 keys."));
-                Assert.That(exception.InnerExceptions.Count, Is.EqualTo(2));
+                Assert.That(exception.InnerExceptions, Has.Count.EqualTo(2));
             });
             foreach (var inner in exception.InnerExceptions)
             {
