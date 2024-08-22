@@ -70,7 +70,7 @@
             Assert.That(exception.InnerExceptions.Count, Is.EqualTo(2));
             foreach (var inner in exception.InnerExceptions)
             {
-                Assert.IsInstanceOf<CryptographicException>(inner);
+                Assert.That(inner, Is.InstanceOf<CryptographicException>());
             }
         }
 
