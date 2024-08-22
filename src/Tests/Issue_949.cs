@@ -15,7 +15,7 @@
 
             inspector.ScanObject(message);
 
-            Assert.AreEqual(new int?[] { null, 1 }, message.Data);
+            Assert.That(message.Data, Is.EqualTo(new int?[] { null, 1 }));
         }
 
         [Test]
@@ -28,7 +28,7 @@
 
             inspector.ScanObject(message);
 
-            Assert.AreEqual(new object[] { null, this, null }, message.Data);
+            Assert.That(message.Data, Is.EqualTo(new object[] { null, this, null }));
 
         }
 

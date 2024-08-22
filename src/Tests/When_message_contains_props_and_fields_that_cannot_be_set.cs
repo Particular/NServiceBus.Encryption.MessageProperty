@@ -11,7 +11,7 @@
         {
             var message = new BogusEntityMessage { Entity = new BogusEntity() };
 
-            Assert.IsEmpty(inspector.ScanObject(message));
+            Assert.That(inspector.ScanObject(message), Is.Empty);
         }
 
         public class BogusEntityMessage : IMessage

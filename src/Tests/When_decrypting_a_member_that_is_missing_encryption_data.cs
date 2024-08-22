@@ -21,7 +21,7 @@
             };
 
             var exception = Assert.Throws<Exception>(() => EncryptedStringConversions.DecryptValue(service, value, null));
-            Assert.AreEqual("Encrypted property is missing encryption data", exception.Message);
+            Assert.That(exception.Message, Is.EqualTo("Encrypted property is missing encryption data"));
         }
     }
 }

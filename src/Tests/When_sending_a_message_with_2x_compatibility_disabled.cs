@@ -17,7 +17,7 @@
             var value = (EncryptedString)MySecretMessage;
 
             service.EncryptValue(value, null);
-            Assert.AreEqual(value.EncryptedValue.EncryptedBase64Value, EncryptedBase64Value);
+            Assert.That(EncryptedBase64Value, Is.EqualTo(value.EncryptedValue.EncryptedBase64Value));
         }
     }
 }

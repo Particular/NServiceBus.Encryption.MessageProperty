@@ -21,7 +21,7 @@
                 .Done(c => c.Done)
                 .Run();
 
-            Assert.AreEqual("betcha can't guess my secret", context.Secret);
+            Assert.That(context.Secret, Is.EqualTo("betcha can't guess my secret"));
         }
 
         public class Context : ScenarioContext

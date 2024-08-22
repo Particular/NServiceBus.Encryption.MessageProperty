@@ -29,16 +29,19 @@
             var result = inspector.ScanObject(message).ToList();
             result.ForEach(x => x.Item2.SetValue(x.Item1, Create()));
 
-            Assert.AreEqual(5, result.Count);
+            Assert.Multiple(() =>
+            {
+                Assert.That(result, Has.Count.EqualTo(5));
 
-            Assert.AreEqual(EncryptedBase64Value, message.Secret.EncryptedValue.EncryptedBase64Value);
-            Assert.AreEqual(EncryptedBase64Value, message.SecretField.EncryptedValue.EncryptedBase64Value);
-            Assert.AreEqual(EncryptedBase64Value, message.CreditCard.CreditCardNumber.EncryptedValue.EncryptedBase64Value);
-            Assert.AreEqual(EncryptedBase64Value, message.ListOfCreditCards[0].CreditCardNumber.EncryptedValue.EncryptedBase64Value);
-            Assert.AreEqual(EncryptedBase64Value, message.ListOfCreditCards[1].CreditCardNumber.EncryptedValue.EncryptedBase64Value);
+                Assert.That(message.Secret.EncryptedValue.EncryptedBase64Value, Is.EqualTo(EncryptedBase64Value));
+                Assert.That(message.SecretField.EncryptedValue.EncryptedBase64Value, Is.EqualTo(EncryptedBase64Value));
+                Assert.That(message.CreditCard.CreditCardNumber.EncryptedValue.EncryptedBase64Value, Is.EqualTo(EncryptedBase64Value));
+                Assert.That(message.ListOfCreditCards[0].CreditCardNumber.EncryptedValue.EncryptedBase64Value, Is.EqualTo(EncryptedBase64Value));
+                Assert.That(message.ListOfCreditCards[1].CreditCardNumber.EncryptedValue.EncryptedBase64Value, Is.EqualTo(EncryptedBase64Value));
 
-            Assert.AreEqual(EncryptedBase64Value, message.ListOfSecrets[0].CreditCardNumber.EncryptedValue.EncryptedBase64Value);
-            Assert.AreEqual(EncryptedBase64Value, message.ListOfSecrets[1].CreditCardNumber.EncryptedValue.EncryptedBase64Value);
+                Assert.That(message.ListOfSecrets[0].CreditCardNumber.EncryptedValue.EncryptedBase64Value, Is.EqualTo(EncryptedBase64Value));
+                Assert.That(message.ListOfSecrets[1].CreditCardNumber.EncryptedValue.EncryptedBase64Value, Is.EqualTo(EncryptedBase64Value));
+            });
         }
     }
 
@@ -58,8 +61,8 @@
 
             var result = inspector.ScanObject(message).ToList();
 
-            Assert.AreEqual(1, result.Count);
-            Assert.AreSame(message.Secret, result[0].Item2.GetValue(result[0].Item1));
+            Assert.That(result, Has.Count.EqualTo(1));
+            Assert.That(result[0].Item2.GetValue(result[0].Item1), Is.SameAs(message.Secret));
         }
 
         public class MessageWithIndexedProperties : IMessage
@@ -88,7 +91,7 @@
             message[1] = Create();
 
             var exception = Assert.Throws<Exception>(() => inspector.ScanObject(message).ToList());
-            Assert.AreEqual("Cannot encrypt or decrypt indexed properties that return a WireEncryptedString.", exception.Message);
+            Assert.That(exception.Message, Is.EqualTo("Cannot encrypt or decrypt indexed properties that return a WireEncryptedString."));
         }
 
         public class MessageWithIndexedProperties : IMessage
@@ -120,8 +123,8 @@
 
             var result = inspector.ScanObject(message).ToList();
 
-            Assert.AreEqual(1, result.Count);
-            Assert.AreEqual("Secret", result[0].Item2.Name);
+            Assert.That(result, Has.Count.EqualTo(1));
+            Assert.That(result[0].Item2.Name, Is.EqualTo("Secret"));
         }
     }
 
@@ -142,7 +145,7 @@
                 .ToList()
                 .ForEach(x => x.Item2.SetValue(x.Item1, (EncryptedString)MySecretMessage));
 
-            Assert.AreEqual(MySecretMessage, message.MySecret.Value);
+            Assert.That(message.MySecret.Value, Is.EqualTo(MySecretMessage));
         }
 
         public class MessageWithPropertyWithBackingPublicField : IMessage
@@ -171,7 +174,7 @@
                 .ToList()
                 .ForEach(x => x.Item2.SetValue(x.Item1, Create()));
 
-            Assert.AreEqual(message.Secret.Value, MySecretMessage);
+            Assert.That(MySecretMessage, Is.EqualTo(message.Secret.Value));
         }
     }
 
@@ -194,9 +197,12 @@
                 .ToList()
                 .ForEach(x => x.Item2.SetValue(x.Item1, Create()));
 
-            Assert.AreEqual(MySecretMessage, message.Secret.Value);
-            Assert.AreEqual(MySecretMessage, message.SecretField.Value);
-            Assert.AreEqual(MySecretMessage, message.CreditCard.CreditCardNumber.Value);
+            Assert.Multiple(() =>
+            {
+                Assert.That(message.Secret.Value, Is.EqualTo(MySecretMessage));
+                Assert.That(message.SecretField.Value, Is.EqualTo(MySecretMessage));
+                Assert.That(message.CreditCard.CreditCardNumber.Value, Is.EqualTo(MySecretMessage));
+            });
         }
     }
 
