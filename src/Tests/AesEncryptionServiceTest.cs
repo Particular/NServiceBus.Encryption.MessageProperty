@@ -66,8 +66,11 @@
             var service2 = new TestableRijndaelEncryptionService("should-be-ignored", usedKey, unusedExpiredKeys);
 
             var exception = Assert.Throws<AggregateException>(() => service2.Decrypt(encryptedValue, null));
-            Assert.That(exception.Message, Is.EqualTo("Could not decrypt message. Tried 2 keys."));
-            Assert.That(exception.InnerExceptions.Count, Is.EqualTo(2));
+            Assert.Multiple(() =>
+            {
+                Assert.That(exception.Message, Is.EqualTo("Could not decrypt message. Tried 2 keys."));
+                Assert.That(exception.InnerExceptions.Count, Is.EqualTo(2));
+            });
             foreach (var inner in exception.InnerExceptions)
             {
                 Assert.That(inner, Is.InstanceOf<CryptographicException>());

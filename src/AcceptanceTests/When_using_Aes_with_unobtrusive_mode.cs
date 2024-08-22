@@ -40,8 +40,11 @@ namespace NServiceBus.Encryption.MessageProperty.AcceptanceTests
                 .Done(c => c.GetTheMessage || c.FailedMessages.Any())
                 .Run();
 
-            Assert.That(context.Secret, Is.EqualTo("betcha can't guess my secret"));
-            Assert.That(context.SubPropertySecret, Is.EqualTo("My sub secret"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(context.Secret, Is.EqualTo("betcha can't guess my secret"));
+                Assert.That(context.SubPropertySecret, Is.EqualTo("My sub secret"));
+            });
             CollectionAssert.AreEquivalent(new List<string>
             {
                 "312312312312312",
