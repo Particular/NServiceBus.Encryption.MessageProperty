@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="NServiceBus.Encryption.MessageProperty.Tests" Key="$(NServiceBusKey)" />
+    <InternalsVisibleTo Include="NServiceBus.Encryption.MessageProperty.Tests" Key="$(NServiceBusTestsKey)" />
   </ItemGroup>
 
 </Project>
