@@ -24,7 +24,7 @@
                     new CreditCardDetails { CreditCardNumber = MySecretMessage }
                 ]
             };
-            message.ListOfSecrets = new List<CreditCardDetails>(message.ListOfCreditCards);
+            message.ListOfSecrets = [.. message.ListOfCreditCards];
 
             var result = inspector.ScanObject(message).ToList();
             result.ForEach(x => x.Item2.SetValue(x.Item1, Create()));
