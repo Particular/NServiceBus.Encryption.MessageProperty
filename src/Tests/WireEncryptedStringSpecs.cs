@@ -206,7 +206,7 @@
         }
     }
 
-    public class WireEncryptedStringContext
+    public abstract class WireEncryptedStringContext
     {
         internal EncryptionInspector inspector;
 
