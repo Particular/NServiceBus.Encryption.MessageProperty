@@ -5,8 +5,8 @@ namespace NServiceBus.Encryption.MessageProperty
 {
     public class AesEncryptionService : NServiceBus.Encryption.MessageProperty.IEncryptionService
     {
-        public AesEncryptionService(string encryptionKeyIdentifier, byte[] key) { }
         public AesEncryptionService(string encryptionKeyIdentifier, System.Collections.Generic.IDictionary<string, byte[]> keys) { }
+        public AesEncryptionService(string encryptionKeyIdentifier, byte[] key) { }
         public AesEncryptionService(string encryptionKeyIdentifier, System.Collections.Generic.IDictionary<string, byte[]> keys, System.Collections.Generic.IList<byte[]> decryptionKeys) { }
         protected virtual void AddKeyIdentifierHeader(NServiceBus.Pipeline.IOutgoingLogicalMessageContext context) { }
         protected virtual void ConfigureIV(System.Security.Cryptography.Aes aes) { }
