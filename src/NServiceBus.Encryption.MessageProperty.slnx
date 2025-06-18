@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="Custom.Build.props" />
+  </Folder>
+  <Project Path="AcceptanceTests/NServiceBus.Encryption.MessageProperty.AcceptanceTests.csproj" />
+  <Project Path="MessageProperty/NServiceBus.Encryption.MessageProperty.csproj" />
+  <Project Path="Tests/NServiceBus.Encryption.MessageProperty.Tests.csproj" />
+</Solution>
