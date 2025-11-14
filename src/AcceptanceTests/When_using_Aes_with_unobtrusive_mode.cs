@@ -3,7 +3,6 @@ namespace NServiceBus.Encryption.MessageProperty.AcceptanceTests
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
     using AcceptanceTesting;
     using AcceptanceTesting.Customization;
@@ -52,9 +51,9 @@ namespace NServiceBus.Encryption.MessageProperty.AcceptanceTests
             ]));
         }
 
-        static Dictionary<string, byte[]> Keys = new Dictionary<string, byte[]>
+        static readonly Dictionary<string, byte[]> Keys = new()
         {
-            {"1st", Encoding.ASCII.GetBytes("gdDbqRpqdRbTs3mhdZh9qCaDaxJXl+e6")}
+            {"1st", "gdDbqRpqdRbTs3mhdZh9qCaDaxJXl+e6"u8.ToArray()}
         };
 
         public class Context : ScenarioContext
@@ -70,43 +69,30 @@ namespace NServiceBus.Encryption.MessageProperty.AcceptanceTests
 
         public class Sender : EndpointConfigurationBuilder
         {
-            public Sender()
-            {
+            public Sender() =>
                 EndpointSetup<DefaultServer>(c =>
-                {
-                    c.Conventions().DefiningCommandsAs(t => t.Namespace != null && t.FullName == typeof(MessageWithSecretData).FullName);
+                    {
+                        c.Conventions().DefiningCommandsAs(t => t.Namespace != null && t.FullName == typeof(MessageWithSecretData).FullName);
 
-                    c.EnableMessagePropertyEncryption(new AesEncryptionService("1st", Keys), t => t.Name.StartsWith("Encrypted"));
+                        c.EnableMessagePropertyEncryption(new AesEncryptionService("1st", Keys), t => t.Name.StartsWith("Encrypted"));
 
-                    c.ConfigureRouting()
-                        .RouteToEndpoint(typeof(MessageWithSecretData), Conventions.EndpointNamingConvention(typeof(Receiver)));
-                })
-                // remove that type from assembly scanning to simulate what would happen with true unobtrusive mode
-                .ExcludeType<MessageWithSecretData>();
-            }
+                        c.ConfigureRouting()
+                            .RouteToEndpoint(typeof(MessageWithSecretData), Conventions.EndpointNamingConvention(typeof(Receiver)));
+                    });
         }
 
         public class Receiver : EndpointConfigurationBuilder
         {
-            public Receiver()
-            {
+            public Receiver() =>
                 EndpointSetup<DefaultServer>(c =>
                 {
                     c.Conventions().DefiningCommandsAs(t => t.Namespace != null && t.FullName == typeof(MessageWithSecretData).FullName);
 
                     c.EnableMessagePropertyEncryption(new AesEncryptionService("1st", Keys), t => t.Name.StartsWith("Encrypted"));
                 });
-            }
 
-            public class Handler : IHandleMessages<MessageWithSecretData>
+            public class Handler(Context testContext) : IHandleMessages<MessageWithSecretData>
             {
-                Context testContext;
-
-                public Handler(Context testContext)
-                {
-                    this.testContext = testContext;
-                }
-
                 public Task Handle(MessageWithSecretData message, IMessageHandlerContext context)
                 {
                     testContext.Secret = message.EncryptedSecret;
@@ -121,7 +107,7 @@ namespace NServiceBus.Encryption.MessageProperty.AcceptanceTests
 
                     testContext.GetTheMessage = true;
 
-                    return Task.FromResult(0);
+                    return Task.CompletedTask;
                 }
             }
         }

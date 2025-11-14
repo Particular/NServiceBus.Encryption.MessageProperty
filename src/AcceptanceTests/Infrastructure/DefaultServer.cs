@@ -1,7 +1,6 @@
 ﻿namespace NServiceBus.Encryption.MessageProperty.AcceptanceTests
 {
     using System;
-    using System.Collections.Generic;
     using System.Threading.Tasks;
     using AcceptanceTesting.Customization;
     using AcceptanceTesting.Support;
@@ -10,26 +9,11 @@
 
     public class DefaultServer : IEndpointSetupTemplate
     {
-        public DefaultServer()
-        {
-            typesToInclude = [];
-        }
-
-        public DefaultServer(List<Type> typesToInclude)
-        {
-            this.typesToInclude = typesToInclude;
-        }
-
         public async Task<EndpointConfiguration> GetConfiguration(RunDescriptor runDescriptor, EndpointCustomizationConfiguration endpointConfiguration, Func<EndpointConfiguration, Task> configurationBuilderCustomization)
         {
-            var types = endpointConfiguration.GetTypesScopedByTestClass();
-
-            typesToInclude.AddRange(types);
-
             var configuration = new EndpointConfiguration(endpointConfiguration.EndpointName);
             configuration.UseSerialization<SystemJsonSerializer>();
 
-            configuration.TypesToIncludeInScan(typesToInclude);
             configuration.EnableInstallers();
 
             var recoverability = configuration.Recoverability();
@@ -53,9 +37,9 @@
             configuration.GetSettings().SetDefault("ScaleOut.UseSingleBrokerQueue", true);
             await configurationBuilderCustomization(configuration);
 
+            configuration.ScanTypesForTest(endpointConfiguration);
+
             return configuration;
         }
-
-        List<Type> typesToInclude;
     }
 }
