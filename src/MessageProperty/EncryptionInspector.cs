@@ -47,7 +47,7 @@ namespace NServiceBus.Encryption.MessageProperty
             return false;
         }
 
-        public List<Tuple<object, MemberInfo>> ScanObject(object root)
+        public List<(object target, MemberInfo member)> ScanObject(object root)
         {
 #pragma warning disable PS0025 // Dictionary keys should implement IEquatable<T> - Valid use for object counting
             var visitedMembers = new HashSet<object>();
@@ -56,7 +56,7 @@ namespace NServiceBus.Encryption.MessageProperty
         }
 
 #pragma warning disable PS0025 // Dictionary keys should implement IEquatable<T> - Valid use for object counting
-        List<Tuple<object, MemberInfo>> ScanObject(object root, HashSet<object> visitedMembers)
+        List<(object target, MemberInfo member)> ScanObject(object root, HashSet<object> visitedMembers)
 #pragma warning restore PS0025 // Dictionary keys should implement IEquatable<T>
         {
             if (root == null || visitedMembers.Contains(root))
@@ -68,7 +68,7 @@ namespace NServiceBus.Encryption.MessageProperty
 
             var members = GetFieldsAndProperties(root);
 
-            var properties = new List<Tuple<object, MemberInfo>>();
+            var properties = new List<(object target, MemberInfo member)>();
 
             foreach (var member in members)
             {
@@ -77,7 +77,7 @@ namespace NServiceBus.Encryption.MessageProperty
                     var value = member.GetValue(root);
                     if (value is string or EncryptedString)
                     {
-                        properties.Add(Tuple.Create(root, member));
+                        properties.Add((root, member));
                         continue;
                     }
                     throw new Exception("Only string properties are supported for convention based encryption. Check the configured conventions.");
@@ -161,7 +161,7 @@ namespace NServiceBus.Encryption.MessageProperty
 
         static List<MemberInfo> NoMembers = [];
 
-        static List<Tuple<object, MemberInfo>> AlreadyVisited = [];
+        static List<(object target, MemberInfo member)> AlreadyVisited = [];
 
         static ConcurrentDictionary<RuntimeTypeHandle, List<MemberInfo>> cache = new ConcurrentDictionary<RuntimeTypeHandle, List<MemberInfo>>();
     }

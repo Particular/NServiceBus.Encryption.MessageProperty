@@ -13,16 +13,16 @@
         {
             var currentMessageToSend = context.Message.Instance;
 
-            var propertiesToRestore = new List<Tuple<object, Tuple<object, MemberInfo>>>();
+            var propertiesToRestore = new List<(object previousValue, object target, MemberInfo member)>();
             var propertiesToEncrypt = messageInspector.ScanObject(currentMessageToSend);
 
             try
             {
-                foreach (var item in propertiesToEncrypt)
+                foreach (var (target, member) in propertiesToEncrypt)
                 {
-                    var oldValue = EncryptMember(item.Item1, item.Item2, context);
+                    var oldValue = EncryptMember(target, member, context);
 
-                    propertiesToRestore.Add(new Tuple<object, Tuple<object, MemberInfo>>(oldValue, item));
+                    propertiesToRestore.Add((oldValue, target, member));
                 }
 
                 context.UpdateMessage(currentMessageToSend);
@@ -35,7 +35,7 @@
                 {
                     foreach (var propertyToRestore in propertiesToRestore)
                     {
-                        propertyToRestore.Item2.Item2.SetValue(propertyToRestore.Item2.Item1, propertyToRestore.Item1);
+                        propertyToRestore.member.SetValue(propertyToRestore.target, propertyToRestore.previousValue);
                     }
 
                     context.UpdateMessage(currentMessageToSend);

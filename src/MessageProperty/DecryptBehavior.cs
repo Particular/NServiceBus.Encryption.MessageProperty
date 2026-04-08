@@ -17,9 +17,9 @@ namespace NServiceBus.Encryption.MessageProperty
         {
             var current = context.Message.Instance;
 
-            foreach (var item in messageInspector.ScanObject(current))
+            foreach (var (target, member) in messageInspector.ScanObject(current))
             {
-                DecryptMember(item.Item1, item.Item2, context);
+                DecryptMember(target, member, context);
             }
 
             context.UpdateMessageInstance(current);

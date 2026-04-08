@@ -27,7 +27,7 @@
             message.ListOfSecrets = [.. message.ListOfCreditCards];
 
             var result = inspector.ScanObject(message).ToList();
-            result.ForEach(x => x.Item2.SetValue(x.Item1, Create()));
+            result.ForEach(x => x.member.SetValue(x.target, Create()));
 
             Assert.Multiple(() =>
             {
@@ -62,7 +62,7 @@
             var result = inspector.ScanObject(message).ToList();
 
             Assert.That(result, Has.Count.EqualTo(1));
-            Assert.That(result[0].Item2.GetValue(result[0].Item1), Is.SameAs(message.Secret));
+            Assert.That(result[0].member.GetValue(result[0].target), Is.SameAs(message.Secret));
         }
 
         public class MessageWithIndexedProperties : IMessage
@@ -124,7 +124,7 @@
             var result = inspector.ScanObject(message).ToList();
 
             Assert.That(result, Has.Count.EqualTo(1));
-            Assert.That(result[0].Item2.Name, Is.EqualTo("Secret"));
+            Assert.That(result[0].member.Name, Is.EqualTo("Secret"));
         }
     }
 
@@ -143,7 +143,7 @@
             inspector
                 .ScanObject(message)
                 .ToList()
-                .ForEach(x => x.Item2.SetValue(x.Item1, (EncryptedString)MySecretMessage));
+                .ForEach(x => x.member.SetValue(x.target, (EncryptedString)MySecretMessage));
 
             Assert.That(message.MySecret.Value, Is.EqualTo(MySecretMessage));
         }
@@ -172,7 +172,7 @@
             inspector
                 .ScanObject(message)
                 .ToList()
-                .ForEach(x => x.Item2.SetValue(x.Item1, Create()));
+                .ForEach(x => x.member.SetValue(x.target, Create()));
 
             Assert.That(MySecretMessage, Is.EqualTo(message.Secret.Value));
         }
@@ -195,7 +195,7 @@
             inspector
                 .ScanObject(message)
                 .ToList()
-                .ForEach(x => x.Item2.SetValue(x.Item1, Create()));
+                .ForEach(x => x.member.SetValue(x.target, Create()));
 
             Assert.Multiple(() =>
             {
