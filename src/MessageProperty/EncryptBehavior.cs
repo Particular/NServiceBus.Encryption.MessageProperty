@@ -13,7 +13,7 @@
         {
             var currentMessageToSend = context.Message.Instance;
 
-            var propertiesToRestore = new List<(object previousValue, object target, MemberInfo member)>();
+            var propertiesToRestore = new List<(object unencryptedValue, object target, MemberInfo member)>();
             var propertiesToEncrypt = messageInspector.ScanObject(currentMessageToSend);
 
             try
@@ -35,7 +35,7 @@
                 {
                     foreach (var propertyToRestore in propertiesToRestore)
                     {
-                        propertyToRestore.member.SetValue(propertyToRestore.target, propertyToRestore.previousValue);
+                        propertyToRestore.member.SetValue(propertyToRestore.target, propertyToRestore.unencryptedValue);
                     }
 
                     context.UpdateMessage(currentMessageToSend);
@@ -49,18 +49,18 @@
 
             if (valueToEncrypt is EncryptedString wireEncryptedString)
             {
-                var copy = new EncryptedString { Value = wireEncryptedString.Value };
+                var unencryptedValue = new EncryptedString { Value = wireEncryptedString.Value };
                 encryptionService.EncryptValue(wireEncryptedString, context);
-                return copy;
+                return unencryptedValue;
             }
 
             if (valueToEncrypt is string stringToEncrypt)
             {
-                var copy = stringToEncrypt;
+                var unencryptedValue = stringToEncrypt;
                 encryptionService.EncryptValue(ref stringToEncrypt, context);
 
                 member.SetValue(message, stringToEncrypt);
-                return copy;
+                return unencryptedValue;
             }
 
             throw new Exception("Only string properties are supported for convention based encryption. Check the configured conventions.");
