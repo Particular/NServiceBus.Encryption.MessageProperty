@@ -19,7 +19,7 @@
             var result = inspector.ScanObject(message).ToList();
 
             Assert.That(result, Has.Count.EqualTo(1));
-            Assert.That(result[0].Item2.Name, Is.EqualTo("EncryptedSecret"));
+            Assert.That(result[0].member.Name, Is.EqualTo("EncryptedSecret"));
         }
     }
 
