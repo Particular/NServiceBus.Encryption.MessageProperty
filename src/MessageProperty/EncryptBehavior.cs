@@ -1,63 +1,76 @@
 ﻿namespace NServiceBus.Encryption.MessageProperty
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Reflection;
     using System.Threading.Tasks;
     using Pipeline;
 
-    class EncryptBehavior : IBehavior<IOutgoingLogicalMessageContext, IOutgoingLogicalMessageContext>
+    class EncryptBehavior(EncryptionInspector messageInspector, IEncryptionService encryptionService) : IBehavior<IOutgoingLogicalMessageContext, IOutgoingLogicalMessageContext>
     {
-        public EncryptBehavior(EncryptionInspector messageInspector, IEncryptionService encryptionService)
-        {
-            this.messageInspector = messageInspector;
-            this.encryptionService = encryptionService;
-        }
-
-        public Task Invoke(IOutgoingLogicalMessageContext context, Func<IOutgoingLogicalMessageContext, Task> next)
+        public async Task Invoke(IOutgoingLogicalMessageContext context, Func<IOutgoingLogicalMessageContext, Task> next)
         {
             var currentMessageToSend = context.Message.Instance;
 
-            foreach (var item in messageInspector.ScanObject(currentMessageToSend))
+            var propertiesToRestore = new List<(object unencryptedValue, object target, MemberInfo member)>();
+            var propertiesToEncrypt = messageInspector.ScanObject(currentMessageToSend);
+
+            try
             {
-                EncryptMember(item.Item1, item.Item2, context);
+                foreach (var (target, member) in propertiesToEncrypt)
+                {
+                    var oldValue = EncryptMember(target, member, context);
+
+                    propertiesToRestore.Add((oldValue, target, member));
+                }
+
+                context.UpdateMessage(currentMessageToSend);
+
+                await next(context).ConfigureAwait(false);
             }
+            finally
+            {
+                if (propertiesToEncrypt.Any())
+                {
+                    foreach (var propertyToRestore in propertiesToRestore)
+                    {
+                        propertyToRestore.member.SetValue(propertyToRestore.target, propertyToRestore.unencryptedValue);
+                    }
 
-            context.UpdateMessage(currentMessageToSend);
-
-            return next(context);
+                    context.UpdateMessage(currentMessageToSend);
+                }
+            }
         }
 
-        void EncryptMember(object message, MemberInfo member, IOutgoingLogicalMessageContext context)
+        object EncryptMember(object message, MemberInfo member, IOutgoingLogicalMessageContext context)
         {
             var valueToEncrypt = member.GetValue(message);
 
             if (valueToEncrypt is EncryptedString wireEncryptedString)
             {
+                var unencryptedValue = new EncryptedString { Value = wireEncryptedString.Value };
                 encryptionService.EncryptValue(wireEncryptedString, context);
-                return;
+                return unencryptedValue;
             }
 
             if (valueToEncrypt is string stringToEncrypt)
             {
+                var unencryptedValue = stringToEncrypt;
                 encryptionService.EncryptValue(ref stringToEncrypt, context);
 
                 member.SetValue(message, stringToEncrypt);
-                return;
+                return unencryptedValue;
             }
 
             throw new Exception("Only string properties are supported for convention based encryption. Check the configured conventions.");
         }
 
-        IEncryptionService encryptionService;
-        EncryptionInspector messageInspector;
-
         public class EncryptRegistration : RegisterStep
         {
             public EncryptRegistration(EncryptionInspector inspector, IEncryptionService encryptionService)
-                : base("MessagePropertyEncryption", typeof(EncryptBehavior), "Invokes the encryption logic", b => new EncryptBehavior(inspector, encryptionService))
-            {
+                : base("MessagePropertyEncryption", typeof(EncryptBehavior), "Invokes the encryption logic", b => new EncryptBehavior(inspector, encryptionService)) =>
                 InsertAfter("MutateOutgoingMessages");
-            }
         }
     }
 }
