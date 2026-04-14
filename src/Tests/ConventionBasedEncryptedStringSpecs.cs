@@ -18,8 +18,8 @@
 
             var result = inspector.ScanObject(message).ToList();
 
-            Assert.AreEqual(1, result.Count);
-            Assert.AreEqual("EncryptedSecret", result[0].Item2.Name);
+            Assert.That(result, Has.Count.EqualTo(1));
+            Assert.That(result[0].member.Name, Is.EqualTo("EncryptedSecret"));
         }
     }
 
