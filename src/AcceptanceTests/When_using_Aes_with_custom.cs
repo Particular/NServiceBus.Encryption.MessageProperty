@@ -39,7 +39,7 @@ public class When_using_Aes_with_custom : NServiceBusAcceptanceTest
         {
             Assert.That(context.Secret, Is.EqualTo(messageToSend.Secret.Value));
             Assert.That(context.SubPropertySecret, Is.EqualTo(messageToSend.SubProperty.Secret.Value));
-            Assert.That(context.CreditCards, Is.EquivalentTo(new List<string>()
+            Assert.That(context.CreditCards, Is.EquivalentTo(new[]
             {
                 "312312312312312",
                 "543645546546456"

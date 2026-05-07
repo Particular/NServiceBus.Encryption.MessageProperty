@@ -41,7 +41,7 @@ public class When_using_Aes_with_unobtrusive_mode : NServiceBusAcceptanceTest
         {
             Assert.That(context.Secret, Is.EqualTo(messageToSend.EncryptedSecret));
             Assert.That(context.SubPropertySecret, Is.EqualTo(messageToSend.SubProperty.EncryptedSecret));
-            Assert.That(context.CreditCards, Is.EquivalentTo(new List<string>
+            Assert.That(context.CreditCards, Is.EquivalentTo(new[]
             {
                 "312312312312312",
                 "543645546546456"
