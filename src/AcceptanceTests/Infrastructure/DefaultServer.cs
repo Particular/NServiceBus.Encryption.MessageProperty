@@ -5,7 +5,6 @@
     using AcceptanceTesting.Customization;
     using AcceptanceTesting.Support;
     using Configuration.AdvancedExtensibility;
-    using Microsoft.Extensions.DependencyInjection;
 
     public class DefaultServer : IEndpointSetupTemplate
     {
@@ -21,16 +20,6 @@
             recoverability.Immediate(immediate => immediate.NumberOfRetries(0));
 
             configuration.UseTransport(new LearningTransport());
-
-            configuration.RegisterComponents(r =>
-            {
-                var type = runDescriptor.ScenarioContext.GetType();
-                while (type != typeof(object))
-                {
-                    r.AddSingleton(type, runDescriptor.ScenarioContext);
-                    type = type.BaseType;
-                }
-            });
 
             configuration.UsePersistence<AcceptanceTestingPersistence>();
 
