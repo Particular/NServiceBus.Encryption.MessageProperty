@@ -22,8 +22,11 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(PkgNServiceBus_AcceptanceTests_Sources)' != ''">
-    <Compile Remove="$(PkgNServiceBus_AcceptanceTests_Sources)\contentFiles\cs\$(TargetFramework)\**\*.cs" />
-    <Compile Include="$(PkgNServiceBus_AcceptanceTests_Sources)\contentFiles\cs\$(TargetFramework)\**\*.cs" />
+    <Compile Remove="$(PkgNServiceBus_AcceptanceTests_Sources)\**\*.cs" />
+    <Compile Include="$(PkgNServiceBus_AcceptanceTests_Sources)\contentFiles\cs\$(TargetFramework)\**\EndpointTemplates\*.cs" />
+    <Compile Include="$(PkgNServiceBus_AcceptanceTests_Sources)\contentFiles\cs\$(TargetFramework)\**\ConfigureEndpointAcceptanceTestingTransport.cs" />
+    <Compile Include="$(PkgNServiceBus_AcceptanceTests_Sources)\contentFiles\cs\$(TargetFramework)\**\ConfigureEndpointAcceptanceTestingPersistence.cs" />
+    <Compile Include="$(PkgNServiceBus_AcceptanceTests_Sources)\contentFiles\cs\$(TargetFramework)\**\NServiceBusAcceptanceTest.cs" />
   </ItemGroup>
 
 </Project>
